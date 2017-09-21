@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+{include file="public/header" /}
+<title>星区配对介绍书</title>
+</head>
+<body>
+<style>
+table{width:70%;!important;}
+table tr td p font{margin:-17px;padding:0;color:#000;!important;}
+table tr td p{margin:-17px;padding:0;color:#000;!important;}
+
+.title{margin-top:39px!important;}
+.content{
+    border-bottom: 1px #eee solid;
+    color: #7c7c7c;
+    font-size: 0.7em;
+    line-height: 1.5em;
+    margin: 0 0 0 1em;
+    padding: 0.7em 1em 0.7em 0;
+	}
+.nav-transparent{background: url(/static/weixin/images/bg_tu.jpg);}
+
+</style>
+<div class="team-intro">
+<header class="mui-bar mui-bar-nav nav-transparent" style="position:fixed;">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title"></h1>
+<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>
+</header>
+
+<div class="title" style="margin-bottom:8px;padding-left:0px;text-align:center;">{$list.title}</div>
+<div style="content">
+{$list.content}
+</div>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+
+</div>
+{include file="public/footer" /}
+</body>
+</html>

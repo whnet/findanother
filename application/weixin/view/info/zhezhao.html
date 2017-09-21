@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+</head>
+<body>
+<div style="width:100%;height:100%;background-color:#EDEDED;opacity:0.5;filter:Alpha(opacity=50);">
+
+</div>
+<script>
+if({$flag}){
+	mui.toast("{$message}");
+}
+if({$flag2}){
+	href="{$url}";
+	(function(){
+			var wait = 3;
+            var interval = setInterval(function(){
+                var time = --wait;
+                if(time <= 0) {
+                    location.href = href;
+                    clearInterval(interval);
+                };
+            }, 1000);
+        })();
+}
+</script>
+</body>
+</html>

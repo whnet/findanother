@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script src="/static/weixin/js/hm.js"></script>
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>
+
+</script>
+{include file="public/header" /}
+<title>修改基本资料</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">修改基本资料</h1>
+</header>
+<div class="mui-content">
+<div id="info" class="">
+<div class="auth">
+<div>
+<form id="form2" method="post">
+<div class="form form-search">
+<div class="padding form-list">
+<div id="SexPicker" class="mui-input-row">
+<label>性别</label>
+<font class="mui-pull-right">{if $base.Sex eq 1}男{else /}女{/if}</font>
+<input name="sex" type="hidden" value="{$base.Sex}" />
+<input name="uid" type="hidden" value="{$uid}" />
+</div>
+<div {if $flag==1 }id="BirthdayPicker"{/if} class="mui-input-row">
+<label>出生日期(阳历)</label>
+<font class="mui-pull-right">{$base.Birthday}</font>
+<input name="birthday" type="hidden" value="{$base.Birthday}" />
+</div>
+<div id="CityPicker" class="mui-input-row">
+<label>所在地区</label>
+<font class="mui-pull-right">{$base.Province}-{$base.City}</font>
+<input name="city" type="hidden" value="{$base.Province}-{$base.City}" />
+</div>
+<div id="MarryPicker" class="mui-input-row">
+<label>婚姻状况</label>
+<font class="mui-pull-right">{if $base.Gqzt}{$base.Gqzt}{else  /}请选择{/if}</font>
+<input name="marry" type="hidden" value="{$base.Gqzt}">
+</div>
+<div id="BooldPicker" class="mui-input-row">
+<label>血型</label>
+<font class="mui-pull-right">{if $base.Blood}{$base.Blood}型{else  /}请选择{/if}</font>
+<input name="boold" type="hidden" value="{$base.Blood}">
+</div>
+<div id="JobPicker" class="mui-input-row">
+<label>职业</label>
+<font class="mui-pull-right">{if $base.zhiye}{$base.zhiye}{else  /}请选择{/if}</font>
+<input name="job" type="hidden" value="{$base.zhiye}">
+</div>
+<div id="XgPicker" class="mui-input-row">
+<label>性格</label>
+<font class="mui-pull-right">{if $base.character}{$base.character}{else  /}请选择{/if}</font>
+<input name="xg" type="hidden" value="{$base.character}">
+</div>
+<div id="HeightPicker" class="mui-input-row">
+<label>身高</label>
+<font class="mui-pull-right">{if $base.height}{$base.height}cm{else  /}请选择{/if}</font>
+<input name="height" type="hidden" value="{$base.height}">
+</div>
+<div id="WeightPicker" class="mui-input-row">
+<label>体重</label>
+<font class="mui-pull-right">{if $base.weight}{$base.weight}{else  /}请选择{/if}</font>
+<input name="weight" type="hidden" value="{$base.weight}">
+</div>
+<div>
+<input name="wxnamber" type="text" class="mui-input-clear" value="{$base.wxnumber}" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入微信号" maxlength="30">
+</div>
+<div class="mui-input-row">
+<textarea name="qianming" class="mui-input-clear" id="qianming" placeholder="请输入您的个性签名">{if $base.Sign}{$base.Sign}{/if}</textarea> 
+</div>
+</div></div>
+
+<button class="mui-btn mui-btn-warning mui-btn-block do-submit">修改</button>
+</form>
+</div> 
+</div>
+<p>
+
+</p>
+</div>
+<link href="/static/weixin/css/mui.picker.min.css" rel="stylesheet" /> 
+<link href="/static/weixin/css/mui.poppicker.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/mui.picker.min.js"></script>
+<script src="/static/weixin/js/mui.poppicker.js"></script>
+<script src="/static/weixin/js/city.data.js" type="text/javascript" charset="utf-8"></script>
+<script>(function($,doc) {$.init();$.ready(function() {
+
+var SexPicker =new $.PopPicker();
+SexPicker.setData([{value:'1',text:'男'
+},{value:'2',text:'女'
+}]);
+var SexPickerButton =doc.getElementById('SexPicker');
+SexPickerButton.addEventListener('tap',function(event) {SexPicker.show(function(items) {SexPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+SexPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+if({$flag}==1){
+var optionsJson ='{"type":"date","beginYear":1949,"endYear":2000}';
+var options =JSON.parse(optionsJson);
+var BirthdayPicker =new $.DtPicker(options);
+BirthdayPicker.setSelectedValue("1988-01-01");
+var BirthdayPickerButton =doc.getElementById('BirthdayPicker');
+BirthdayPickerButton.addEventListener('tap',function(event) {BirthdayPicker.show(function(items) {BirthdayPickerButton.getElementsByTagName('font')[0].innerText =items.text;BirthdayPickerButton.getElementsByTagName('input')[0].value =items.text;});},false);
+}
+
+var CityPicker =new $.PopPicker({layer:2});
+CityPicker.setData(cityData); 
+var CityPickerButton =doc.getElementById('CityPicker');CityPickerButton.addEventListener('tap',function(event) {CityPicker.show(function(items) {CityPickerButton.getElementsByTagName('font')[0].innerText =items[0].text + " - " + items[1].text;CityPickerButton.getElementsByTagName('input')[0].value =items[0].text + "-" + items[1].text;});},false);
+
+var MarryPicker =new $.PopPicker();
+MarryPicker.setData([{value:'单身',text:'单身'
+},{value:'恋爱中',text:'恋爱中'
+},{value:'已婚',text:'已婚'
+}]);
+var MarryPickerButton =doc.getElementById('MarryPicker');
+MarryPickerButton.addEventListener('tap',function(event) {MarryPicker.show(function(items) {MarryPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+MarryPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var BooldPicker =new $.PopPicker();
+BooldPicker.setData([{value:'A',text:'A型'
+},{value:'B',text:'B型'
+},{value:'AB',text:'AB型'
+},{value:'O',text:'O型'
+}]);
+var BooldPickerButton =doc.getElementById('BooldPicker');
+BooldPickerButton.addEventListener('tap',function(event) {BooldPicker.show(function(items) {BooldPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+BooldPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var JobPicker =new $.PopPicker();
+JobPicker.setData([
+{value:'在读初中生',text:'在读初中生'},
+{value:'在读高中生',text:'在读高中生'},
+{value:'在读专科生',text:'在读专科生'},
+{value:'在读大学生',text:'在读大学生'},
+{value:'在读研究生',text:'在读研究生'},
+{value:'博士/教授/讲师',text:'博士/教授/讲师'},
+{value:'学术/科研/科学家',text:'学术/科研/科学家'},
+{value:'计算机/互联网/软件',text:'计算机/互联网/软件'},
+{value:'通信/电信',text:'通信/电信'},
+{value:'机械/工程师/技工',text:'机械/工程师/技工'},
+{value:'电子/半导体/仪表仪器',text:'电子/半导体/仪表仪器'},
+{value:'房地产/装修/物业',text:'房地产/装修/物业'},
+{value:'会计师/审计师/统计师',text:'会计师/审计师/统计师'},
+{value:'金融/证券/股票/保险',text:'金融/证券/股票/保险'},
+{value:'采购/贸易',text:'采购/贸易'},
+{value:'高层/管理',text:'高层/管理'},
+{value:'咨询/顾问',text:'咨询/顾问'},
+{value:'人力资源/行政/后勤',text:'人力资源/行政/后勤'},
+{value:'仓储/物流',text:'仓储/物流'},
+{value:'客户服务/技术支持',text:'客户服务/技术支持'},
+{value:'销售/业务员',text:'销售/业务员'},
+{value:'市场/拓展',text:'市场/拓展'},
+{value:'广告/公关',text:'广告/公关'},
+{value:'媒体/记者/编辑',text:'媒体/记者/编辑'},
+{value:'创意产业/设计师/艺术家',text:'创意产业/设计师/艺术家'},
+{value:'形象设计/造型师/美容师',text:'形象设计/造型师/美容师'},
+{value:'影视/制片/导演/摄像',text:'影视/制片/导演/摄像'},
+{value:'漫画家/动画制作',text:'漫画家/动画制作'},
+{value:'录音师/特效师',text:'录音师/特效师'},
+{value:'模特/主持人/演员/歌手',text:'模特/主持人/演员/歌手'},
+{value:'作家/文学',text:'作家/文学'},
+{value:'普通服务行业',text:'普通服务行业'},
+{value:'餐饮/酒店',text:'餐饮/酒店'},
+{value:'旅游',text:'旅游'},
+{value:'航空服务业/空姐/飞行员',text:'航空服务业/空姐/飞行员'},
+{value:'公务员/国家干部',text:'公务员/国家干部'},
+{value:'质控/安检',text:'质控/安检'},
+{value:'翻译',text:'翻译'},
+{value:'老师/教育/培训',text:'老师/教育/培训'},
+{value:'法律/律师',text:'法律/律师'},
+{value:'医疗/保健/医生/护理',text:'医疗/保健/医生/护理'},
+{value:'生物/制药/医疗器械',text:'生物/制药/医疗器械'},
+{value:'体育工作者/运动员',text:'体育工作者/运动员'},
+{value:'文艺工作者/舞蹈家/演奏家',text:'文艺工作者/舞蹈家/演奏家'},
+{value:'武警/警察/消防/军人',text:'武警/警察/消防/军人'},
+{value:'生产/加工/制造',text:'生产/加工/制造'},
+{value:'农/林/牧/渔业',text:'农/林/牧/渔业'},
+{value:'化工/能源',text:'化工/能源'},
+{value:'考古/地质勘查',text:'考古/地质勘查'},
+{value:'自主经营',text:'自主经营'},
+{value:'自由职业者',text:'自由职业者'}
+]);
+var JobPickerButton =doc.getElementById('JobPicker');
+JobPickerButton.addEventListener('tap',function(event) {JobPicker.show(function(items) {JobPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+JobPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var XgPicker =new $.PopPicker();
+XgPicker.setData([{value:'内向',text:'内向'
+},{value:'外向',text:'外向'
+},{value:'温柔可爱',text:'温柔可爱'
+}]);
+var XgPickerButton =doc.getElementById('XgPicker');
+XgPickerButton.addEventListener('tap',function(event) {XgPicker.show(function(items) {XgPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+XgPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var HeightPicker =new $.PopPicker();HeightPicker.setData([{value:'150',text:'150CM'
+},{value:'151',text:'151CM'
+},{value:'152',text:'152CM'
+},{value:'153',text:'153CM'
+},{value:'154',text:'154CM'
+},{value:'155',text:'155CM'
+},{value:'156',text:'156CM'
+},{value:'157',text:'157CM'
+},{value:'158',text:'158CM'
+},{value:'159',text:'159CM'
+},{value:'160',text:'160CM'
+},{value:'161',text:'161CM'
+},{value:'162',text:'162CM'
+},{value:'163',text:'163CM'
+},{value:'164',text:'164CM'
+},{value:'165',text:'165CM'
+},{value:'166',text:'166CM'
+},{value:'167',text:'167CM'
+},{value:'168',text:'168CM'
+},{value:'169',text:'169CM'
+},{value:'170',text:'170CM'
+},{value:'171',text:'171CM'
+},{value:'172',text:'172CM'
+},{value:'173',text:'173CM'
+},{value:'174',text:'174CM'
+},{value:'175',text:'175CM'
+},{value:'176',text:'176CM'
+},{value:'177',text:'177CM'
+},{value:'178',text:'178CM'
+},{value:'179',text:'179CM'
+},{value:'180',text:'180CM'
+},{value:'181',text:'181CM'
+},{value:'182',text:'182CM'
+},{value:'183',text:'183CM'
+},{value:'184',text:'184CM'
+},{value:'185',text:'185CM'
+},{value:'186',text:'186CM'
+},{value:'187',text:'187CM'
+},{value:'188',text:'188CM'
+},{value:'189',text:'189CM'
+},{value:'190',text:'190CM'
+},{value:'191',text:'191CM'
+},{value:'192',text:'192CM'
+},{value:'193',text:'193CM'
+},{value:'194',text:'194CM'
+},{value:'195',text:'195CM'
+},{value:'196',text:'196CM'
+},{value:'197',text:'197CM'
+},{value:'198',text:'198CM'
+},{value:'199',text:'199CM'
+},{value:'200',text:'200CM'
+}]);
+var HeightPickerButton =doc.getElementById('HeightPicker');
+HeightPickerButton.addEventListener('tap',function(event) {HeightPicker.show(function(items) {HeightPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var WeightPicker =new $.PopPicker();
+WeightPicker.setData([{value:'偏瘦',text:'偏瘦'
+},{value:'偏胖',text:'偏胖'
+},{value:'中等',text:'中等'
+}]);
+var WeightPickerButton =doc.getElementById('WeightPicker');
+WeightPickerButton.addEventListener('tap',function(event) {WeightPicker.show(function(items) {WeightPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+WeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+});
+})(mui,document);</script>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script language="javascript">
+				$(function() {
+					//提交表单
+					var flag = true;
+					$('#form2 .do-submit').click(function () {
+
+					var _this = $(this);
+					
+						var xb = $('#form2 input[name="sex"]');
+					    var bd = $('#form2 input[name="birthday"]');
+					    var ma = $('#form2 input[name="marry"]');
+					    var ct = $('#form2 input[name="city"]');
+					    var ht = $('#form2 input[name="height"]');
+						var wt = $('#form2 input[name="weight"]');
+					    var xg = $('#form2 input[name="xg"]');
+					    var jb = $('#form2 input[name="job"]');
+					    var bld = $('#form2 input[name="boold"]');
+					    var wx = $('#form2 input[name="wxnamber"]');
+					    var qm = $('#qianming');		
+
+					    //判断出生日期是否选择
+					    if (xb.val() == '' || xb.val() == '0') {
+					        mui.toast('请选择您的性别');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+					    //判断出生日期是否选择
+					    if (bd.val() == '' || bd.val() == '0') {
+					        mui.toast('请选择您的出生日期');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+					    //判断地区是否选择
+					    if (ct.val() == '' || ct.val() == '0') {
+					        mui.toast('请选择您的所在地区');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+						
+						//判断婚姻状况是否选择
+					    if (ma.val() == '' || ma.val() == '0') {
+					        mui.toast('请选择您的婚姻状况');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+						
+						//判断血型是否选择
+					    if (bld.val() == '' || bld.val() == '0') {
+					        mui.toast('请选择您的血型');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+						
+/* 						//判断职业是否选择
+					    if (jb.val() == '' || jb.val() == '0') {
+					        mui.toast('请选择您的职业');
+							flag = false;
+					        return false;
+					    }
+						
+					    //判断性格是否选择
+					    if (xg.val() == '' || xg.val() == '0') {
+					        mui.toast('请选择您的性格');
+							flag = false;
+					        return false;
+					    }
+						
+					   
+						//判断身高是否选择
+					    if (ht.val() == '' || ht.val() == '0') {
+					        mui.toast('请选择您的身高');
+							flag = false;
+					        return false;
+					    }
+					    //判断体型是否选择
+					    if (wt.val() == '' || wt.val() == '0') {
+					        mui.toast('请选择您的体重');
+							flag = false;
+					        return false;
+					    } */
+						
+						//判断是否填写微信
+					    if (wx.val() == '' || wx.val() == '0') {
+					        mui.toast('请填写您的微信号');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+					    //判断是否填写签名
+					    if (qm.val() != '') {
+							var unlen = getByteLen(qm.val());
+							if (unlen < 6 || unlen > 100) {
+								mui.toast('签名长度为6-50个字符');
+								qm.focus();
+								flag = false;
+								return false;
+							}else{
+								flag = true;
+							}
+
+					    }
+						if(flag){
+							document.getElementById("form2").submit();
+						}
+						
+					});
+				});	    
+				//判断字符串长度（中文/英文）
+				function getByteLen(val) {
+					var len = 0;
+					for (var i = 0; i < val.length; i++) {
+						var a = val.charAt(i);
+						if (a.match(/[^\x00-\xff]/ig) != null) {
+							len += 2;
+						} else {
+							len += 1;
+						}
+					}
+					return len;
+				}
+</script>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

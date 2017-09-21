@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+{include file="public/header" /}
+<title>兴趣爱好</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+
+<h1 class="mui-title">兴趣爱好</h1>
+<!-- <a href="/" class="mui-bar-nav-home link"></a> -->
+</header>
+<div class="mui-content">
+<div class="interest-form">
+<div class="title">至少选择<span class="orange">一个标签</span>，快速被那个TA找到</div>
+<div class="interest-list">
+<a href="javascript:;" class="interest-item checked" value="运动">
+<div class="icon icon-sport"></div>
+<div class="label">运动</div>
+</a>
+<a href="javascript:;" class="interest-item" value="音乐">
+<div class="icon icon-music"></div>
+<div class="label">音乐</div>
+</a>
+<a href="javascript:;" class="interest-item" value="影视">
+<div class="icon icon-film"></div>
+<div class="label">影视</div>
+</a>
+<a href="javascript:;" class="interest-item" value="美食">
+<div class="icon icon-food"></div>
+<div class="label">美食</div>
+</a>
+<a href="javascript:;" class="interest-item" value="游戏">
+<div class="icon icon-game"></div>
+<div class="label">游戏</div>
+</a>
+<a href="javascript:;" class="interest-item" value="户外">
+<div class="icon icon-outdoor"></div>
+<div class="label">户外</div>
+</a>
+<a href="javascript:;" class="interest-item" value="文学">
+<div class="icon icon-literature"></div>
+<div class="label">文学</div>
+</a>
+<a href="javascript:;" class="interest-item" value="艺术">
+<div class="icon icon-art"></div>
+<div class="label">艺术</div>
+</a>
+<a href="javascript:;" class="interest-item" value="动漫">
+<div class="icon icon-comic"></div>
+<div class="label">动漫</div>
+</a>
+</div>
+<div class="mui-button-row">
+<button class="mui-btn mui-btn-warning mui-btn-block interest-btn" type="submit" href-url="/index.php/weixin/info/mfind/id/{$uid}" dialog="" id="interest-btn">下一步</button>
+</div>
+</div>
+</div>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script type="text/javascript">
+function interest() {
+$(".interest-list .interest-item").click(function () {
+$(this).toggleClass("checked");}
+)
+ $('#interest-btn').click(function () {
+ var interestSaveUrl ='/index.php/weixin/info/save_inter';
+ var link = $(this).attr('href-url');
+ var data ={id:{$uid},interest:[]}
+$(".interest-list .interest-item").each(function () {if ($(this).hasClass("checked")) {data.interest.push($(this).attr("value"))
+}
+})
+if (data.interest.length ==0) {mui.toast('请至少选择一项');return;}
+data.interest =data.interest.join(',');
+$.ajax({
+url:interestSaveUrl,
+dataType:'json',
+type:'POST',
+data:data
+}).done(function (response) {
+if (response.error_code ==0) {
+setTimeout("window.location.href='" + link + "';",1000)
+} else {mui.toast('兴趣爱好添加失败！');}
+}).fail(function () {mui.toast('请稍后再试');})
+})
+}
+$(interest);</script>
+{include file="public/footer" /}
+</body>
+</html>

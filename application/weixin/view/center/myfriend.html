@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+{include file="public/header" /}
+<title>我的好友</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">我的好友</h1>
+</header>
+<div class="mui-content" pull="myfriend" pull-obj="mui-table-view">
+<div class="focus-list">
+<ul class="mui-table-view"></ul>
+</div>
+<script src="/static/weixin/js/city.data.js"></script>
+<script src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/auto-pull.js"></script>
+<script type="text/javascript">mui.init();
+var btnArray =['确认','取消'];
+$('.focus-list ul').on('click','.mui-btn',function(event) {
+var elem =this;
+var li =elem.parentNode.parentNode;
+mui.confirm('您要删除本次记录吗？','',btnArray,function(e) {
+if (e.index ==0) {
+	var url ="myfrienddel";
+	var link ='/index.php/weixin/center';
+
+	$.ajax(url, {
+		data:{'homeuserid':li.getAttribute('objid')},
+		dataType:'json',
+		type:'post',
+		success:function(result) {
+			if (result.error_code ==0) {
+				mui.toast(result.msg);
+				li.parentNode.removeChild(li);
+			}else {
+				mui.toast(result.msg);
+				setTimeout("window.location.href='" + link + "';",1000);
+			}
+		},
+		error:function(xhr,type,errorThrown) {
+			console.log(type);
+			alert(type);
+		}
+	});
+}
+});
+});</script>
+</div> 
+{include file="public/footer" /}
+</body>
+</html>

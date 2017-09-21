@@ -1,0 +1,80 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改下载链接</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/main.css"/>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/libs/modernizr.min.js"></script>
+</head>
+<script>
+    function check()
+    {
+        var version=document.getElementById('version').value;
+        var name=document.getElementById('downname').value;
+        var url=document.getElementById('downurl').value;
+        var temp=true;
+        if(version=="")
+        {
+            alert('请填入版本号');
+            temp=false;
+        }
+        else if(name=="")
+        {
+            alert('请填入名称');
+            temp=false;
+        }
+        else if(url=="")
+        {
+            alert('请填入地址');
+            temp=false;
+        }
+        return temp;
+    }
+</script>
+<body>
+{include file="public/header"}
+<!--/sidebar-->
+<div class="main-wrap">
+
+    <div class="crumb-wrap">
+        <div class="crumb-list"><i class="icon-font"></i><a href="{:url('index/index')}">首页</a><span class="crumb-step">&gt;</span><span>修改下载链接</span></div>
+    </div>
+    <div class="result-wrap">
+        <div class="result-content">
+            <form action="__URL__/xiugai?id={$id}" method="post" id="myform" name="myform" onsubmit="return check()" >
+                <table class="insert-tab" width="100%">
+                    <tbody>
+
+                    <tr>
+                        <th  width="120"><i class="require-red">*</i>版本号：</th>
+                        <td>
+                            <input class="common-text required" id="version" name="version" size="50" value="{$version}" type="text">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><i class="require-red">*</i>名称：</th>
+                        <td><input class="common-text" id="downname" name="downname" size="50" value="{$name}" type="text"></td>
+                    </tr>
+                    <tr>
+                        <th><i class="require-red">*</i>下载地址</th>
+                        <td><input class="common-text" id="downurl" name="downurl" size="50" value="{$url}" type="text"></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="btn btn-primary btn6 mr10" value="确认修改" type="submit">
+                            <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
+                        </td>
+                    </tr>
+                    </tbody></table>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!--/main-->
+</div>
+</body>
+</html>

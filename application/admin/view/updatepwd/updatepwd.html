@@ -1,0 +1,58 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>发布新版插件</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/main.css"/>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/libs/modernizr.min.js"></script>
+</head>
+<script>
+    function check()
+    {
+        var pwd=document.getElementById('title').value;
+        var strpwd=document.getElementById('reinput').value;
+    }
+</script>
+<body>
+{include file="public/header"}
+<!--/sidebar-->
+<div class="main-wrap">
+
+    <div class="crumb-wrap">
+        <div class="crumb-list"><i class="icon-font"></i><a href="{:url('index/index')}">首页</a><span class="crumb-step">&gt;</span><span>修改密码</span></div>
+    </div>
+    <div class="result-wrap">
+        <div class="result-content">
+		<form action="__URL__/changepwd" method="post" id="myform" name="myform" enctype="multipart/form-data" onsubmit="check()">
+                <table class="insert-tab" width="100%">
+                    <tbody>
+                    <tr>
+                        <th width="120"><i class="require-red">*</i>输入新密码：</th>
+                        <td>
+
+                            <input class="common-text required" id="title" name="title" size="50" value="" type="text" >
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><i class="require-red">*</i>确认密码：</th>
+                        <td><input class="common-text required" id="reinput" name="reinput" size="50" value="" type="text" ></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td>
+                            <input class="btn btn-primary btn6 mr10" value="提交" type="submit">
+                            <input class="btn btn6" onclick="history.go(-1)" value="返回" type="button">
+                        </td>
+                    </tr>
+                    </tbody></table>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!--/main-->
+</div>
+</body>
+</html>

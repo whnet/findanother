@@ -1,0 +1,28 @@
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config(<?php echo $js->config(array('onMenuShareTimeline', 'onMenuShareAppMessage'), false) ?>);
+	wx.ready(function(){
+		wx.onMenuShareTimeline({
+			title:'',
+			link:'',
+			imgUrl:'http://weixin.matchingbus.com/static/weixin/images/fenxiang.jpg',
+			success:function(){
+			},
+			cancel:function(){
+			}
+		});
+		wx.onMenuShareAppMessage({
+			title:'',
+			desc:'{$desc}',
+			link:'',
+			imgUrl:'http://weixin.matchingbus.com/static/weixin/images/fenxiang.jpg',
+			type:'',
+			dataUrl:'',
+			success:function(){
+			},
+			cancel:function(){ 
+			}
+		});
+	
+	});
+</script>

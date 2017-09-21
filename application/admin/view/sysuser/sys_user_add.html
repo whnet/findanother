@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>系统用户管理</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  {include file="public/css" /}  
+  <style type="text/css">
+    /*contract*/
+  .rmbcss{font-size: 15px;margin-left: 10px;float: left;line-height: 30px}
+  .companylist{position: absolute;overflow:auto;background-color: #fff;z-index: 9999;width: 250px;border: 1px solid #ccc;border-radius: 5px;right: -240px;top:-100px;height: 480px}
+  .companylist li{display: block;height: 30px;line-height: 30px; font-size: 13px;padding-left: 10px;width: 100%;height: 30px}
+  .companylist li:hover{background-color: #CAE1FF;width: 100%}
+  .title{height: 40px;background-color: #f5f5f5;color: #1296db}
+  .error{padding: 10px;}
+  .result{color: #ff4500;position: absolute;margin-left: 450px;margin-top: -30px;z-index: 9999;font-size: 13px;font-weight: bold;}
+
+  </style>
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon/favicon.png">
+</head>
+
+<body>
+<!-- Header starts -->
+{include file="public/header" /}
+<!-- Header ends -->
+
+<!-- Main content starts -->
+
+<div class="content">
+
+    <!-- Sidebar -->
+    {include file='public/sidebar' /}
+    <!-- Sidebar ends -->
+
+    <!-- Main bar -->
+    <div class="mainbar">
+      
+      <!-- Page heading -->
+      <div class="page-head">
+        <!-- Page heading -->
+        <h2 class="pull-left"> 
+          <!-- page meta -->
+          <span class="page-meta">{if $item.id}编辑{else}新增{/if}用户</span>
+        </h2>
+
+
+        <!-- Breadcrumb -->
+        <div class="bread-crumb pull-right">
+           <!-- Divider -->
+        </div>
+
+        <div class="clearfix"></div>
+
+      </div>
+      <!-- Page heading ends -->
+
+
+
+      <!-- Matter -->
+
+      <div class="matter">
+        <div class="container">
+<!--search start-->
+          <div class="search">
+              <div class="search_left">
+                  
+              </div>
+              <div class="search_right">
+                <button class="btn btn-info" onclick="location='{:url('sysuser/index')}'">用户管理</button>
+
+              </div>
+          </div>
+          <div class="clear"></div><!-- 清空样式 -->
+          <!--search ends-->
+          <div class="row">
+
+            <div class="col-md-12">
+
+
+              <div class="widget wgreen">
+                
+                <div class="widget-head">
+                  <div class="pull-left">{if $item.id}编辑{else}新增{/if}用户</div>
+                  <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div class="widget-content">
+                  <div class="padd">
+
+                    <h6>请录入用户信息</h6>
+                    <hr />
+                    <!-- Form starts.  -->
+                     <form class="form-horizontal" role="form" method="post" action=""   enctype="multipart/form-data" id="jsForm"  >
+                              
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">登录账号</label>
+                                  <div class="col-lg-8">
+                                    <input type="text" class="form-control" placeholder="登录账号" name="uname"    id="uname"  required  value="{$item.uname}"   >
+                                    <input type="hidden" class="form-control" placeholder="登录账号" name="id"    id="id"  required  value="{$item.id}"   >
+                                    <span id="unamemsg" class='result' style='color:#F00'></span>
+                                   </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">登录密码</label>
+                                  <div class="col-lg-8">
+                                    <input type="password" class="form-control" placeholder="登录密码" name="upwd"  id="upwd" required minlength="6" value="{$item.upwd}">
+                                   </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">用户姓名</label>
+                                  <div class="col-lg-8">
+                                    <input type="text" class="form-control" placeholder="用户姓名" name="name"  id="name" required value="{$item.name}" >
+                                   </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">联系方式</label>
+                                  <div class="col-lg-8">
+                                    <input type="text" class="form-control" placeholder="联系方式" name='mobile' required value="{$item.mobile}" >
+                                    
+                                  </div>
+                                </div>
+
+                                    <hr />
+                                <div class="form-group">
+                                  <div class="col-lg-offset-1 col-lg-9">
+                                     
+                                    <button type="submit" class="btn btn-success" id='submit-button'>提交数据</button>
+                                    <button type="button" class="btn btn-warning" style="margin-left:30px" onclick="location='{:url('index')}'">取消录入</button>
+                                  </div>
+                                </div>
+                              </form>
+                  </div>
+                </div>
+                  <div class="widget-foot">
+                    <!-- Footer goes here -->
+                  </div>
+              </div>  
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    <!-- Matter ends -->
+
+    </div>
+
+   <!-- Mainbar ends -->        
+   <div class="clearfix"></div>
+
+</div>
+<style type="text/css">
+  .w100{width: 100%;overflow:hidden;position: absolute;top: 600px;z-index: 9999;display: none;}
+  .alertinfo{z-index: 9999;margin: 0 auto;width: 200px;display: none;}
+}
+</style>
+<div class="w100" id="w100">
+  <div class="alertinfo" id="alertinfo">
+    sdfasdfads
+  </div>
+</div>
+<!-- Footer starts -->
+{include file='public/footer' /}
+<!-- Footer ends -->
+<!-- Js starts -->
+{include file="public/webjs" /}
+<script type="text/javascript">
+//验证用户账户是否存在
+$("#uname").keyup(function(){
+    var uname=$("#uname").val();
+    //alert(departmentid);
+    $.post("validateuser",{uname:uname},function(data){
+      if(data !=""){
+        $("#unamemsg").html(data);
+      }
+    });
+});
+</script>
+<!-- Js ends -->
+</body>
+</html>

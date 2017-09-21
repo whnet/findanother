@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>编辑用户</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  {include file="public/css" /}  
+  <script type="text/javascript" src="__PUBLIC__/login/js/address.js"></script>
+  <style type="text/css">
+    /*contract*/
+  .rmbcss{font-size: 15px;margin-left: 10px;float: left;line-height: 30px}
+  .companylist{position: absolute;overflow:auto;background-color: #fff;z-index: 9999;width: 250px;border: 1px solid #ccc;border-radius: 5px;right: -240px;top:-100px;height: 480px}
+  .companylist li{display: block;height: 30px;line-height: 30px; font-size: 13px;padding-left: 10px;width: 100%;height: 30px}
+  .companylist li:hover{background-color: #CAE1FF;width: 100%}
+  .title{height: 40px;background-color: #f5f5f5;color: #1296db}
+  .error{padding: 10px;}
+  .result{color: #ff4500;position: absolute;margin-left: 550px;margin-top: -30px;z-index: 9999;font-size: 13px;font-weight: bold;}
+
+  </style>
+  <!-- Favicon -->
+
+</head>
+
+<body>
+<!-- Header starts -->
+{include file="public/header" /}
+<!-- Header ends -->
+
+<!-- Main content starts -->
+
+<div class="content">
+
+    <!-- Sidebar -->
+    {include file='public/sidebar' /}
+    <!-- Sidebar ends -->
+
+    <!-- Main bar -->
+    <div class="mainbar">
+      
+      <!-- Page heading -->
+      <div class="page-head">
+        <!-- Page heading -->
+        <h2 class="pull-left"> 
+          <!-- page meta -->
+          <span class="page-meta">编辑用户</span>
+        </h2>
+
+
+        <!-- Breadcrumb -->
+        <div class="bread-crumb pull-right">
+           <!-- Divider -->
+        </div>
+
+        <div class="clearfix"></div>
+
+      </div>
+      <!-- Page heading ends -->
+
+
+
+      <!-- Matter -->
+
+      <div class="matter">
+        <div class="container">
+ 
+          <div class="row">
+
+            <div class="col-md-12">
+
+              <div class="widget wgreen">
+                
+                <div class="widget-head">
+                  <div class="pull-left">编辑用户</div>
+                  <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+
+                <div class="widget-content">
+                  <div class="padd">
+ 
+                    <!-- Form starts.  -->
+                     <form class="form-horizontal" role="form" method="post" action=""   enctype="multipart/form-data" id="jsForm">
+
+
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">微信名</label>
+                                  <div class="col-lg-8">
+                                   
+                                    <input type="text" class="form-control" placeholder="微信名" name="nickname"    id="nickname" readonly   required value="{$item.nickname}" >
+                                   <input type="hidden" class="form-control" placeholder="用户ID" name='id' id="id" required  value="{$item.suid}">
+                  
+                                  </div>
+                                </div>
+                
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">微信头像</label>
+                                  <div class="col-lg-8">
+                                   
+                                    <img width="56" height="56" src={$item.headimgurl}/>
+                  
+                                  </div>
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">积　　分</label>
+                                  <div class="col-lg-8">
+                                   
+                                    <input type="text" class="form-control" placeholder="积分" name="Mark" id="Mark"  readonly  value="{$item.Mark}" >
+                                   <span id='m_list'></span>
+                                  </div>
+                                </div>
+								
+							  
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">注册时间</label>
+                                  <div class="col-lg-8">
+                                   
+                                    <input type="text" class="form-control" placeholder="注册时间" name="Regtime" id="Regtime"  readonly  value="{$item.Regtime|date='Y-m-d',###}" >
+                                   <span id='m_list'></span>
+                                  </div>
+                                </div> 	
+ 
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">最后登录时间</label>
+                                  <div class="col-lg-8">
+                                   
+                                    <input type="text" class="form-control" placeholder="最后登录时间" name="Lasttime" id="Lasttime"  readonly  value="{if $item.Lasttime}{$item.Lasttime|date='Y-m-d',###}{/if}" >
+                                   <span id='m_list'></span>
+                                  </div>
+                                </div>                                  
+                                <div class="form-group">
+                                  <label class="col-lg-4 control-label">是否会员</label>
+                                  <div class="col-lg-8">
+									<label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox1" value="1" name="isVip" {$item.isVip == 1 ?='checked'}   > 是
+                                     </label>
+                                     <label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox2" value="2" name="isVip"  {$item.isVip == 2 ?='checked'} > 否 
+                                     </label>
+                                  </div>
+                                </div> 
+								
+								<div class="form-group">
+                                  <label class="col-lg-4 control-label">是否实名</label>
+                                  <div class="col-lg-8">
+									<label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox1" value="1" name="isShow" {$item.isShow == 1 ?='checked'}   > 是
+                                     </label>
+                                     <label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox2" value="2" name="isShow"  {$item.isShow == 2 ?='checked'} > 否 
+                                     </label>
+                                  </div>
+                                </div> 
+								
+ 								<div class="form-group">
+                                  <label class="col-lg-4 control-label">是否认证</label> 
+                                  <div class="col-lg-8">
+									<label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox1" value="1" name="isSign" {$item.isSign == 1 ?='checked'}   > 是
+                                     </label>
+                                     <label class="radio-inline">
+                                       <input type="radio" id="inlineCheckbox2" value="2" name="isSign"  {$item.isSign == 2 ?='checked'} > 否 
+                                     </label>
+                                  </div>
+                                </div>     
+								
+ 								<div class="form-group">
+                                  <label class="col-lg-4 control-label">推荐人</label>
+                                  <div class="col-lg-8"> 
+                                   
+                                    <input type="text" class="form-control" placeholder="推荐人" name="tuijianname" readonly id="tuijianname"  value="{$item.tuijianname}" >
+                                   <span id='m_list'></span>
+                                  </div>
+                                </div> 								
+                                <hr />
+                                <div class="form-group">
+                                  <div class="col-lg-offset-1 col-lg-9">
+                                     
+                                    <button type="submit" class="btn btn-success" id='submit-button'>提交</button>
+                                    <button type="button" class="btn btn-warning" style="margin-left:30px" onclick="location='{:url('index')}'">取消</button>
+                                  </div>
+                                </div>
+                              </form>
+                  </div>
+                </div>
+                  <div class="widget-foot">
+                    <!-- Footer goes here -->
+                  </div>
+              </div>  
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    <!-- Matter ends -->
+
+    </div>
+
+   <!-- Mainbar ends -->        
+   <div class="clearfix"></div>
+
+</div>
+
+<!-- Content ends --> 
+<!-- Modal -->
+  
+<!-- Footer starts -->
+{include file='public/footer' /}
+<!-- Footer ends -->
+<!-- Js starts -->
+{include file="public/webjs" /}
+<script type="text/javascript">
+
+</script>
+<!-- Js ends -->
+</body>
+</html>

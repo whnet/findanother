@@ -1,0 +1,60 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理下载链接</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/admin/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/bootstrap/style.css"/>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/libs/modernizr.min.js"></script>
+</head>
+<body>
+{include file="public/header"}
+<!--/sidebar-->
+<div class="main-wrap">
+
+    <div class="crumb-wrap">
+        <div class="crumb-list"><i class="icon-font"></i><a href="{:url('mainpage/index')}">首页</a><span class="crumb-step">&gt;</span><span class="crumb-name">管理下载链接</span></div>
+    </div>
+
+    <div class="result-wrap">
+        <form name="myform" id="myform" method="post">
+
+            <div class="result-content">
+                <table class="result-tab" width="100%">
+                    <tr>
+
+                        
+                        <th width="100px">版本号</th>
+                        <th width="100px">名称</th>
+                        <th>下载地址</th>
+                        <th width="100px">操作</th>
+                    </tr>
+                    {volist name="result" id="vo" empty="$empty"}
+                    <tr>
+
+                        
+                        <td >{$vo.version}</td>
+                        <td>{$vo.name}</td>
+                        <td>{$vo.url}</td>
+
+                        <td>
+				<a class="link-update" href="__URL__/updatedown?id={$vo.id}&version={$vo.version}&name={$vo.name}&url={$vo.url}">修改</a>
+                            <a class="link-update" href="__URL__/deletedown?id={$vo.id}">删除</a>
+			
+                        </td>
+                    </tr>
+                    {/volist}
+                    <div align="center" style="" class="pagelist">
+                    {$result->render()}
+                    </div>
+                </table>
+
+            </div>
+        </form>
+    </div>
+</div>
+<!--/main-->
+</div>
+</body>
+</html>

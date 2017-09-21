@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+
+{include file="public/header" /}
+<title>投诉页</title>
+</head>
+<body>
+<style>
+.team-intro div.title{
+border-bottom:0px;
+}
+</style>
+<div class="team-intro">
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">投诉TA</h1>
+<a onclick="center()" class="mui-bar-nav-home link"></a>
+</header>
+<div style="margin-top:43px;">
+<form id="form2" method="post">
+<div class="form form-search">
+<div class="padding form-list">
+
+<div>
+<input name="title" type="text" class="mui-input-clear" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入投诉标题" maxlength="60">
+</div>
+<div class="mui-input-row">
+<textarea name="content" id="content" class="mui-input-clear" placeholder="请输入详细投诉内容"></textarea> 
+</div>
+
+<div class="title">
+<input type="hidden" name="tuid" value="{$tuid}"/>
+<input type="hidden" name="btuid" value="{$btuid}"/>
+<button class="mui-btn mui-btn-warning mui-btn-block do-submit" type="button">提交</button>
+</div>
+</div>
+</div>
+</form>
+</div>
+<script language="javascript">
+	function center(){
+		window.location.href='/index.php/weixin/center/index';
+	}
+				$(function() {
+					//提交表单
+					var flag = true;
+					$('#form2 .do-submit').click(function () {
+
+					var _this = $(this);
+					
+						var ti = $('#form2 input[name="title"]');
+					    var co = $('#content');
+	
+						//判断是否填写标题
+					    if (ti.val() == '' || ti.val() == '0') {
+					        mui.toast('请填写标题');
+							flag = false;
+					        return false;
+					    }
+						
+						//判断是否填写内容
+					    if (co.val() == '' || co.val() == '0') {
+					        mui.toast('请填写投诉内容');
+							flag = false;
+					        return false;
+					    }						
+					    //判断是否填写投诉内容
+					    if (co.val() != '' || co.val() != '0') {
+							var unlen = getByteLen(co.val());
+							if (unlen < 6 || unlen > 200) {
+								mui.toast('投诉内容长度为6-200个字符');
+								co.focus();
+								flag = false;
+								return false;
+							}
+					    }
+						
+						if(flag){
+							document.getElementById("form2").submit();
+						}
+						
+					});
+				});	    
+				//判断字符串长度（中文/英文）
+				function getByteLen(val) {
+					var len = 0;
+					for (var i = 0; i < val.length; i++) {
+						var a = val.charAt(i);
+						if (a.match(/[^\x00-\xff]/ig) != null) {
+							len += 2;
+						} else {
+							len += 1;
+						}
+					}
+					return len;
+				}
+</script>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

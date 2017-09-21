@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>上传模型</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  {include file="public/css" /}
+  
+  <!-- HTML5 Support for IE -->
+  <!--[if lt IE 9]>
+  <script src="js/html5shim.js"></script>
+  <![endif]-->
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon/favicon.png">
+</head>
+
+<body>
+<!-- Header starts -->
+{include file="public/header" /}
+<!-- Header ends -->
+
+<!-- Main content starts -->
+
+<div class="content">
+
+  	<!-- Sidebar -->
+    {include file="public/sidebar" /}
+    <!-- Sidebar ends -->
+
+  	<!-- Main bar -->
+  	<div class="mainbar">
+
+      <!-- Page heading -->
+      <div class="page-head">
+        <h2 class="pull-left"><i class="icon-file-alt"></i>上传模型</h2>
+
+        <!-- Breadcrumb -->
+        <div class="bread-crumb pull-right">
+         </div>
+
+        <div class="clearfix"></div>
+
+      </div>
+      <!-- Page heading ends -->
+
+
+	    <!-- Matter -->
+
+	    <div class="matter">
+        <div class="container">
+         <!--search start-->
+          <div class="clear"></div><!-- 清空样式 -->
+          <!--search ends-->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="widget">
+                <div class="widget-head">
+                  <div class="pull-left">上传模型</div>
+                  <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                  </div>  
+                  <div class="clearfix"></div>
+                </div>
+                <div class="widget-content medias">
+					<div class="result-content">
+						<form class="form-horizontal" role="form" method="post" action="" onsubmit="return check()" enctype="multipart/form-data" id="jsForm">
+							
+							    <div class="form-group" style="margin-top:12px;">
+                                  <label class="col-lg-4 control-label">模型名</label>
+                                  <div class="col-lg-8">
+                                    <input type="text" class="form-control" placeholder="模型名" name="name"  id="name"  required  value="{$item.name}" >
+                                    <input type="hidden" class="form-control" placeholder="ID" name="id" id="id"  required  value="{$item.id}" >
+                                    <span id="unamemsg" class='result' style='color:#F00'></span>
+                                   </div>
+                                </div>
+								
+								<div class="form-group">
+                                  <label class="col-lg-4 control-label">模型类别</label>
+                                  <div class="col-lg-2">
+                                    <select class="form-control" name="mtype" id="mtype" required>
+                                      <option value="">选择模型类别</option>
+                                      <option value="cad" {if condition="$item['mtype'] eq cad"} selected {/if}>cad</option>
+									  <option value="ue4" {if condition="$item['mtype'] eq ue4"} selected {/if}>ue4</option>
+                                    </select>
+                                  </div>
+                                </div> 
+								
+								<div class="form-group">
+                                  <label class="col-lg-4 control-label">模型分类</label>
+                                  <div class="col-lg-2">
+                                    <select class="form-control" name="cate" id="cate" required>
+                                      <option value="">选择模型分类</option>
+                                      <option value="花朵" {if condition="$item['cate'] eq 花朵"} selected {/if}>花朵</option>
+									  <option value="绿草" {if condition="$item['cate'] eq 绿草"} selected {/if}>绿草</option>
+                                    </select>
+                                  </div>
+                                </div> 
+								
+
+								<div class="form-group">
+                                  <label class="col-lg-4 control-label">选择文件</label>
+                                  <div class="col-lg-8" id='role_list' name='role_list'>
+                                   <input type="file" name="downurl" id="myFile" >
+                                   <input type="hidden" class="form-control" name="downurl2" id="downurl2" readonly  value="{$item.name}">
+								   <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+								  </div>
+                                </div>
+								
+                                 <hr />
+                                <div class="form-group">
+                                  <div class="col-lg-offset-1 col-lg-9">
+                                     
+                                    <button type="submit" class="btn btn-success" id='submit-button'>提交数据</button>
+                                    <button type="button" class="btn btn-warning" style="margin-left:30px" onclick="location='{:url('index')}'">取消上传</button>
+                                  </div>
+                                </div>							
+						</form>
+					</div>
+                </div>
+              </div>  
+              
+            </div>
+          </div>
+        </div>
+		  </div>
+
+		<!-- Matter ends -->
+
+    </div>
+
+   <!-- Mainbar ends -->	    	
+   <div class="clearfix"></div>
+
+</div>
+<!-- Content ends -->
+
+<!-- Footer starts -->
+<script type="text/javascript">	
+function load()
+    {
+        var image=document.getElementById('loadimage');
+        image.style.display="block";
+    }
+
+</script>
+<!-- Footer starts -->
+{include file="public/footer" /}
+<!-- Footer ends -->
+<!-- JS -->
+{include file="public/webjs" /}
+
+<script type="text/javascript">
+
+function check(){
+    var name=document.getElementById('name').value;
+    var filepath = $("input[name='downurl']").val();
+	var downurl2 = $('downurl2').val();
+    var temp=true;
+	var flag2=true;
+	var flag1=true;
+	var file_size = 0;
+	
+	if(name){
+	
+		$.post("check_name",{name:name},function(data){
+		  if(data==1){
+			$("#unamemsg").html("此模型已存在！");
+			flag2 =false;
+		  }else{
+			flag2 = true;
+		  }
+		});
+	}
+	
+	if(filepath=="" && downurl2==""){
+        alert('请选择文件');
+        temp=false;
+    }
+	
+	if(filepath && downurl2=="")
+	{
+		var extStart = filepath.lastIndexOf(".");
+		var ext = filepath.substring(extStart, filepath.length).toUpperCase();
+		if (ext != ".TXT" && ext != ".PNG" && ext != ".GIF" && ext != ".JPG" && ext != ".JPEG") {
+			alert("模型限于bmp,png,gif,jpeg,jpg格式");
+			flag1 = false;
+		}
+	}
+
+    if(flag2 && temp && flag1){
+		return true;
+	}else{
+		return false;
+	}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>
+$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+{include file="public/header" /}
+<title>补充个人资料</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+
+<h1 class="mui-title">补充个人资料</h1>
+
+</header>
+<div class="mui-content">
+<div id="info" >
+<form id="form3" method="post">
+<div class="form form-search">
+<div class="padding form-list">
+<div id="EducationPicker" class="mui-input-row">
+<label>最高学历</label>
+<font class="mui-pull-right">请选择</font>
+<input name="education" type="hidden" value="" />
+</div>
+<div id="IncomePicker" class="mui-input-row">
+<label>目前收入</label>
+<font class="mui-pull-right">请选择</font>
+<input name="income" type="hidden" value="" />
+</div>
+<div id="HoustPicker" class="mui-input-row">
+<label>车房</label>
+<font class="mui-pull-right">请选择</font>
+<input name="houst" type="hidden" value="" />
+</div>
+<div>
+<input name="school" type="text" class="mui-input-clear" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入您的毕业学校" maxlength="60">
+</div>
+<div>
+<input name="stuabroad" type="text" class="mui-input-clear" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入您的留学经历" maxlength="200">
+</div>
+<div>
+<input name="residence" type="text" class="mui-input-clear" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入您的户口所在地" maxlength="200">
+</div>
+<div>
+<input name="hometown" type="text" class="mui-input-clear" style="border-radius:0em;border-bottom:1px #eee solid;border-top:0px;border-left:0px;border-right:0px;padding: 0.2em;font-size: 0.8em;" placeholder="请输入您的老家地址" maxlength="200">
+</div>
+
+<div class="title">
+<button class="mui-btn mui-btn-warning mui-btn-block do-submit" type="button">完成</button>
+<input name="id" type="hidden" value="{$id}">
+</div>
+</div>
+</div>
+</form>
+<link href="/static/weixin/css/mui.picker.min.css" rel="stylesheet" />
+<link href="/static/weixin/css/mui.poppicker.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/mui.picker.min.js"></script>
+<script src="/static/weixin/js/mui.poppicker.js"></script>
+<script src="/static/weixin/js/city.data.js" type="text/javascript" charset="utf-8"></script>
+<script>(function($,doc) {$.init();$.ready(function() {
+
+var EducationPicker =new $.PopPicker();EducationPicker.setData([{value:'初中',text:'初中'
+},{value:'高中',text:'高中'
+},{value:'中专',text:'中专'
+},{value:'大专',text:'大专'
+},{value:'本科',text:'本科'
+},{value:'硕士',text:'硕士'
+},{value:'博士',text:'博士'
+},{value:'院士',text:'院士'
+}]);
+var EducationPickerButton =doc.getElementById('EducationPicker');
+EducationPickerButton.addEventListener('tap',function(event) {EducationPicker.show(function(items) {EducationPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;EducationPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var IncomePicker =new $.PopPicker();
+IncomePicker.setData([{value:'1万以下',text:'1万以下'
+},{value:'1-2万',text:'1-2万'
+},{value:'2-3万',text:'2-3万'
+},{value:'3万以上',text:'3万以上'
+}]);
+var IncomePickerButton =doc.getElementById('IncomePicker');IncomePicker.pickers[0].setSelectedValue('11');
+IncomePickerButton.addEventListener('tap',function(event) {IncomePicker.show(function(items) {IncomePickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+IncomePickerButton.getElementsByTagName('input')[0].value =items[0].text.substr(0,3);});},false);
+
+var HoustPicker =new $.PopPicker();HoustPicker.setData([{value:'有车',text:'有车'
+},{value:'有房',text:'有房'
+},{value:'有车有房',text:'有车有房'
+}]);
+
+var HoustPickerButton =doc.getElementById('HoustPicker');HoustPicker.pickers[0].setSelectedValue('30');
+HoustPickerButton.addEventListener('tap',function(event) {HoustPicker.show(function(items) {HoustPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;HoustPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+});
+})(mui,document);</script>
+</div>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script language="javascript">
+				$(function() {
+					//提交表单
+					var flag = true;
+					$('#form3 .do-submit').click(function () {
+					    var _this = $(this);
+					    var ed = $('#form3 input[name="education"]');
+					    var ic = $('#form3 input[name="income"]');
+					    var hou = $('#form3 input[name="houst"]');
+					    var sc = $('#form3 input[name="school"]');
+					    var st = $('#form3 input[name="stuabroad"]');
+					    var re = $('#form3 input[name="residence"]');
+					    var ht = $('#form3 input[name="hometown"]');
+					    //判断最高学历是否选择
+					   /* if (ed.val() == '' || ed.val() == '0') {
+					        mui.toast('请选择您的最高学历');
+							flag = false;
+					        return false;
+					    }
+					    //判断收入是否选择
+					    if (ic.val() == '' || ic.val() == '0') {
+					        mui.toast('请选择您的收入状况');
+							flag = false;
+					        return false;
+					    }
+					    //判断是否有车房选择
+					    if (hou.val() == '' || hou.val() == '0') {
+					        mui.toast('请选择是否有车房');
+							flag = false;
+					        return false;
+					    }*/
+						
+						 //判断是否填写毕业学校
+					    if (sc.val()) {
+							var unlen = getByteLen(sc.val());
+							if (unlen < 6 || unlen > 100) {
+								mui.toast('毕业学校长度为6-50个字符');
+								sc.focus();
+								flag = false;
+								 return false;
+							}else{
+								flag = true;
+							}
+					    }
+						//判断是否填写留学经历
+					    if (st.val()) {
+							var unlen = getByteLen(st.val());
+							if (unlen < 6 || unlen > 100) {
+								mui.toast('留学经历长度为6-50个字符');
+								st.focus();
+								flag = false;
+								 return false;
+							}else{
+								flag = true;
+							}
+
+					    }
+						
+						//判断是否填写户口所在
+					    if (re.val()) {
+							var unlen = getByteLen(re.val());
+							if (unlen < 6 || unlen > 100) {
+								mui.toast('户口所在长度为6-50个字符');
+								re.focus();
+								flag = false;
+								 return false;
+							}else{
+								flag = true;
+							}
+
+					    }
+						
+						//判断是否填写老家地址
+					    if (ht.val()) {
+							var unlen = getByteLen(ht.val());
+							if (unlen < 6 || unlen > 200) {
+								mui.toast('老家地址长度为6-100个字符');
+								ht.focus();
+								flag = false;
+								 return false;
+							}else{
+								flag = true;
+							}
+
+					    }
+						
+						if(flag){
+							document.getElementById("form3").submit();
+						}
+						
+
+					});
+				});
+				//判断字符串长度（中文/英文）
+				function getByteLen(val) {
+					var len = 0;
+					for (var i = 0; i < val.length; i++) {
+						var a = val.charAt(i);
+						if (a.match(/[^\x00-\xff]/ig) != null) {
+							len += 2;
+						} else {
+							len += 1;
+						}
+					}
+					return len;
+				}
+			</script>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

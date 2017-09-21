@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>
+$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+
+<style>
+.cm-list-style .group {
+    padding-top: 10px;
+	padding-bottom:10px;
+}
+.cm-list-style .values-main {
+    padding-bottom: 10px;
+}
+.self-intro-main{
+	padding-top: 31px;
+}
+</style>
+{include file="public/header" /}
+<title>星数奇缘</title>
+<meta name="description" content="星数奇缘婚恋交友网站--星数奇缘：真实的会员{$list.name}个人资料，{$list.name}交友联系电话 ，快来速配，找对象的好去处，星数奇缘实名婚恋网站，直营连锁创导者，更提供丰富多彩的交友征婚活动！">
+<meta name="keywords" content="{$list.name}会员征婚照片电话">
+</head>
+<body userid="{$list.nuid}">
+<div class="mui-content backgroud-gray">
+<header class="mui-bar mui-bar-nav nav-transparent">
+<h1 class="mui-title">{$list.name}</h1>
+<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>
+</header>
+
+<div class="self-intro">
+<div class="self-intro-main">
+<div class="self-avatar" style="background-image:url({$list.header});">
+<div class="audit-hint">
+</div>
+</div>
+<div class="data">
+<span class="sex" status="{$list.Sex}"></span>
+<span>{$age}</span>
+<span>{$start}</span>
+</div>
+<div class="data">
+{if $start && $list.Blood}<span>{$start}{$list.Blood}</span>{/if}
+{if $list.zhiye}<span>{$list.zhiye}</span>{/if}
+{if $list.height}<span>{$list.height}</span>{/if}
+</div>
+<div class="mood">{$list.Sign}</div>
+</div>
+<img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" />
+</div>
+<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted background-white self-preview-wrapper" {if $flag==2}style='display:none;'{/if}>
+<div class="mui-scroll" id="album">
+<div class="mui-table-view mui-grid-view boder-none">
+<a href="#" class="mui-table-view-cell mui-media preview-item">
+<div class="clip">
+ {volist name='xc' id='pho'}
+	<img width="80" height="98" src="/{$pho.photo}" data-preview-src="/{$pho.photo}" data-preview-group="{$pho.id}">	
+{/volist}
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- <div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted background-white self-preview-wrapper">
+<div class="mui-scroll" id="album">
+<div class="mui-table-view mui-grid-view boder-none">
+<a href="#" class="mui-table-view-cell mui-media preview-item">
+<div class="clip">
+<img src="http://static.7799520.com/data/attachment/avatar/201609/21/364808/avatar_big.jpg.thumb.jpg" data-preview-src="http://static.7799520.com/data/attachment/avatar/201609/21/364808/avatar_big.jpg.thumb.jpg" data-preview-group="1">
+</div>
+</a>
+</div>
+</div>
+</div> -->
+<section class="cm-list-style">
+<div class="group" style="padding-top:20px;">
+<div class="label">是否推荐</div>
+<div class="values" style="padding-left: 100px;">
+<div class="values-main" style="padding-left:0px;">
+<span>{$tuijian}</span>
+</div>
+</div>
+</div>
+<div class="group">
+<div class="label">{$result}</div>
+<div class="values" style="padding-left: 97px;padding-bottom:10px;">
+<div class="values-main" style="padding-right:0px;font-size:15px;">
+{$content}
+</div>
+
+</div>
+</div>
+<section class="cm-list-style">
+<div class="group">
+<div class="label">基本资料</div>
+<div class="values">
+<div class="values-main">
+{if $list.height}<span class="value-item">{$list.height}</span>{/if}
+{if $list.weight}<span class="value-item">{$list.weight}</span>{/if}
+{if $list.Gqzt}<span class="value-item">{$list.Gqzt}</span>{/if}
+{if $list.Province && $list.City}<span class="value-item">{$list.Province}-{$list.City}</span>{/if}
+{if $list.salary}<span class="value-item">{$list.salary}</span>{/if}
+{if $list.character}<span class="value-item">{$list.character}</span>{/if}
+{if $list.Blood}<span class="value-item">{$list.Blood}</span>{/if}
+{if $list.education}<span class="value-item">{$list.education}</span>{/if}
+
+</div>
+</div>
+</div>
+
+<div class="group">
+<div class="label">兴趣爱好</div>
+<div class="values">
+<div class="values-main">
+ {volist name='intes' id='listv'}
+<span class="value-item">{$listv}</span>
+{/volist}
+</div>
+</div>
+</div>
+{if condition="$list.school neq ''"}
+<div class="group">
+<div class="label">毕业学校</div>
+<div class="values">
+<div class="values-main">
+<p>{$list.school}</p>
+</div>
+</div>
+</div>
+{/if}
+{if $list.stuabroad}
+<div class="group">
+<div class="label">留学经历</div>
+<div class="values">
+<div class="values-main">
+<p>{$list.stuabroad}</p>
+</div>
+</div>
+</div>
+{/if}
+{if $list.houst}
+<div class="group">
+<div class="label">车房</div>
+<div class="values">
+<div class="values-main">
+<p>{$list.houst}</p>
+</div>
+</div>
+</div>
+{/if}
+{if $list.residence}
+<div class="group">
+<div class="label">户口</div>
+<div class="values">
+<div class="values-main">
+<p>{$list.residence}</p>
+</div>
+</div>
+</div>
+{/if}
+</section>
+<section class="margin-top cm-list-style">
+<div class="group">
+<div class="label">择偶要求</div>
+<div class="values">
+<div class="values-main">
+{if $list.Wanna}<span class="value-item">{$list.Wanna}</span>{/if}
+{if $list.Loveage}<span class="value-item">{$list.Loveage}</span>{/if}
+{if $fval.start}<span class="value-item">{$fval.start}</span>{/if}
+{if $fval.boold}<span class="value-item">{$fval.boold}</span>{/if}
+{if $fval.height}<span class="value-item">{$fval.height}</span>{/if}
+
+</div>
+</div>
+</div>
+</section>
+
+<div id="infox" num="{$num}" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" flag='2'  control='Ppbirthday'></div>
+</div>
+<nav class="footbar mui-clearfix">
+<a href="javascript:;" class="footbar-item" id="hulue">
+<div class="footbar-icon hulue-icon" status="false"></div>
+<span class="mui-tab-label">忽略</span>
+</a>
+<a href="javascript:;" class="footbar-item" id="msgrecord">
+<div class="footbar-icon beixuan-icon" status="false"></div>
+<span class="mui-tab-label">放入备选</span>
+</a>
+<a href="javascript:;" class="footbar-item" id="like">
+<div class="footbar-icon renshi-icon" status="false"></div>
+<span class="mui-tab-label">
+认识一下
+</span>
+</a>
+</nav>
+
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
+<script src="/static/weixin/js/mui.zoom.js"></script>
+<script src="/static/weixin/js/mui.previewimage.js"></script>
+<script src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/detail.js"></script>
+<script>mui.previewImage();</script>
+{include file="public/footer" /}
+</body>
+
+</body>
+</html>

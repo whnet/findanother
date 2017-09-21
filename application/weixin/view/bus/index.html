@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+{include file="public/header" /}
+<style>
+.cm-list-style .group {
+    padding-top: 46px;
+}
+
+.footbar .footbar-item{
+	width:50%;
+}
+.mui-button-row a{width:48%;float:left;border-radius: 2em;margin-top:10px;}
+.mui-btn-block{padding:10px;}
+
+.self-intro-main .data{color:#9f9f9f;}
+.clicks{background-color:#efeff4;}
+.self-intro{background-color:#efeff4;}
+.backgroud-gray{background-color:#fff;}
+</style>
+<title>我的巴士</title>
+</head>
+<body style="background-color: #fff;">
+<div class="backgroud-gray">
+
+<div class="mui-button-row" style="margin-bottom:9px;margin-top:10px;height:72px; background-color: #fff;">
+<a href="javascript:;"  style="margin-left:1%;" class="mui-btn mui-btn-block clicks" id="like_s">想认识的</a>
+<a href="javascript:;"  style="margin-left:2%;" class="mui-btn mui-btn-block" id="bei_s">备选页</a>
+</div>
+<div class="mui-content" pull="like_s" pull-obj="likerenshi">
+
+<div class="likerenshi">
+</div>
+</div>
+</div>
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
+<script src="/static/weixin/js/mui.zoom.js"></script>
+<script src="/static/weixin/js/mui.previewimage.js"></script>
+<script src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/detail.js"></script>
+<script src="/static/weixin/js/auto-pull.js"></script>
+<script>
+	
+	function send(suid,id,fid){
+		var url = '/index.php/weixin/bus/friend';
+		$.ajax(url, {
+			data: {
+				'suid':suid,
+				'kid':id,
+				'fid':fid,
+			},
+			dataType: 'json',
+			type: 'post',
+			success: function(result) {
+				if(result.error_code==0){
+				mui.toast(result.msg);
+				href="/index.php/weixin/bus/index";
+				(function(){
+				var wait = 3;
+				var interval = setInterval(function(){
+					var time = --wait;
+					if(time <= 0) {
+						location.href = href;
+						clearInterval(interval);
+					};
+				}, 1000);
+				})();
+				}
+			}
+		});
+	}
+$("#bei_s").click(function(){
+	window.location.href='/index.php/weixin/bus/beixuan';
+})
+$("#like_s").click(function(){
+	window.location.href='/index.php/weixin/bus/index';
+})
+</script>
+{include file="public/footer" /}
+</body>
+</html>

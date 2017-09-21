@@ -1,0 +1,277 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>
+$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+{include file="public/header" /}
+<title>修改资料</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">修改资料</h1>
+
+</header>
+<div class="mui-content">
+<div id="info">
+<form id="form3" method="post">
+<div class="form form-search">
+<div class="padding form-list">
+<div id="FindPicker" class="mui-input-row">
+<label>寻找</label>
+<font class="mui-pull-right">{if $detail.Wanna}{$detail.Wanna}{else /}请选择{/if}</font>
+<input name="find" type="hidden" value="{$detail.Wanna}" />
+<input name="uid" type="hidden" value="{$uid}" />
+<input name="fid" type="hidden" value="{$detail.fid}" />
+</div>
+<div id="XiwangPicker" class="mui-input-row">
+<label>期望</label>
+<font class="mui-pull-right">{if $detail.Loveage}{$detail.Loveage}{else /}请选择{/if}</font>
+<input name="xiwang" type="hidden" value="{$detail.Loveage}" />
+</div>
+<div id="StartPicker" class="mui-input-row">
+<label>星座</label>
+<font class="mui-pull-right">{if $detail.start}{$detail.start}{else /}请选择{/if}</font>
+<input name="start" type="hidden" value="{$detail.start}" />
+</div>
+<div class="mui-input-row" id="BooldPicker">
+<label>血型</label>
+<font class="mui-pull-right">{if $detail.boold}{$detail.boold}型{else /}请选择{/if}</font>
+<input name="boold" type="hidden" value="{$detail.boold}" />
+</div>
+<div id="HeightPicker" class="mui-input-row">
+<label>身高</label>
+<font class="mui-pull-right">{if $detail.height}{$detail.height}CM{else /}请选择{/if}</font>
+<input name="height" type="hidden" value="{$detail.height}" />
+</div>
+
+<div class="title">
+<button class="mui-btn mui-btn-warning mui-btn-block do-submit" type="button">修改</button>
+
+</div>
+</div>
+</div>
+</form>
+<link href="/static/weixin/css/mui.picker.min.css" rel="stylesheet" />
+<link href="/static/weixin/css/mui.poppicker.css" rel="stylesheet" />
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/mui.picker.min.js"></script>
+<script src="/static/weixin/js/mui.poppicker.js"></script>
+<script src="/static/weixin/js/city.data.js" type="text/javascript" charset="utf-8"></script>
+<script>(function($,doc) {$.init();$.ready(function() {
+
+var FindPicker =new $.PopPicker();
+FindPicker.setData([{value:'合适就行',text:'合适就行'
+},{value:'异性朋友',text:'异性朋友'
+},{value:'同性朋友',text:'同性朋友'
+},{value:'情侣',text:'情侣'
+},{value:'夫妻',text:'夫妻'
+},{value:'同性恋人',text:'同性恋人'
+}]);
+var FindPickerButton =doc.getElementById('FindPicker');
+FindPickerButton.addEventListener('tap',function(event) {FindPicker.show(function(items) {FindPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+FindPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var XiwangPicker =new $.PopPicker();
+XiwangPicker.setData([{value:'合适就行',text:'合适就行'
+},{value:'小我0-3岁',text:'小我0-3岁'
+},{value:'小我3岁以上',text:'小我3岁以上'
+},{value:'大我0-3岁',text:'大我0-3岁'
+},{value:'大我3岁以上',text:'大我3岁以上'
+}]);
+var XiwangPickerButton =doc.getElementById('XiwangPicker');
+XiwangPickerButton.addEventListener('tap',function(event) {XiwangPicker.show(function(items) {XiwangPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+XiwangPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var BooldPicker =new $.PopPicker();
+BooldPicker.setData([{value:'A',text:'A型'
+},{value:'B',text:'B型'
+},{value:'AB',text:'AB型'
+},{value:'O',text:'O型'
+}]);
+var BooldPickerButton =doc.getElementById('BooldPicker');
+BooldPickerButton.addEventListener('tap',function(event) {BooldPicker.show(function(items) {BooldPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+BooldPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var StartPicker =new $.PopPicker();
+StartPicker.setData([{value:'白羊座',text:'白羊座'
+},{value:'金牛座',text:'金牛座'
+},{value:'双子座',text:'双子座'
+},{value:'巨蟹座',text:'巨蟹座'
+},{value:'狮子座',text:'狮子座'
+},{value:'处女座',text:'处女座'
+},{value:'天秤座',text:'天秤座'
+},{value:'天蝎座',text:'天蝎座'
+},{value:'射手座',text:'射手座'
+},{value:'摩羯座',text:'摩羯座'
+},{value:'水瓶座',text:'水瓶座'
+},{value:'双鱼座',text:'双鱼座'
+}]);
+var StartPickerButton =doc.getElementById('StartPicker');
+StartPickerButton.addEventListener('tap',function(event) {StartPicker.show(function(items) {StartPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+StartPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+var HeightPicker =new $.PopPicker();HeightPicker.setData([{value:'150',text:'150CM'
+},{value:'151',text:'151CM'
+},{value:'152',text:'152CM'
+},{value:'153',text:'153CM'
+},{value:'154',text:'154CM'
+},{value:'155',text:'155CM'
+},{value:'156',text:'156CM'
+},{value:'157',text:'157CM'
+},{value:'158',text:'158CM'
+},{value:'159',text:'159CM'
+},{value:'160',text:'160CM'
+},{value:'161',text:'161CM'
+},{value:'162',text:'162CM'
+},{value:'163',text:'163CM'
+},{value:'164',text:'164CM'
+},{value:'165',text:'165CM'
+},{value:'166',text:'166CM'
+},{value:'167',text:'167CM'
+},{value:'168',text:'168CM'
+},{value:'169',text:'169CM'
+},{value:'170',text:'170CM'
+},{value:'171',text:'171CM'
+},{value:'172',text:'172CM'
+},{value:'173',text:'173CM'
+},{value:'174',text:'174CM'
+},{value:'175',text:'175CM'
+},{value:'176',text:'176CM'
+},{value:'177',text:'177CM'
+},{value:'178',text:'178CM'
+},{value:'179',text:'179CM'
+},{value:'180',text:'180CM'
+},{value:'181',text:'181CM'
+},{value:'182',text:'182CM'
+},{value:'183',text:'183CM'
+},{value:'184',text:'184CM'
+},{value:'185',text:'185CM'
+},{value:'186',text:'186CM'
+},{value:'187',text:'187CM'
+},{value:'188',text:'188CM'
+},{value:'189',text:'189CM'
+},{value:'190',text:'190CM'
+},{value:'191',text:'191CM'
+},{value:'192',text:'192CM'
+},{value:'193',text:'193CM'
+},{value:'194',text:'194CM'
+},{value:'195',text:'195CM'
+},{value:'196',text:'196CM'
+},{value:'197',text:'197CM'
+},{value:'198',text:'198CM'
+},{value:'199',text:'199CM'
+},{value:'200',text:'200CM'
+}]);
+var HeightPickerButton =doc.getElementById('HeightPicker');
+HeightPickerButton.addEventListener('tap',function(event) {HeightPicker.show(function(items) {HeightPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+});
+})(mui,document);</script>
+</div>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script language="javascript">
+				$(function() {
+					//提交表单
+					var flag = true;
+					$('#form3 .do-submit').click(function () {
+
+					var _this = $(this);
+					
+						var fi = $('#form3 input[name="find"]');
+					    var xi = $('#form3 input[name="xiwang"]');
+					    var st = $('#form3 input[name="start"]');
+					    var bl = $('#form3 input[name="boold"]');
+					    var ht = $('#form3 input[name="height"]');
+
+					    //判断寻找是否选择
+					    if (fi.val() == '' || fi.val() == '0') {
+					        mui.toast('请选择您的寻找对象');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+					    //判断期望是否选择
+					    if (xi.val() == '' || xi.val() == '0') {
+					        mui.toast('请选择您的期望对象');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+
+					    //判断星座是否选择
+					    if (st.val() == '' || st.val() == '0') {
+					        mui.toast('请选择您要找的星座');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+						
+						//判断血型是否选择
+					    if (bl.val() == '' || bl.val() == '0') {
+					        mui.toast('请选择您要找的血型');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+						
+						//判断血型是否选择
+					    if (ht.val() == '' || ht.val() == '0') {
+					        mui.toast('请选择您要找的身高');
+							flag = false;
+					        return false;
+					    }else{
+							flag = true;
+						}
+
+						
+						if(flag){
+							document.getElementById("form3").submit();
+						}
+						
+					});
+				});	    
+				//判断字符串长度（中文/英文）
+				function getByteLen(val) {
+					var len = 0;
+					for (var i = 0; i < val.length; i++) {
+						var a = val.charAt(i);
+						if (a.match(/[^\x00-\xff]/ig) != null) {
+							len += 2;
+						} else {
+							len += 1;
+						}
+					}
+					return len;
+				}
+			</script>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

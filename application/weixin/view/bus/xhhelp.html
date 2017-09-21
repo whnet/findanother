@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+{include file="public/header" /}
+<title>小红帮忙</title>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">小红帮忙</h1>
+<a onclick="center()" class="mui-bar-nav-home link"></a>
+</header>
+<div class="team-intro">
+<div class="title" style="padding-left:0px;text-align:center;">{$data.name}</div>
+
+<p>
+{$data.content}
+</p>
+
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script language="javascript">
+	function center(){
+		window.location.href='/index.php/weixin/center/index';
+	}
+</script>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

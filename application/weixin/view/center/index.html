@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+
+<script>$(window).ready(function () {
+(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');
+var blank =this.getAttribute('target');
+if (blank =='_blank') {window.open(url);} 
+else {window.location.href =url;}
+});
+$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');
+var blank =this.getAttribute('target');
+
+Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} 
+else {window.location.href =url;}
+});
+});
+})(mui);
+var lab =document.getElementsByClassName('site-nav')[0];
+if (lab) {var nav =getCookie('tab_item');
+if (nav) {var as =lab.getElementsByTagName('a');
+for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+<style>
+.ucenter .mui-table-view:first-child{padding-bottom:12px;}
+</style>
+{include file="public/header" /}
+<title>个人中心</title>
+</head>
+<body>
+<header class="mui-bar mui-bar-nav">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">个人中心</h1>
+</header>
+<!-- <div class="site-nav">
+<a class="link" href="/">
+<span class="nav-home"></span>
+<span class="mui-tab-label">首页</span>
+</a>
+<a class="link" href="/jiaoyou.html">
+<span class="nav-heart"></span>
+<span class="mui-tab-label">交友</span>
+</a>
+<a class="link" href="/register.html">
+<span class="nav-leaf"></span>
+<span class="mui-tab-label">注册</span>
+</a>
+<a class="link" href="/self/news">
+<span class="nav-call">
+</span>
+<span class="mui-tab-label">消息</span>
+</a>
+<a class="link" href="/self">
+<span class="nav-self"></span>
+<span class="mui-tab-label">个人</span>
+</a>
+</div>
+<nav class="mui-bar mui-bar-tab hidden">
+<a class="mui-tab-item link" href="首页.html">
+<span class="nav-home"></span>
+<span class="mui-tab-label">首页</span>
+</a>
+<a class="mui-tab-item mui-active link" href="推荐会员.html">
+<span class="nav-heart"></span>
+<span class="mui-tab-label">交友</span>
+</a>
+<a class="mui-tab-item link" href="注册1.html">
+<span class="nav-leaf"></span>
+<span class="mui-tab-label">注册</span>
+</a>
+<a class="mui-tab-item link" href="消息列表.html">
+<span class="nav-call"><label>99</label></span>
+<span class="mui-tab-label">消息</span>
+</a>
+<a class="mui-tab-item link" href="个人中心.html">
+<span class="nav-self"></span>
+<span class="mui-tab-label">个人</span>
+</a>
+</nav>  -->
+<div id="pullrefresh" class="mui-scroll-wrapper">
+<div class="mui-scroll">
+<div class="ucenter">
+<ul class="mui-table-view">
+<li class="mui-table-view-cell mui-media">
+<button class="mui-btn mui-btn-warning mui-btn-outlined"><a id="href" href="/index.php/weixin/center/edit" class="link">修改资料</a></button>
+<div class="mui-media-object mui-pull-left clip-bg do-upload" id="avatar" style="background: url({$list.headimgurl});">
+</div>
+<div class="mui-media-body">
+<b id="username"></b>{$list.nickname} 
+<span id="userid">交友ID：{$list.id}</span>
+</div>
+
+</li>
+</ul>
+<ul class="mui-table-view mui-table-view-chevron">
+
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/album" class="mui-navigate-right link"><span class="ico ico-uc-camera"></span>我的相册</a>
+</li>
+</ul>
+<ul class="mui-table-view mui-table-view-chevron">
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/myfriend" class="mui-navigate-right v-link"><span class="ico ico-uc-send"></span>我的好友({if $fnum}{$fnum}{else}0{/if})</a>
+</li>
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/mylike" class="mui-navigate-right v-link"><span class="ico ico-uc-star1"></span>我想认识的({if $knum}{$knum}{else}0{/if})</a>
+</li>
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/likeme" class="mui-navigate-right v-link"><span class="ico ico-uc-star2"></span>想认识我的({if $xknum}{$xknum}{else}0{/if})</a>
+</li>
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/mysaw" class="mui-navigate-right v-link"><span class="ico ico-uc-user1"></span>我的备选({if $anum}{$anum}{else}0{/if})</a>
+</li>
+
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/center/hulue" class="mui-navigate-right v-link"><span class="ico ico-uc-user2"></span>我忽略的({if $hnum}{$hnum}{else}0{/if})</a>
+</li>
+<li class="mui-table-view-cell">
+<a href="/index.php/weixin/bus/index" class="mui-navigate-right v-link"><span class="ico ico-uc-send"></span>我的巴士</a>
+</li>
+</ul>
+ 
+<!--<ul class="mui-table-view mui-table-view-chevron">
+ <li class="mui-table-view-cell">
+<a href="/self/set" class="mui-navigate-right link"><span class="ico ico-uc-set"></span>
+设置</a>
+</li> 
+</ul>-->
+</div>
+<div class="make-upload" object="avatar" param="ucenter"></div>
+<style type="text/css">.mui-pull{display:none;}</style>
+<script type="text/javascript" charset="utf-8">document.cookie ="tab_item="+"5";</script>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/upload.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core-pull.js"></script>
+<script type="text/javascript">$(function() {$('.ucenter').on('tap','.do-upload',function(event) {$('.make-upload input').click();});});</script>
+</div>
+</div>
+{include file="public/footer" /}
+</body>
+</html>

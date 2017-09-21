@@ -1,0 +1,53 @@
+<style>
+    .order_notice{width:90%; display:block;position:fixed;bottom:10px;right:20px;  overflow-x:hidden; overflow-y:hidden; font-family: microsoft yahei;z-index: 9999;}
+    .order_notice_detail{border:2px solid #ccc;border-radius:4px;margin-bottom: 8px;background-color: #fff;height:111px;}
+    .order_notice_top{background-color: #ccc;height:25px;padding: 0 8px;line-height: 25px;}
+    .order_notice_top span{float: left;color:#fff;font-size:15px;}
+    .order_notice_top a {float: right;margin-left: 10px;text-decoration: none;color: #fff}
+    .order_notice_bottom{margin: 10px;}
+    .order_notice_bottom a{text-decoration: none;line-height: 20px;}
+    .order_notice_bottom a:hover{color:red}
+	.order_notice_detail a{font-size:15px;}
+	.message{color:#7c7c7c;}
+	.agree{float:right;padding-right:8px;}
+	.agree a{color:#7c7c7c;}
+</style>
+<div class="order_notice">
+</div>
+
+<script language="javascript">
+
+    setInterval("load_notice_information()",15000);
+
+    function load_notice_information()
+    {
+        $.getJSON("{:url('notice/ajaxorder')}", function(result) {
+            if (result) {
+                if(result.order_log_num > 0){
+                    var i = 0;
+                    var data = result['list'];
+                    $(".order_notice").html('');
+                    for(i = 0; i < result.order_log_num; i++){
+                        var html = '';
+                        html += '<div class="order_notice_detail" id="notice_'+data[i]['log_id']+'"><div class="order_notice_top"><span>'+data[i]['notice']+'</span><a href="javascript:;" onclick = del_notice_log("'+data[i]['log_id']+'");>关闭</a></div><div class="order_notice_bottom">'+data[i]['title']+'</div></div>';
+                        $(".order_notice").append(html);
+                    }
+                }
+            }
+        });
+    }
+    
+    function del_notice_log(log_id)
+    {
+        $.getJSON("/index.php/weixin/notice/ajaxorderdrop/log_id/"+log_id, function(result) {
+            if(result.done=='true'){
+                $('#notice_' + log_id).remove();
+                load_notice_information();
+            }else{
+                $('#notice_' + log_id).remove();
+                load_notice_information();
+            }
+        });
+    }
+    
+</script>

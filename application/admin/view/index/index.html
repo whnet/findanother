@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>后台登录</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  <link href="/static/admin/style/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="/static/admin/style/font-awesome.css">
+  <link href="/static/admin/style/style.css" rel="stylesheet">
+  
+  <!-- HTML5 Support for IE -->
+  <!--[if lt IE 9]>
+  <script src="__PUBLIC__static/js/html5shim.js"></script>
+  <![endif]-->
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/static/admin/img/favicon/favicon.png">
+</head>
+
+<body   >
+
+<!-- Form area -->
+<div class="admin-form">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+        <!-- Widget starts -->
+            <div class="widget worange">
+              <!-- Widget head -->
+              <div class="widget-head">
+                <i class="icon-lock"></i> 后台系统登录 
+              </div>
+
+              <div class="widget-content">
+                <div class="padd">
+                  <!-- Login form -->
+                  <form class="form-horizontal">
+                    <!-- Email -->
+                    <div class="form-group">
+                      <label class="control-label col-lg-3" style="width:90px" for="inputEmail">登录账号</label>
+                      <div class="col-lg-9">
+                        <input type="text" class="form-control" id="username" placeholder="登录账号" name="username" required >
+                      </div>
+                    </div>
+                    <!-- Password -->
+                    <div class="form-group">
+                      <label class="control-label col-lg-3" style="width:90px" for="inputPassword">登录密码</label>
+                      <div class="col-lg-9">
+                        <input type="password" class="form-control" id="password" placeholder="登录密码" required name="password">
+                      </div>
+                    </div>
+                    <!-- Remember me checkbox and sign in button -->
+                    <div class="form-group">
+          <div class="col-lg-9 col-lg-offset-3">
+                      <div class="checkbox" style="float:left;margin-left:-25px">
+                        <label>
+                          <input type="checkbox" name="member"> 记录登录
+                        </label>
+                       </div>
+                       <div style="float:right;margin-right:25px"><button type="button" id='submit_btn' class="btn btn-danger">登录系统</button></div>
+          </div>
+          </div>
+  
+                  </form>
+        <div id="errormsg" style="color:#f00;font-size:14px;"></div>
+        </div>
+                </div>
+              
+                <div class="widget-foot">
+                  1.01
+                </div>
+            </div>  
+      </div>
+    </div>
+  </div> 
+</div> 
+
+<!-- JS -->
+<script src="/static/admin/js/jquery.js"></script>
+<script src="/static/admin/js/bootstrap.js"></script>
+<script type="text/javascript">
+$("#submit_btn").click(function(){
+    var username=$("#username").val();
+    var password=$("#password").val();
+    $.post("/index.php/admin/index/login",{username:username,password:password},function(data){
+      // body...
+      if(data != "登录成功"){ 
+        $('#errormsg').html(data);
+      }else{
+        window.location.href="/index.php/admin/main/index";
+      }
+    });
+});
+</script>
+</body>
+</html>

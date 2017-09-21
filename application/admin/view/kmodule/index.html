@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <!-- Title and other stuffs -->
+  <title>模型管理</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="author" content="">
+  <!-- Stylesheets -->
+  {include file="public/css" /}
+  
+  <!-- HTML5 Support for IE -->
+  <!--[if lt IE 9]>
+  <script src="js/html5shim.js"></script>
+  <![endif]-->
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="img/favicon/favicon.png">
+</head>
+
+<body>
+<!-- Header starts -->
+{include file="public/header" /}
+<!-- Header ends -->
+
+<!-- Main content starts -->
+
+<div class="content">
+
+  	<!-- Sidebar -->
+    {include file="public/sidebar" /}
+    <!-- Sidebar ends -->
+
+  	<!-- Main bar -->
+  	<div class="mainbar">
+
+      <!-- Page heading -->
+      <div class="page-head">
+        <h2 class="pull-left"><i class="icon-file-alt"></i>模型列表</h2>
+
+        <!-- Breadcrumb -->
+        <div class="bread-crumb pull-right">
+         </div>
+
+        <div class="clearfix"></div>
+
+      </div>
+      <!-- Page heading ends -->
+
+
+	    <!-- Matter -->
+
+	    <div class="matter">
+        <div class="container">
+         <!--search start-->
+          <div class="search">
+            <form method="get" action="" >
+              <div class="search_left">
+                  <li>模型名:</li>
+                  <li><input class="form-control col-lg-12 mt" type="text" placeholder="模型名" name="keyword"></li>
+				  <li>上传时间:</li>
+                  <li><input type="text" id="start_at" class="form-control dtpicker" name="start_at" onclick="return Calendar('start_at');" value="" class="text" style="width:85px;"/></li>
+                  <li>至</li>
+                  <li><input type="text" id="end_at" class="form-control dtpicker" onclick="return Calendar('end_at');" value="" name="end_at" class="text" style="width:85px;"/></li>
+                  <li><button type="submit" class="btn btn-success">查询</button></li>
+              </div>
+             </form>
+              <div class="search_right">
+                <button class="btn btn-info" onclick="location='{:url('add_kmodel')}'">新增模型</button>
+              </div>
+          </div>
+          <div class="clear"></div><!-- 清空样式 -->
+          <!--search ends-->
+          <div class="row">
+            <div class="col-md-12">
+
+              <div class="widget">
+                <div class="widget-head">
+                  <div class="pull-left">模型列表</div>
+                  <div class="widget-icons pull-right">
+                    <a href="#" class="wminimize"><i class="icon-chevron-up"></i></a> 
+                    <a href="#" class="wclose"><i class="icon-remove"></i></a>
+                  </div>  
+                  <div class="clearfix"></div>
+                </div>
+                <div class="widget-content medias">
+                  
+                  <table class="table table-striped table-bordered table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>模型名称</th>
+                          <th>模型类别</th>
+                          <th>模型分类</th>
+						  <th>添加时间</th>
+                          <th>操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {volist id='list' name='list'}
+                        <tr>
+                          <td>{$i}</td>
+                          <td>{$list.name}</td>
+                          <td>{$list.cate}</td>
+                          <td>{$list.mtype}</td>
+                          <td>{$list.create_at|date='Y-m-d',###}</td>
+                          <td>
+						  		<a href="{:url('add_kmodel',['id'=>$list->id])}" class="btn btn-xs btn-warning" title="编辑">编辑</a>
+							   <a href="{:url('del',['id'=>$list->id])}" data-confirm="确认删除？" class="btn btn-xs btn-danger" title="删除">删除</a>
+
+                          </td>
+                        </tr>
+                        {/volist}
+                      </tbody>
+                    </table>
+
+                    <div class="widget-foot">
+                      {$page}
+                      <div class="clearfix"></div> 
+
+                    </div>
+                </div>
+              </div>  
+              
+            </div>
+          </div>
+        </div>
+		  </div>
+
+		<!-- Matter ends -->
+
+    </div>
+
+   <!-- Mainbar ends -->	    	
+   <div class="clearfix"></div>
+
+</div>
+<!-- Content ends -->
+
+<!-- Footer starts -->
+<script type="text/javascript">
+  function delinfo(id){
+        if(window.confirm('你确定要删除模型吗？')){
+             window.location.href="del/id/"+id; 
+        }
+  }
+
+</script>
+<!-- Footer starts -->
+{include file="public/footer" /}
+<!-- Footer ends -->
+<!-- JS -->
+{include file="public/webjs" /}
+
+</body>
+</html>

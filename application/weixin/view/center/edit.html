@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');
+Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+<style>
+.cm-label-style .group{float:left;padding-right:0px;}
+.interst{background-color: #fff;height:100px;}
+.cm-label-style .group.sport .icon, .cm-label-style .group.sport .value-item.checked:after{
+    background-color: #a173cb;
+}
+</style>
+{include file="public/header" /}
+<title>修改个人资料</title>
+</head>
+<body>
+<div class="mui-content backgroud-gray">
+<header class="mui-bar mui-bar-nav nav-transparent">
+<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+<h1 class="mui-title">{$list.nickname}</h1>
+</header>
+<div class="self-intro">
+<div class="self-intro-main">
+<div class="self-avatar" style="background-image:url({$list.headimgurl});">
+<div class="audit-hint">
+</div>
+</div>
+<div class="data">
+<span class="sex" status="{$list.Sex}"></span>
+<span>{$age}</span>
+<span>{$start}</span>
+
+</div>
+<div class="mood"></div>
+</div>
+<img class="self-intro-bg" src="http://m7799520.oss-cn-shanghai.aliyuncs.com/img/self/self_detail_top.jpg" />
+</div>
+<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted background-white self-preview-wrapper">
+<div class="mui-scroll" id="album">
+<div class="mui-table-view mui-grid-view boder-none" style="margin-top:1px;">
+ {volist name='xc' id='pho'}
+	<img width="80" height="80" src="/{$pho.photo}" data-preview-src="/{$pho.photo}" data-preview-group="{$pho.id}">	
+{/volist}
+</div>
+</div>
+</div>
+<section class="cm-edit-list">
+<a class="title cm-into v-link" href="baseinfo">基本资料</a>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">身高 : <em>{if $list.height}{$list.height}cm{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">体重 : <em>{if $list.weight}{$list.weight}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">现居 :<em>{if $list.Province && $list.City}{$list.Province}-{$list.City}{else /}'未填写'{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">出生年月日 : <em>{if $list.Birthday}{$list.Birthday|date="Y-m-d",###}{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">婚姻状况 :<em>{if $list.Gqzt}{$list.Gqzt}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">血型 : <em>{if $list.Blood}{$list.Blood}型{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">职业 :<em>{if $list.zhiye}{$list.zhiye}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">微信号 :<em>{$list.wxnumber}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">性格 :<em>{if $list.character}{$list.character}{else /}未填写{/if}</em></div>
+</div>
+</section>
+<section class="cm-edit-list">
+<a class="title v-link" href="javascript:;">个性签名</a>
+<p>{$list.Sign}</p>
+</section>
+<section class="cm-edit-list">
+<a class="title cm-into v-link" href="detailinfo">详细资料</a>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">最高学历</div>
+<div class="cm-right-value">{if $list.education}{$list.education}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">目前收入</div>
+<div class="cm-right-value">{if $list.salary}{$list.salary}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">毕业学校</div>
+<div class="cm-right-value">{if $list.school}{$list.school}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">留学经历</div>
+<div class="cm-right-value">{if $list.stuabroad}{$list.stuabroad}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">车房</div>
+<div class="cm-right-value">{if $list.houst}{$list.houst}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">户口所在地</div>
+<div class="cm-right-value">{if $list.residence}{$list.residence}{else /}未填写{/if}</div>
+</div>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">老家</div>
+<div class="cm-right-value">{if $list.hometown}{$list.hometown}{else /}未填写{/if}</div>
+</div>
+</section>
+<section class="cm-edit-list margin-top">
+<a class="title cm-into v-link" href="zheouinfo">择偶要求</a>
+<div class="mui-row">
+<div class="mui-col-xs-6 mui-col-sm-6">寻找 : <em>{if $list.Wanna}{$list.Wanna}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">期望 :<em>{if $list.Loveage}{$list.Loveage}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">星座 : <em>{if $findval.fstart}{$findval.fstart}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">血型 : <em>{if $findval.fboold}{$findval.fboold}型{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">身高 :<em>{if $findval.fheight}{$findval.fheight}cm{else /}未填写{/if}</em></div>
+</div>
+</section>
+<style>
+
+</style>
+<section class="margin-top cm-label-style cm-edit-list">
+<a class="title cm-into v-link" href="interinfo">兴趣爱好</a>
+<div class="interst">
+ {volist name='info' id='ints'}
+	<div class="group sport">
+	<div class="label">
+	<div class="icon {$ints}"></div>
+	</div>
+	</div>
+{/volist}
+</div>
+</section>
+</div>
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
+<script src="/static/weixin/js/mui.zoom.js"></script>
+<script src="/static/weixin/js/mui.previewimage.js"></script>
+<script>mui.previewImage();</script>
+<script src="/static/weixin/js/common.js"></script>
+{include file="public/footer" /}
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<script src="/static/admin/js/jquery.js"></script> <!-- jQuery -->
+<script src="/static/admin/js/bootstrap.js"></script> <!-- Bootstrap -->
+<script src="/static/admin/js/jquery-ui-1.9.2.custom.min.js"></script> <!-- jQuery UI -->
+<script src="/static/admin/js/fullcalendar.min.js"></script> <!-- Full Google Calendar - Calendar -->
+<script src="/static/admin/js/jquery.rateit.min.js"></script> <!-- RateIt - Star rating -->
+<script src="/static/admin/js/jquery.prettyPhoto.js"></script> <!-- prettyPhoto -->
+
+<!-- jQuery Flot -->
+<script src="/static/admin/js/excanvas.min.js"></script>
+<script src="/static/admin/js/jquery.flot.js"></script>
+<script src="/static/admin/js/jquery.flot.resize.js"></script>
+<script src="/static/admin/js/jquery.flot.pie.js"></script>
+<script src="/static/admin/js/jquery.flot.stack.js"></script>
+
+<!-- jQuery Notification - Noty -->
+<script src="/static/admin/js/jquery.noty.js"></script> <!-- jQuery Notify -->
+<script src="/static/admin/js/themes/default.js"></script> <!-- jQuery Notify -->
+<script src="/static/admin/js/layouts/bottom.js"></script> <!-- jQuery Notify -->
+<script src="/static/admin/js/layouts/topRight.js"></script> <!-- jQuery Notify -->
+<script src="/static/admin/js/layouts/top.js"></script> <!-- jQuery Notify -->
+<!-- jQuery Notification ends -->
+
+<script src="/static/admin/js/sparklines.js"></script> <!-- Sparklines -->
+<script src="/static/admin/js/jquery.cleditor.min.js"></script> <!-- CLEditor -->
+<script src="/static/admin/js/bootstrap-datetimepicker.min.js"></script> <!-- Date picker -->
+<!-- <script src="__PUBLIC__/admin/js/jquery.uniform.min.js"></script> <!-- jQuery Uniform -->
+<script src="/static/admin/js/bootstrap-switch.min.js"></script> <!-- Bootstrap Toggle -->
+<script src="/static/admin/js/filter.js"></script> <!-- Filter for support page -->
+<script src="/static/admin/js/custom.js"></script> <!-- Custom codes -->
+<script src="/static/admin/js/charts.js"></script> <!-- Charts & Graphs -->
+<script src="/static/admin/js/showdate.js"></script> <!-- 时间选择器 -->
+<script src="/static/admin/js/jquery.validate.min.js"></script> <!--表单验证 -->
+<!-- <script src="__PUBLIC__/admin/js/jquery-1.10.2.min.js"></script> <!-- 表单验证 --> 
+<script type="text/javascript">
+	$(document).ready(function() {
+    $('a[data-confirm]').click(function(ev) {
+        var href = $(this).attr('href');
+       	var confirm_text = $(this).attr('data-confirm');
+       	if(confirm(confirm_text)) {
+       		window.location = href;
+       	}
+       	return false;
+    });
+});
+</script>
+
+<style>
+    .order_notice{width:250px; display:block;position:fixed;bottom:10px;right:20px;  overflow-x:hidden; overflow-y:hidden; font-family: microsoft yahei;z-index: 9999;}
+    .order_notice_detail{border:2px solid #ccc;border-radius:4px;margin-bottom: 8px;background-color: #fff}
+    .order_notice_top{background-color: #ccc;height:25px;padding: 0 8px;line-height: 25px;}
+    .order_notice_top span{float: left;color:#fff}
+    .order_notice_top a {float: right;margin-left: 10px;text-decoration: none;color: #fff}
+    .order_notice_bottom{margin: 10px;}
+    .order_notice_bottom a{text-decoration: none;line-height: 20px;}
+    .order_notice_bottom a:hover{color:red}
+</style>
+<div class="order_notice">
+</div>
+

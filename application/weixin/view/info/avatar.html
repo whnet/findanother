@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+<script>$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});$('body').on('tap','.v-link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');Common.downloadApp(function(){if(url =='javascript:;'||url ==null ||url ==undefined ||url ==''){return false;}
+if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
+});});})(mui);var lab =document.getElementsByClassName('site-nav')[0];if (lab) {var nav =getCookie('tab_item');if (nav) {var as =lab.getElementsByTagName('a');for (var i;i < as.length;i++) {as[i].className ='link'
+}
+as[nav - 1].className ='link mui-active'
+}
+}
+})
+</script>
+{include file="public/header" /}
+<title>我的相册</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+<h1 class="mui-title">我的相册</h1>
+<a href="javascript:;" class="mui-btn-link mui-btn-nav mui-pull-right do-submit">删除</a>
+<a href="javascript:;" class="mui-btn-link mui-btn-nav mui-pull-right do-close hidden">取消</a>
+<a href="javascript:;" class="mui-btn-link mui-btn-nav mui-pull-right do-del hidden">确认</a>
+</header>
+<div class="mui-content">
+<div class="album">
+<ul class="mui-table-view mui-grid-view boder-none" id="photo">
+<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+<a href="javascript:;" class="do-upload">
+<img src="/static/weixin/images/file-upload.png" />
+</a>
+</li>
+</ul>
+</div>
+
+<div class="make-upload" object="album" param="myalbum" uid="{$id}"></div>
+<script type="text/javascript" src="/static/weixin/js/common.js"></script>
+<script src="/static/weixin/js/exif.js"></script>
+<script src="/static/weixin/js/upload.js"></script>
+<script type="text/javascript">$(function() {
+
+if($('.do-upload').parents('ul').find('li').size() >10) {$('.do-upload').hide();}
+
+$('.do-upload').click(function() {
+$('.make-upload input').click();
+});
+
+$('.do-submit').click(function() {
+
+$('.mui-bar-nav .mui-pull-right').addClass('hidden');
+
+$('.do-close').removeClass('hidden');
+
+$('.do-upload').parent().hide();
+
+$('.album label').show();
+
+});
+
+$('.album label').live('click',function() {if ($(this).parent().find('span').size() >0) {$(this).parent().find('span').remove();
+} else {$(this).parent().append('<span class="mui-icon mui-icon-checkmarkempty"></span>');
+}
+
+if ($('.album span').size() >0) {$('.mui-bar-nav .mui-pull-right').addClass('hidden');$('.do-del').removeClass('hidden');} else {$('.mui-bar-nav .mui-pull-right').addClass('hidden');$('.do-close').removeClass('hidden');}
+});$('.do-close').click(function() {$('.mui-bar-nav .mui-pull-right').addClass('hidden');$('.do-submit').removeClass('hidden');$('.do-upload').parent().show();$('.album label').hide();$('.album span').remove();});$('.do-del').click(function() {var t ='';$('.album span').each(function(x) {if (x ==0) {t +=$(this).parent().attr('photoid');} else {t +=',' + $(this).parent().attr('photoid');}
+$(this).parents('li').remove();});var url ="//" +apiUrl+ "/user/wap/album/del";$.ajax(url,{data:{'photoidList':t,'token' :Common.cookieGet('user_info')
+},dataType:'json',type:'post',success:function(result) {if (result.error_code ==0) {mui.toast(result.msg);} else {mui.toast(result.msg);}
+}
+});$('.mui-bar-nav .mui-pull-right').addClass('hidden');$('.do-submit').removeClass('hidden');$('.do-upload').parent().show();$('.album label').hide();if($('.do-upload').parents('ul').find('li').size() <=10) {$('.do-upload').show();}
+});});</script>
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css" />
+<script src="/static/weixin/js/mui.zoom.js"></script>
+<script src="/static/weixin/js/mui.previewimage.js"></script>
+<script>mui.previewImage();</script>
+</div>
+
+<div class="form-radius form mui-button-row">
+<p class="mui-text-center">
+上传相册，人气立即提升
+<font>76.15%</font>
+</p>
+
+<div class="mui-button-row">
+<a class="mui-btn mui-btn-warning mui-btn-block  link" href="/index.php/weixin/detail/index/uid/{$id}/jh/1" style="color:#fff;">完成</a>
+<p class="mui-text-left">
+<font>提示：</font>支持
+<font>JPG、GIF、PNG</font>格式，图片小于
+<font>5M</font>
+</p>
+</div>
+</div>
+<script>
+$('.do-submit').click(function() {
+	mui.toast("赞~ 你的匹配信息已完善,正跳到匹配页喔！");
+	(function(){
+			var wait = 3;
+            var interval = setInterval(function(){
+                var time = --wait;
+                if(time <= 0) {
+                    location.href = '/index.php/weixin/detail/index/uid/' +{$id}+ '.html';
+                    clearInterval(interval);
+                };
+            }, 1000);
+        })();
+})
+</script>
+{include file="public/footer" /}
+</body>
+</html>

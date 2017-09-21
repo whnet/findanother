@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
+<script type="text/javascript" src="/static/weixin/js/core.js"></script>
+
+<title>注册</title>
+</head>
+<body class="backgroud-white">
+<header class="mui-bar mui-bar-nav">
+<h1 class="mui-title">注册</h1>
+<a href="/" class="mui-bar-nav-home link"></a>
+</header>
+<div class="mui-content">
+<div class="auth">
+<div>
+<form id="form2" method="post">
+<div class="avatar">
+<b>请选择</b>
+<ul class="mui-table-view mui-grid-view">
+<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+<label class="mui-checkbox" gender="1"><input name="do" type="checkbox" value=""></label>
+<span>我是新用户</span>
+</li>
+<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6">
+<label class="mui-checkbox" gender="2"><input name="do" type="checkbox" value=""></label>
+<span>我是老用户(爱情巴士网)</span>
+</li>
+</ul>
+<div></div>
+<input name="gender" type="hidden" value="">
+
+</div>
+<button class="mui-btn mui-btn-warning mui-btn-block do-submit">下一步</button>
+</form>
+<p>
+<b>提示：</b>爱情巴士网注册的用户请选择"我是老用户"！
+</p>
+</div>
+</div>
+
+<script src="/static/weixin/js/common.js"></script>
+<script language="javascript">
+				$(function() {
+					//选择性别
+					$('#form2 .avatar label').click(function() {
+						$('#form2 .avatar li').removeClass('active');
+						$(this).find('input').attr('checked', true);
+						$(this).parent().addClass('active');
+						$('#form2 input[name="gender"]').val($(this).attr('gender'));
+					});
+
+					var flag = true;
+					$('#form2 .do-submit').click(function () {
+					    var _this = $(this);
+					    var sx = $('#form2 input[name="gender"]');	
+					   
+					    //判断新老用户是否为空
+					    if (sx.val() == '' || sx.val() == '0') {
+					        mui.toast('请选择新老用户');
+							flag = false;
+					        return false;
+					    }
+					    
+						if(flag){
+							document.getElementById("form2").submit();
+						}
+					});
+				});
+
+			</script>
+</div>
+{include file="public/footer" /}
+</html>
