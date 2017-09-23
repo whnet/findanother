@@ -35,17 +35,17 @@ as[nav - 1].className ='link mui-active'
 <div class="form form-search">
 <div class="padding form-list">
 <div id="EducationPicker" class="mui-input-row">
-<label>最高学历</label>
+<label><i></i>最高学历</label>
 <font class="mui-pull-right">请选择</font>
 <input name="education" type="hidden" value="" />
 </div>
 <div id="IncomePicker" class="mui-input-row">
-<label>目前收入</label>
+<label><i></i>目前收入</label>
 <font class="mui-pull-right">请选择</font>
 <input name="income" type="hidden" value="" />
 </div>
 <div id="HoustPicker" class="mui-input-row">
-<label>车房</label>
+<label><i></i>车房</label>
 <font class="mui-pull-right">请选择</font>
 <input name="houst" type="hidden" value="" />
 </div>
@@ -77,7 +77,7 @@ as[nav - 1].className ='link mui-active'
 <script src="/static/weixin/js/city.data.js" type="text/javascript" charset="utf-8"></script>
 <script>(function($,doc) {$.init();$.ready(function() {
 
-var EducationPicker =new $.PopPicker();EducationPicker.setData([{value:'初中',text:'初中'
+var EducationPicker =new $.PopPicker();EducationPicker.setData([{value:'0',text:'请选择'},{value:'初中',text:'初中'
 },{value:'高中',text:'高中'
 },{value:'中专',text:'中专'
 },{value:'大专',text:'大专'
@@ -90,7 +90,7 @@ var EducationPickerButton =doc.getElementById('EducationPicker');
 EducationPickerButton.addEventListener('tap',function(event) {EducationPicker.show(function(items) {EducationPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;EducationPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
 var IncomePicker =new $.PopPicker();
-IncomePicker.setData([{value:'1万以下',text:'1万以下'
+IncomePicker.setData([{value:'0',text:'请选择'},{value:'1万以下',text:'1万以下'
 },{value:'1-2万',text:'1-2万'
 },{value:'2-3万',text:'2-3万'
 },{value:'3万以上',text:'3万以上'
@@ -99,7 +99,7 @@ var IncomePickerButton =doc.getElementById('IncomePicker');IncomePicker.pickers[
 IncomePickerButton.addEventListener('tap',function(event) {IncomePicker.show(function(items) {IncomePickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
 IncomePickerButton.getElementsByTagName('input')[0].value =items[0].text.substr(0,3);});},false);
 
-var HoustPicker =new $.PopPicker();HoustPicker.setData([{value:'有车',text:'有车'
+var HoustPicker =new $.PopPicker();HoustPicker.setData([{value:'0',text:'请选择'},{value:'有车',text:'有车'
 },{value:'有房',text:'有房'
 },{value:'有车有房',text:'有车有房'
 }]);
@@ -143,58 +143,58 @@ HoustPickerButton.addEventListener('tap',function(event) {HoustPicker.show(funct
 					    }*/
 						
 						 //判断是否填写毕业学校
-					    if (sc.val()) {
-							var unlen = getByteLen(sc.val());
-							if (unlen < 6 || unlen > 100) {
-								mui.toast('毕业学校长度为6-50个字符');
-								sc.focus();
-								flag = false;
-								 return false;
-							}else{
-								flag = true;
-							}
-					    }
+						//if (sc.val()) {
+						//	var unlen = getByteLen(sc.val());
+						//	if (unlen < 6 || unlen > 100) {
+						//		mui.toast('毕业学校长度为6-50个字符');
+						//		sc.focus();
+						//		flag = false;
+						//		 return false;
+						//	}else{
+						//		flag = true;
+						//	}
+						//}
 						//判断是否填写留学经历
-					    if (st.val()) {
-							var unlen = getByteLen(st.val());
-							if (unlen < 6 || unlen > 100) {
-								mui.toast('留学经历长度为6-50个字符');
-								st.focus();
-								flag = false;
-								 return false;
-							}else{
-								flag = true;
-							}
-
-					    }
+						//if (st.val()) {
+						//	var unlen = getByteLen(st.val());
+						//	if (unlen < 6 || unlen > 100) {
+						//		mui.toast('留学经历长度为6-50个字符');
+						//		st.focus();
+						//		flag = false;
+						//		 return false;
+						//	}else{
+						//		flag = true;
+						//	}
+						//
+						//}
 						
 						//判断是否填写户口所在
-					    if (re.val()) {
-							var unlen = getByteLen(re.val());
-							if (unlen < 6 || unlen > 100) {
-								mui.toast('户口所在长度为6-50个字符');
-								re.focus();
-								flag = false;
-								 return false;
-							}else{
-								flag = true;
-							}
-
-					    }
+						//if (re.val()) {
+						//	var unlen = getByteLen(re.val());
+						//	if (unlen < 6 || unlen > 100) {
+						//		mui.toast('户口所在长度为6-50个字符');
+						//		re.focus();
+						//		flag = false;
+						//		 return false;
+						//	}else{
+						//		flag = true;
+						//	}
+						//
+						//}
 						
 						//判断是否填写老家地址
-					    if (ht.val()) {
-							var unlen = getByteLen(ht.val());
-							if (unlen < 6 || unlen > 200) {
-								mui.toast('老家地址长度为6-100个字符');
-								ht.focus();
-								flag = false;
-								 return false;
-							}else{
-								flag = true;
-							}
-
-					    }
+						//if (ht.val()) {
+						//	var unlen = getByteLen(ht.val());
+						//	if (unlen < 6 || unlen > 200) {
+						//		mui.toast('老家地址长度为6-100个字符');
+						//		ht.focus();
+						//		flag = false;
+						//		 return false;
+						//	}else{
+						//		flag = true;
+						//	}
+						//
+						//}
 						
 						if(flag){
 							document.getElementById("form3").submit();

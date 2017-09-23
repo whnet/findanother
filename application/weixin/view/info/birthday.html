@@ -30,17 +30,24 @@
 <div class="form form-search">
 <div class="padding form-list">
 
+<!--生日-->
 <div id="BirthdayPicker" class="mui-input-row">
-<label>出生日期(阳历)</label>
+<label><i>*</i>出生日期(阳历)</label>
 <font class="mui-pull-right">请选择</font>
 <input name="birthday" type="hidden" value="" />
 </div>
-<div id="FindPicker" class="mui-input-row">
-<label>要寻找的人</label>
-<font class="mui-pull-right">请选择</font>
-<input name="find" type="hidden" value="" />
+<!--生日-->
+
+<!--性别-->
+<div id="SexPicker" class="mui-input-row">
+    <label><i>*</i>性别</label>
+    <font class="mui-pull-right">请选择</font>
+    <input name="sex" type="hidden" value="" />
 </div>
-<div style="color:red;font-size:13px;">(注)请慎重选择，出生年月日只有一次修改机会</div>
+<!--性别-->
+
+
+<div style="color:red;font-size:12px;">(注)请慎重选择，出生年月日只有一次修改机会</div>
 </div></div>
 
 <button class="mui-btn mui-btn-warning mui-btn-block do-submit">提交</button>
@@ -60,7 +67,6 @@
 <script>(function($,doc) {
 $.init();
 $.ready(function() {
-
 var optionsJson ='{"type":"date","beginYear":1949,"endYear":2000}';
 var options =JSON.parse(optionsJson);
 var BirthdayPicker =new $.DtPicker(options);
@@ -68,31 +74,32 @@ BirthdayPicker.setSelectedValue("1988-01-01");
 var BirthdayPickerButton =doc.getElementById('BirthdayPicker');
 BirthdayPickerButton.addEventListener('tap',function(event) {BirthdayPicker.show(function(items) {BirthdayPickerButton.getElementsByTagName('font')[0].innerText =items.text;BirthdayPickerButton.getElementsByTagName('input')[0].value =items.text;});},false);
 
-var FindPicker =new $.PopPicker();
-FindPicker.setData([{value:'合适就行',text:'合适就行'
-},{value:'异性朋友',text:'异性朋友'
-},{value:'同性朋友',text:'同性朋友'
-},{value:'情侣',text:'情侣'
-},{value:'夫妻',text:'夫妻'
-},{value:'同性恋人',text:'同性恋人'
+
+
+var SexPicker =new $.PopPicker();
+SexPicker.setData([{value:'1',text:'男'
+},{value:'2',text:'女'
 }]);
+var SexPickerButton =doc.getElementById('SexPicker');
+SexPickerButton.addEventListener('tap',function(event) {SexPicker.show(function(items) {SexPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+    SexPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+
+
 var FindPickerButton =doc.getElementById('FindPicker');
 FindPickerButton.addEventListener('tap',function(event) {FindPicker.show(function(items) {FindPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
 FindPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 });
-})(mui,document);</script>
+})(mui,document);
+</script>
 <script type="text/javascript" src="/static/weixin/js/common.js"></script>
 <script language="javascript">
 				$(function() {
 					//提交表单
 					var flag = true;
 					$('#form2 .do-submit').click(function () {
-
 					var _this = $(this);
-					
 					var bd = $('#form2 input[name="birthday"]');
-					var fi = $('#form3 input[name="find"]');
-
+					var fi = $('#form3 input[name="sex"]');
 					    //判断出生日期是否选择
 					    if (bd.val() == '' || bd.val() == '0') {
 					        mui.toast('请选择您的出生日期');
@@ -101,7 +108,6 @@ FindPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},fal
 					    }else{
 							flag = true;
 						}
-						
 						//判断寻找是否选择
 					    if (fi.val() == '' || fi.val() == '0') {
 					        mui.toast('请选择您的寻找对象');

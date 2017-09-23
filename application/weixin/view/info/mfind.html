@@ -36,25 +36,14 @@ as[nav - 1].className ='link mui-active'
 <div class="padding form-list">
 
 <div id="XiwangPicker" class="mui-input-row">
-<label>期望</label>
+<label><i>*</i>期望</label>
 <font class="mui-pull-right">请选择</font>
 <input name="xiwang" type="hidden" value="" />
 </div>
 <div id="StartPicker" class="mui-input-row">
-<label>星座</label>
+<label><i>*</i>星座</label>
 <font class="mui-pull-right">请选择</font>
 <input name="start" type="hidden" value="" />
-</div>
-<div class="mui-input-row" id="BooldPicker">
-<label>血型</label>
-<font class="mui-pull-right">请选择</font>
-<input name="boold" type="hidden" value="" />
-</div>
-<div id="HeightPicker" class="mui-input-row">
-<label>身高</label>
-<font class="mui-pull-right">请选择</font>
-<input name="height" type="hidden" value="" />
-<input name="id" type="hidden" value="{$id}" />
 </div>
 
 <div class="title">
@@ -85,15 +74,6 @@ var XiwangPickerButton =doc.getElementById('XiwangPicker');
 XiwangPickerButton.addEventListener('tap',function(event) {XiwangPicker.show(function(items) {XiwangPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
 XiwangPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
-var BooldPicker =new $.PopPicker();
-BooldPicker.setData([{value:'A',text:'A型'
-},{value:'B',text:'B型'
-},{value:'AB',text:'AB型'
-},{value:'O',text:'O型'
-}]);
-var BooldPickerButton =doc.getElementById('BooldPicker');
-BooldPickerButton.addEventListener('tap',function(event) {BooldPicker.show(function(items) {BooldPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
-BooldPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
 var StartPicker =new $.PopPicker();
 StartPicker.setData([{value:'白羊座',text:'白羊座'
@@ -113,61 +93,61 @@ var StartPickerButton =doc.getElementById('StartPicker');
 StartPickerButton.addEventListener('tap',function(event) {StartPicker.show(function(items) {StartPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
 StartPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
-var HeightPicker =new $.PopPicker();HeightPicker.setData([{value:'150',text:'150CM'
-},{value:'151',text:'151CM'
-},{value:'152',text:'152CM'
-},{value:'153',text:'153CM'
-},{value:'154',text:'154CM'
-},{value:'155',text:'155CM'
-},{value:'156',text:'156CM'
-},{value:'157',text:'157CM'
-},{value:'158',text:'158CM'
-},{value:'159',text:'159CM'
-},{value:'160',text:'160CM'
-},{value:'161',text:'161CM'
-},{value:'162',text:'162CM'
-},{value:'163',text:'163CM'
-},{value:'164',text:'164CM'
-},{value:'165',text:'165CM'
-},{value:'166',text:'166CM'
-},{value:'167',text:'167CM'
-},{value:'168',text:'168CM'
-},{value:'169',text:'169CM'
-},{value:'170',text:'170CM'
-},{value:'171',text:'171CM'
-},{value:'172',text:'172CM'
-},{value:'173',text:'173CM'
-},{value:'174',text:'174CM'
-},{value:'175',text:'175CM'
-},{value:'176',text:'176CM'
-},{value:'177',text:'177CM'
-},{value:'178',text:'178CM'
-},{value:'179',text:'179CM'
-},{value:'180',text:'180CM'
-},{value:'181',text:'181CM'
-},{value:'182',text:'182CM'
-},{value:'183',text:'183CM'
-},{value:'184',text:'184CM'
-},{value:'185',text:'185CM'
-},{value:'186',text:'186CM'
-},{value:'187',text:'187CM'
-},{value:'188',text:'188CM'
-},{value:'189',text:'189CM'
-},{value:'190',text:'190CM'
-},{value:'191',text:'191CM'
-},{value:'192',text:'192CM'
-},{value:'193',text:'193CM'
-},{value:'194',text:'194CM'
-},{value:'195',text:'195CM'
-},{value:'196',text:'196CM'
-},{value:'197',text:'197CM'
-},{value:'198',text:'198CM'
-},{value:'199',text:'199CM'
-},{value:'200',text:'200CM'
-}]);
-var HeightPickerButton =doc.getElementById('HeightPicker');
-HeightPickerButton.addEventListener('tap',function(event) {HeightPicker.show(function(items) {HeightPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
-HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+//var HeightPicker =new $.PopPicker();HeightPicker.setData([{value:'150',text:'150CM'
+//},{value:'151',text:'151CM'
+//},{value:'152',text:'152CM'
+//},{value:'153',text:'153CM'
+//},{value:'154',text:'154CM'
+//},{value:'155',text:'155CM'
+//},{value:'156',text:'156CM'
+//},{value:'157',text:'157CM'
+//},{value:'158',text:'158CM'
+//},{value:'159',text:'159CM'
+//},{value:'160',text:'160CM'
+//},{value:'161',text:'161CM'
+//},{value:'162',text:'162CM'
+//},{value:'163',text:'163CM'
+//},{value:'164',text:'164CM'
+//},{value:'165',text:'165CM'
+//},{value:'166',text:'166CM'
+//},{value:'167',text:'167CM'
+//},{value:'168',text:'168CM'
+//},{value:'169',text:'169CM'
+//},{value:'170',text:'170CM'
+//},{value:'171',text:'171CM'
+//},{value:'172',text:'172CM'
+//},{value:'173',text:'173CM'
+//},{value:'174',text:'174CM'
+//},{value:'175',text:'175CM'
+//},{value:'176',text:'176CM'
+//},{value:'177',text:'177CM'
+//},{value:'178',text:'178CM'
+//},{value:'179',text:'179CM'
+//},{value:'180',text:'180CM'
+//},{value:'181',text:'181CM'
+//},{value:'182',text:'182CM'
+//},{value:'183',text:'183CM'
+//},{value:'184',text:'184CM'
+//},{value:'185',text:'185CM'
+//},{value:'186',text:'186CM'
+//},{value:'187',text:'187CM'
+//},{value:'188',text:'188CM'
+//},{value:'189',text:'189CM'
+//},{value:'190',text:'190CM'
+//},{value:'191',text:'191CM'
+//},{value:'192',text:'192CM'
+//},{value:'193',text:'193CM'
+//},{value:'194',text:'194CM'
+//},{value:'195',text:'195CM'
+//},{value:'196',text:'196CM'
+//},{value:'197',text:'197CM'
+//},{value:'198',text:'198CM'
+//},{value:'199',text:'199CM'
+//},{value:'200',text:'200CM'
+//}]);
+//var HeightPickerButton =doc.getElementById('HeightPicker');
+//HeightPickerButton.addEventListener('tap',function(event) {HeightPicker.show(function(items) {HeightPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+//HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
 });
 })(mui,document);</script>
@@ -184,8 +164,8 @@ HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},f
 						
 					    var xi = $('#form3 input[name="xiwang"]');
 					    var st = $('#form3 input[name="start"]');
-					    var bl = $('#form3 input[name="boold"]');
-					    var ht = $('#form3 input[name="height"]');
+//					    var bl = $('#form3 input[name="boold"]');
+//					    var ht = $('#form3 input[name="height"]');
 
 					    //判断期望是否选择
 					    if (xi.val() == '' || xi.val() == '0') {
@@ -206,22 +186,22 @@ HeightPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},f
 						}
 						
 						//判断血型是否选择
-					    if (bl.val() == '' || bl.val() == '0') {
-					        mui.toast('请选择您要找的血型');
-							flag = false;
-					        return false;
-					    }else{
-							flag = true;
-						}
+//					    if (bl.val() == '' || bl.val() == '0') {
+//					        mui.toast('请选择您要找的血型');
+//							flag = false;
+//					        return false;
+//					    }else{
+//							flag = true;
+//						}
 						
 						//判断血型是否选择
-					    if (ht.val() == '' || ht.val() == '0') {
-					        mui.toast('请选择您要找的身高');
-							flag = false;
-					        return false;
-					    }else{
-							flag = true;
-						}
+//					    if (ht.val() == '' || ht.val() == '0') {
+//					        mui.toast('请选择您要找的身高');
+//							flag = false;
+//					        return false;
+//					    }else{
+//							flag = true;
+//						}
 						
 						if(flag){
 							document.getElementById("form3").submit();
