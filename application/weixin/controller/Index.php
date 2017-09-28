@@ -70,14 +70,15 @@ class Index extends Controller
 				switch ($message->Event) {  
 					case 'subscribe':
 						$bopenid = $message->FromUserName;   //邀请人的openid 
-						$message1 = "Hi 你来啦~ 我是机器人小星，点击<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">这里</a>，填写你的出生日期，就知道你和Ta什么匹配啦！";
+						$message1 = "Hi 我是星数君，<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">点击这里</a>，填写资料，看看你和Ta是什么配！";
 						$this->sendtxtmessage($message1,$bopenid);
 						
 						break;
 					case 'SCAN':
-						$yopenid = $message->EventKey;  //邀请人的openid 
+						$yopenid = $message->EventKey;  //邀请人的openid
+//                        Cookie::set('yopenid',$yopenid,3600*24);
 						$bopenid = $message->FromUserName;  //被邀请人的openid
-						
+//                        Cookie::set('bopenid',$bopenid,3600*24);
 						$yval = weixin::where('openid',$yopenid)->find();
 						$aname = $yval['nickname'];
 						$ydata = user::where('wid',$yval['id'])->find();
@@ -85,10 +86,48 @@ class Index extends Controller
 						$val = weixin::where('openid',$bopenid)->find();
 						$data = user::where('wid',$val['id'])->find();
 						$bname = $val['nickname'];
-						if(empty($data['Birthday'])){
-							$message2 = "Hi 我是星数君，点击<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&&openid=".$yopenid."'>这里</a>，填写你的出生日期，看看你和Ta什么匹配，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right？";
+                        //先判断是否是自己，因为有一个break 注意判断顺序
+                        if($yopenid == $bopenid){   //自己扫自己的二维码
+                            $bmessage = "和自己无法匹配哦，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right！";
+                            $this->sendtxtmessage($bmessage,$bopenid);
+
+                            $options = Config::get('wechat');
+                            $app = new Application($options);
+                            $temporary = $app->material_temporary;
+                            $path = $this->erweima($bopenid);
+                            $data = $temporary->uploadImage($path);
+                            @unlink($path);  //删除生成的二维码
+                            $imgmessage = new Image(['media_id' => $data['media_id']]);
+                            $this->sendtxtmessage($imgmessage,$bopenid);
+                            break;
+                        }else{     //扫邀请人的二维码
+                            if(!$val){//判断扫描的人是否填写了资料
+                                //
+                                $message2 = "Hi 我是星数君，你还未填写资料，无法查看你们的关系，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
+                                $this->sendtxtmessage($message2,$bopenid);
+                                break;
+                            }
+                            $guanxi = $this->get_guanxi($yopenid,$bopenid);
+                            $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
+                            $this->sendtxtmessage($message,$bopenid);
+
+
+                            $guanxi2 = $this->get_guanxi($bopenid,$yopenid);
+                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$guanxi2."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
+                            $this->sendtxtmessage($bmessage,$yopenid);
+                            break;
+                        }
+                        //后判断是否填写资料，因为有一个break 注意判断顺序
+                        if(empty($data['Birthday'])){
+                            //为空，让填写信息
+                            $message2 = "Hi 我是星数君，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
+                            $this->sendtxtmessage($message2,$bopenid);
+                            break;
+                        }elseif(!empty($data['Birthday'])){
+						    //填完信息后才能弹窗
+							$message2 = "Hi 我是星数君，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right！";
 							$this->sendtxtmessage($message2,$bopenid);
-							
+
 							$options = Config::get('wechat');
 							$app = new Application($options);
 							$temporary = $app->material_temporary;
@@ -96,38 +135,25 @@ class Index extends Controller
 							$data = $temporary->uploadImage($path);
 							@unlink($path);  //删除生成的二维码
 							$imgmessage = new Image(['media_id' => $data['media_id']]);
-							$this->sendtxtmessage($imgmessage,$bopenid);	
+							$this->sendtxtmessage($imgmessage,$bopenid);
 
 							break;
-						}elseif($yopenid == $bopenid){   //自己扫自己的二维码
-							$bmessage = "和自己无法匹配哦！";
-							$this->sendtxtmessage($bmessage,$bopenid);
-							
-							$options = Config::get('wechat');
-							$app = new Application($options);
-							$temporary = $app->material_temporary;
-							$path = $this->erweima($bopenid);
-							$data = $temporary->uploadImage($path);
-							@unlink($path);  //删除生成的二维码
-							$imgmessage = new Image(['media_id' => $data['media_id']]);
-							$this->sendtxtmessage($imgmessage,$bopenid);							
-							break;
-						}else{     //扫邀请人的二维码 
-							$guanxi = $this->get_guanxi($yopenid,$bopenid);
-							
-							$message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
-							$this->sendtxtmessage($message,$bopenid);
-							
-							
- 							$guanxi2 = $this->get_guanxi($bopenid,$yopenid);
-							$bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$guanxi2."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
-							$this->sendtxtmessage($bmessage,$yopenid);
-							break;
 						}
+
 					case 'CLICK':
-						if($message->EventKey == 'ERWEIMA'){
-							$openid = $message->FromUserName;   //邀请人的openid 
-							$message3 = "Hi，将下方你的专属二维码，发送到朋友圈或发给那个Ta,看看谁是你的Mr/Ms Right？";
+					    //判断是否填写资料，没有则弹出界面
+                        $openid = $message->FromUserName;
+                        $val = weixin::where('openid',$openid)->find();
+                        $data = user::where('wid',$val['id'])->find();
+					    if(empty($data['Birthday'])){
+                            $bopenid = $message->FromUserName;   //邀请人的openid
+                            $message1 = "您的资料不完整，<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">点击这里</a>，填写资料，获取你的专属二维码,看看谁是你的Mr/Ms Right！";
+                            $this->sendtxtmessage($message1,$bopenid);
+
+                            break;
+                        }else if($message->EventKey == 'ERWEIMA' && !empty($data['Birthday'])){
+							$openid = $message->FromUserName;
+							$message3 = "Hi，将下方你的专属二维码，发送到朋友圈或发给那个Ta,看看谁是你的Mr/Ms Right！";
 							$this->sendtxtmessage($message3,$openid);
 							
 							$options = Config::get('wechat');

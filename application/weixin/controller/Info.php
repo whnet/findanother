@@ -95,6 +95,34 @@ class Info extends SecdController
            ];
 
            $uid = $db ->insertGetId($lab_data);
+           //提交资料成功之后，给公众号发送一个二维码和一段话
+            if($uid){
+                //通知与扫码者的关系
+//                $yopenid =  Cookie::get('yopenid');
+//                $bopenid =  Cookie::get('bopenid');
+                //获取opened
+                $user = Cookie::get('wechat_user');
+                $open_id = $user['original']['openid'];
+                //查询数据库中用户的账号的openid中是否有值，有值说明用户的微信与账号绑定
+                $result = Weixin::check_login($open_id);
+                if($result){
+                    $openid = $result['openid'];
+                    $message2 = "Hi 我是星数君，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right！";
+                    $this->sendtxtmessage($message2,$openid);
+
+                    $options = Config::get('wechat');
+                    $app = new Application($options);
+                    $temporary = $app->material_temporary;
+                    $path = $this->erweima($openid);
+                    $data = $temporary->uploadImage($path);
+                    // @unlink($path);
+                    $imgmessage = new Image(['media_id' => $data['media_id']]);
+                    $this->sendtxtmessage($imgmessage,$openid);
+                }
+
+            }
+
+
 
 		   	$yopenid = !empty(Cookie::get('yaoqingopenid'))?Cookie::get('yaoqingopenid'):'';
 			if(!empty($yopenid)){
@@ -117,8 +145,8 @@ class Info extends SecdController
 
 			   $guanxi = $this->get_guanxi($id,$yopenid); 
 				
-				$message = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
-				$this->sendtxtmessage($message,$id);
+				$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
+				$this->sendtxtmessage($messageGuanxi,$id);
 			}
 			$this->redirect('Ppbirthday/index',['id'=>$uid]);
         }else{
@@ -207,7 +235,7 @@ class Info extends SecdController
 		    $file = request()->file('imgfile0');
             if($file){
                 // 移动到框架应用根目录/uploads/ 目录下
-                $info = $file->validate(['size'=>51000,'ext'=>'jpg,png,gif'])->move('uploads/photo/');
+                $info = $file->validate(['size'=>510000000000,'ext'=>'jpg,png,gif,jpeg'])->move('uploads/photo/');
                 if($info){
                     // 成功上传后 获取上传信息
                     $license_url=$info->getSaveName();
@@ -313,7 +341,7 @@ class Info extends SecdController
 			$flag = 1;
 			$flag2 = 1;
 			$url = "-index.php-weixin-pipei-index";
-			$message = "您已经填写了个人信息，正在为你跳转到匹配页";
+			$message = "赞~~你的匹配信息已完善！";
 		
 			$this->redirect('zhezhao',['flag'=>$flag,'flag2'=>$flag2,'url'=>$url,'message'=>$message]);
 		}else{

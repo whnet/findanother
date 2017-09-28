@@ -1,0 +1,7 @@
+  .search{width: 100%;height: 60px;border: 1px solid #ccc;background-color: #fff;border-radius: 3px}
+  .search_left{width: 65%;float: left;line-height: 60px;}
+  .search_left li{float: left;display:block;margin-left: 10px;font-size: 15px;}
+  .search_right{width: 30%;float: right;line-height: 60px;text-align: right;margin-right: 10px;}
+  .clear{clear: both;}
+  .mt{margin-top: 12px;}
+ 

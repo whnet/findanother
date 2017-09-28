@@ -1,0 +1,158 @@
+.demo {
+	position: absolute;
+	left: 50%;
+	top: 15%;
+	width: 100%;
+	margin-left: -50%;
+	background-size: 100%;
+}
+
+.demo__content {
+	width: 76%;
+	margin: 0 auto;
+	position: relative;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.demo__card {
+	z-index: 2;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	-webkit-transform-origin: 50% 100%;
+	-ms-transform-origin: 50% 100%;
+	transform-origin: 50% 100%;
+}
+
+.demo__card.reset {
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+	-webkit-transform: translateX(0) !important;
+	-ms-transform: translateX(0) !important;
+	transform: translateX(0) !important;
+}
+
+.demo__card.reset .demo__card__choice {
+	-webkit-transition: opacity 0.3s;
+	transition: opacity 0.3s;
+	opacity: 0 !important;
+}
+
+.demo__card.inactive {
+	-webkit-transition: -webkit-transform 0.3s;
+	transition: transform 0.3s;
+}
+
+.demo__card.to-left {
+	-webkit-transform: translateX(-30rem) rotate(-30deg) !important;
+	-ms-transform: translateX(-30rem) rotate(-30deg) !important;
+	transform: translateX(-30rem) rotate(-30deg) !important;
+}
+
+.demo__card.to-right {
+	-webkit-transform: translate(30rem) rotate(30deg) !important;
+	-ms-transform: translate(30rem) rotate(30deg) !important;
+	transform: translate(30rem) rotate(30deg) !important;
+}
+
+.demo__card.below {
+	z-index: 1;
+}
+
+.demo__card__btm {
+	width: 100%;
+	background: #fff;
+	display: block;
+}
+
+.demo__card__btm a {
+	background-size: 100%;
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+.demo__card__btm a.male {
+	background-image: url(http://m7799520.oss-cn-shanghai.aliyuncs.com/img/avatar-male.png);
+}
+
+.demo__card__btm a.female {
+	background-image: url(http://m7799520.oss-cn-shanghai.aliyuncs.com/img/avatar-female.png);
+}
+
+.demo__card__btm a img {
+	width: 100%;
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.demo__card__btm > div {
+	height: 4.5em;
+	padding: 0.5em 0.7em;
+	padding-right: 4em;
+	position: relative;
+}
+
+.demo__card__btm > div label {
+	font-size: 0.7em;
+	color: #7c7c7c;
+	text-align: center;
+	padding-left: 1em;
+	border-left: 1px #eee solid;
+	position: absolute;
+	right: 1em;
+	top: 1.5em;
+}
+
+.demo__card__btm > div b {
+	font-size: 1.6em;
+	color: #f6b25f;
+	display: block;
+}
+
+.demo__card__btm > div button {
+	font-size: 0.8em;
+	margin-right: 0.3em;
+	margin-bottom: 1em;
+	padding-top: 0.2em;
+	padding-bottom: 0.1em;
+}
+
+.demo__card__btm > div p {
+	height: 2em;
+	font-size: 0.7em;
+	margin-bottom: 0.5em;
+	overflow: hidden;
+}
+
+.demo__card__btm > div p.title {
+	font-size: 0.8em;
+	color: #323232;
+	margin-top: 0.3em;
+	margin-bottom: 0.1em;
+	text-overflow: ellipsis;
+	word-break: keep-all;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.demo__bg {
+	background: #fff;
+}
+
+.demo__bottom {
+	width: 96%;
+	height: 0.5em;
+	background: #eee;
+	box-shadow: 5px 5px 5px #ddd inset;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
