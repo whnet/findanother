@@ -28,34 +28,38 @@ as[nav - 1].className ='link mui-active'
 <div class="mui-content backgroud-gray">
 <header class="mui-bar mui-bar-nav nav-transparent">
 {if $tjly eq ''}<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>{/if}
-<h1 class="mui-title">{$list.name}</h1>
 <!--<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>-->
 </header>
 <div class="self-intro">
 <div class="self-intro-main">
+    <h4 style="color:#fff;text-align:center;widht:100%;">{$list.name}</h4>
 <div class="self-avatar" style="background-image:url({$list.header});">
 <div class="audit-hint">
 </div>
 </div>
-<div class="data">
-<span class="sex" status="{$list.Sex}"></span>
-<span>{$age}</span>
-<span>{$start}</span>
-</div>
-<div class="mood">{$list.Sign}</div>
+    <div class="data">
+        <span class="sex" status="{$list.Sex}"></span>
+        <span>{$age}</span>
+        <span>{$start}{$list['Blood']}</span>
+        <span>{$list['zhiye']}{$list['height']}</span>
+    </div>
+    <div class="data">
+        {if $list['Sign']}<span>{$list['Sign']}</span>{/if}
+    </div>
+<!--<div class="mood">{$list.Sign}</div>-->
 </div>
 <img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" />
 </div>
 <div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted background-white self-preview-wrapper" {if $flag==2} style="display:none;" {/if}>
 <div class="mui-scroll" id="album">
 <div class="mui-table-view mui-grid-view boder-none">
-<a href="#" class="mui-table-view-cell mui-media preview-item">
-<div class="clip">
+
+<div class="showImg">
  {volist name='xc' id='pho'}
-	<img width="80" height="98" src="/{$pho.photo}" data-preview-src="/{$pho.photo}" data-preview-group="{$pho.id}">	
+	<img width="80" height="80" src="/{$pho.photo}" data-preview-src="/{$pho.photo}" data-preview-group="{$pho.id}" >
 {/volist}
 </div>
-</a>
+
 </div>
 </div>
 </div>

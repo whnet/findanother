@@ -21,7 +21,8 @@ class Center extends BaseController
 {
 	public function index()
     {
-		$openid = Cookie::get('openid');
+		$openid = Cookie::get('openid');//邀请
+		$yopenid = Cookie::get('byaoqingopenid');//被邀请
 		$list = weixin::where('openid',$openid)->find();
 		
 		$uinfo = user::where('wid',$list['id'])->find();

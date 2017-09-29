@@ -62,7 +62,7 @@ $(function() {
 
 //处理交互
 function upload_callback(obj, data) {
-    var imgUrl = 'http://static.7799520.com/';
+    var imgUrl = '';
 
     switch (obj) {
         case "regavatar":
@@ -84,15 +84,15 @@ function upload_callback(obj, data) {
         case "album":
             var data = data.data;
             $('.do-upload').parents('.mui-grid-view').append('<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3"><a href="#"><div class="clip" photoid="'+ data[0].photoid +'"><img width="80" height="98" src="' + data[0].thumbfiles + '" data-preview-src="'+ data[0].uploadfiles +'" data-preview-group="1" /></div></a></li>');
-            //只允许上传10张
-            if($('.do-upload').parents('ul').find('li').size() > 10){
+            //只允许上传5张
+            if($('.do-upload').parents('ul').find('li').size() > 5){
                 $('.do-upload').parent().hide();
             }
             $('.layer').fadeOut();
             break;
         case "certify":
-            $('.identification-form .upload div').show().find('img').attr('src', 'http://static.7799520.com/'+data.path);
-            $('form input[name="img_url"]').val('http://static.7799520.com/'+data.path);
+            $('.identification-form .upload div').show().find('img').attr('src', ''+data.path);
+            $('form input[name="img_url"]').val(''+data.path);
             break;
         default:
             break;

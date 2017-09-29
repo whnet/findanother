@@ -18,7 +18,8 @@ use app\weixin\model\Birthday;
 use app\weixin\model\Alternative; 
 use app\weixin\model\District; 
 use app\weixin\model\Constellation; 
-use app\weixin\model\Blood; 
+use app\weixin\model\Blood;
+use app\weixin\model\Saoma;
 
 class Index extends Controller
 {
@@ -76,9 +77,10 @@ class Index extends Controller
 						break;
 					case 'SCAN':
 						$yopenid = $message->EventKey;  //邀请人的openid
-//                        Cookie::set('yopenid',$yopenid,3600*24);
 						$bopenid = $message->FromUserName;  //被邀请人的openid
-//                        Cookie::set('bopenid',$bopenid,3600*24);
+                        //将扫码信息写到数据库中
+
+
 						$yval = weixin::where('openid',$yopenid)->find();
 						$aname = $yval['nickname'];
 						$ydata = user::where('wid',$yval['id'])->find();
@@ -86,6 +88,7 @@ class Index extends Controller
 						$val = weixin::where('openid',$bopenid)->find();
 						$data = user::where('wid',$val['id'])->find();
 						$bname = $val['nickname'];
+						//将扫码的记录存到数据表中，
                         //先判断是否是自己，因为有一个break 注意判断顺序
                         if($yopenid == $bopenid){   //自己扫自己的二维码
                             $bmessage = "和自己无法匹配哦，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right！";
@@ -100,13 +103,29 @@ class Index extends Controller
                             $imgmessage = new Image(['media_id' => $data['media_id']]);
                             $this->sendtxtmessage($imgmessage,$bopenid);
                             break;
-                        }else{     //扫邀请人的二维码
-                            if(!$val){//判断扫描的人是否填写了资料
-                                //
-                                $message2 = "Hi 我是星数君，你还未填写资料，无法查看你们的关系，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
+                        }else{//扫邀请人的二维码
+
+                            if(!$data){
+                                $message2 = "Hi 我是星数君，你还未填写资料，无法查看你们的关系，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&bopenid=".$bopenid."&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
                                 $this->sendtxtmessage($message2,$bopenid);
                                 break;
                             }
+                            //查询是否匹配过
+                            $map['yaoqingopenid'] = $yopenid;
+                            $map['beiyaoqingopenid'] = $bopenid;
+                            $map['status'] = 1;
+                            $data = saoma::where($map)->find();
+                            if(!$data){
+                                $db = new saoma();
+                                $lab_data=[
+                                    'yaoqingopenid'=>$yopenid,
+                                    'beiyaoqingopenid'=>$bopenid,
+                                    'status'=>1,
+                                    'created'=>time(),
+                                ];
+                                $db ->save($lab_data);
+                            }
+
                             $guanxi = $this->get_guanxi($yopenid,$bopenid);
                             $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
                             $this->sendtxtmessage($message,$bopenid);
@@ -120,7 +139,7 @@ class Index extends Controller
                         //后判断是否填写资料，因为有一个break 注意判断顺序
                         if(empty($data['Birthday'])){
                             //为空，让填写信息
-                            $message2 = "Hi 我是星数君，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
+                            $message2 = "Hi 我是星数君，<a href='http://weixin.matchingbus.com/index.php/weixin/info/index?flag=1&bopenid=".$bopenid."&openid=".$yopenid."'>点击这里</a>，填写资料，看看你和Ta什么匹配！";
                             $this->sendtxtmessage($message2,$bopenid);
                             break;
                         }elseif(!empty($data['Birthday'])){

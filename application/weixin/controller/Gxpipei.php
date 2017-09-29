@@ -217,7 +217,6 @@ class Gxpipei extends BaseController
 							</table>"; 
 				$tjly = $heshiweizhi;
 		}
-		
 		$this->assign('tuijian', $tuijian);
 		$this->assign('result', $result);
 		$this->assign('content', $content);

@@ -40,14 +40,14 @@ as[nav - 1].className ='link mui-active'
 <meta name="keywords" content="{$list.name}会员征婚照片电话">
 </head>
 <body userid="{$uid}">
-<div class="mui-content backgroud-gray">
-<header class="mui-bar mui-bar-nav nav-transparent">
-<h1 class="mui-title">{$list.name}</h1>
-<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>
-</header>
+<!--<div class="mui-content backgroud-gray">-->
+<!--<header class="mui-bar mui-bar-nav nav-transparent">-->
+<!--<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>-->
+<!--</header>-->
 
 <div class="self-intro">
 <div class="self-intro-main">
+    <h4 style="color:#fff;text-align:center;widht:100%;">{$list.name}</h4>
 <div class="self-avatar" style="background-image:url({$list.header});">
 <div class="audit-hint">
 </div>
@@ -55,12 +55,11 @@ as[nav - 1].className ='link mui-active'
 <div class="data">
 <span class="sex" status="{$list.Sex}"></span>
 <span>{$age}</span>
-<span>{$start}</span>
+<span>{$start}{$list['Blood']}</span>
+<span>{$list['zhiye']}{$list['height']}</span>
 </div>
 <div class="data">
-{if $start && $list.Blood}<span>{$start}{$list.Blood}</span>{/if}
-{if $list.zhiye}<span>{$list.zhiye}</span>{/if}
-{if $list.height}<span>{$list.height}</span>{/if}
+    {if $list['Sign']}<span>{$list['Sign']}</span>{/if}
 </div>
 <div class="mood">{$list.Sign}</div>
 </div>

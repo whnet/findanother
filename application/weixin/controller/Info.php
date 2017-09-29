@@ -29,8 +29,10 @@ class Info extends SecdController
 	public function index()
     {
 		if(input('flag')){
-			$yaoqingopenid = !empty(input('openid'))?input('openid'):'';
-			Cookie::set('yaoqingopenid',$yaoqingopenid,360000);
+			$yaoqingopenid = !empty(input('openid'))?input('openid'):'';//别人
+			Cookie::set('yaoqingopenid',$yaoqingopenid,300);
+			$byaoqingopenid = !empty(input('bopenid'))?input('bopenid'):'';//我自己
+			Cookie::set('byaoqingopenid',$byaoqingopenid,300);
 		}
 		$options = Config::get('wechat');
 		$app = new Application($options);
@@ -80,7 +82,7 @@ class Info extends SecdController
     }
 	
 	public function birthday(){
-		
+		//判断是否是扫别人分享的二维码进来的，在scan中写入cookies
 		if(request()->ispost()){
 			$id = Cookie::get('openid');
 			$val = Weixin::where('openid',$id)->find();
@@ -97,9 +99,6 @@ class Info extends SecdController
            $uid = $db ->insertGetId($lab_data);
            //提交资料成功之后，给公众号发送一个二维码和一段话
             if($uid){
-                //通知与扫码者的关系
-//                $yopenid =  Cookie::get('yopenid');
-//                $bopenid =  Cookie::get('bopenid');
                 //获取opened
                 $user = Cookie::get('wechat_user');
                 $open_id = $user['original']['openid'];
@@ -118,6 +117,18 @@ class Info extends SecdController
                     // @unlink($path);
                     $imgmessage = new Image(['media_id' => $data['media_id']]);
                     $this->sendtxtmessage($imgmessage,$openid);
+                }
+                //同时，通知与扫码者的关系
+
+                $yaoqingpenid = Cookie::get('yaoqingopenid');
+                $beiyaoqingopenid = Cookie::get('byaoqingopenid');
+
+                if($yaoqingpenid && $beiyaoqingopenid){
+                    $yval = weixin::where('openid',$yaoqingpenid)->find();
+                    $aname = $yval['nickname'];
+                    $guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
+                    $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yaoqingpenid."/bopenid/".$beiyaoqingopenid."'>点击查看</a>";
+                    $this->sendtxtmessage($message,$beiyaoqingopenid);
                 }
 
             }
@@ -143,10 +154,9 @@ class Info extends SecdController
 				
 				$fdb ->save($ylab_fdata);
 
-			   $guanxi = $this->get_guanxi($id,$yopenid); 
-				
-				$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
-				$this->sendtxtmessage($messageGuanxi,$id);
+//			    $guanxi = $this->get_guanxi($id,$yopenid);
+//				$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
+//				$this->sendtxtmessage($messageGuanxi,$id);
 			}
 			$this->redirect('Ppbirthday/index',['id'=>$uid]);
         }else{
