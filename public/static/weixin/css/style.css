@@ -3585,6 +3585,7 @@ header.index .mui-title{font-size: 1em;}
     background-color: #f5f5f5;
     border-radius: 5px;
     margin-bottom: 10px;
+    margin-left: 5px;
 }
 
 .cm-list-style p {
@@ -3612,7 +3613,7 @@ header.index .mui-title{font-size: 1em;}
 .self-intro-main {
     position: absolute;
     width: 100%;
-    padding-top: 60px;
+    padding-top: 5px;
 }
 
 .self-intro-main .self-avatar {

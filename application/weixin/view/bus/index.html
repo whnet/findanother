@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
-<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
 <script type="text/javascript" src="/static/weixin/js/core.js"></script>
 {include file="public/header" /}
@@ -16,7 +16,7 @@
 }
 
 .footbar .footbar-item{
-	width:50%;
+	width:100%;
 }
 .mui-button-row a{width:48%;float:left;border-radius: 2em;margin-top:10px;}
 .mui-btn-block{padding:10px;}
@@ -31,14 +31,12 @@
 <body style="background-color: #fff;">
 <div class="backgroud-gray">
 
-<div class="mui-button-row" style="margin-bottom:9px;margin-top:10px;height:72px; background-color: #fff;">
-<a href="javascript:;"  style="margin-left:1%;" class="mui-btn mui-btn-block clicks" id="like_s">想认识的</a>
-<a href="javascript:;"  style="margin-left:2%;" class="mui-btn mui-btn-block" id="bei_s">备选页</a>
-</div>
+<!--<div class="mui-button-row" style="margin-bottom:9px;margin-top:10px;height:72px; background-color: #fff;">-->
+<!--<a href="javascript:;"  style="margin-left:1%;" class="mui-btn mui-btn-block clicks" id="like_s">想认识的</a>-->
+<!--<a href="javascript:;"  style="margin-left:2%;" class="mui-btn mui-btn-block" id="bei_s">备选页</a>-->
+<!--</div>-->
 <div class="mui-content" pull="like_s" pull-obj="likerenshi">
-
-<div class="likerenshi">
-</div>
+    <div class="likerenshi"></div>
 </div>
 </div>
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
@@ -48,7 +46,7 @@
 <script src="/static/weixin/js/detail.js"></script>
 <script src="/static/weixin/js/auto-pull.js"></script>
 <script>
-	
+
 	function send(suid,id,fid){
 		var url = '/index.php/weixin/bus/friend';
 		$.ajax(url, {

@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
-<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script>
 <script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
 <script type="text/javascript" src="/static/weixin/js/core.js"></script>
 <script>$(window).ready(function () {(function ($) {$('body').on('tap','.link',function (event) {var url =this.getAttribute('href');var blank =this.getAttribute('target');if (blank =='_blank') {window.open(url);} else {window.location.href =url;}
@@ -26,10 +26,7 @@ as[nav - 1].className ='link mui-active'
 </head>
 <body userid="{$uid}">
 <div class="mui-content backgroud-gray">
-<header class="mui-bar mui-bar-nav nav-transparent">
-{if $tjly eq ''}<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>{/if}
-<!--<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>-->
-</header>
+
 <div class="self-intro">
 <div class="self-intro-main">
     <h4 style="color:#fff;text-align:center;widht:100%;">{$list.name}</h4>
@@ -71,10 +68,10 @@ as[nav - 1].className ='link mui-active'
 {if $list.height}<span class="value-item">{$list.height}</span>{/if}
 {if $list.weight}<span class="value-item">{$list.weight}</span>{/if}
 {if $list.Gqzt}<span class="value-item">{$list.Gqzt}</span>{/if}
-{if $list.Province && $list.City}<span class="value-item">现居:{$list.Province}-{$list.City}</span>{/if}
+{if $list.Province && $list.City}<span class="value-item">{$list.Province}-{$list.City}</span>{/if}
 {if $list.salary}<span class="value-item">{$list.salary}</span>{/if}
 {if $list.character}<span class="value-item">{$list.character}</span>{/if}
-{if $list.Blood}<span class="value-item">血型:{$list.Blood}型</span>{/if}
+{if $list.Blood}<span class="value-item">{$list.Blood}型</span>{/if}
 {if $list.education}<span class="value-item">{$list.education}</span>{/if}
 
 </div>
@@ -153,8 +150,8 @@ as[nav - 1].className ='link mui-active'
 </div>
 
 <nav class="footbar mui-clearfix" {if $flag2==1}style="display:none;"{/if}>
-<a style="width:50%;" href="javascript:;" class="footbar-item" onclick='agree({$uid},{$suid},{$frid},{$kid},{$tjly});'><div class="footbar-icon beixuan-icon" status="false"></div><span class="mui-tab-label">{if $frid}同意{else}加为好友{/if}</span></a>
-<a style="width:50%;" href="/index.php/weixin/bus/xhhelp" class="footbar-item link"><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">小红帮忙</span></a>
+<a style="width:100%;" href="javascript:;" class="footbar-item" onclick='agree({$uid},{$suid},{$frid},{$kid},{$tjly});'><div class="footbar-icon beixuan-icon" status="false"></div><span class="mui-tab-label">{if $frid}同意{else}加为好友{/if}</span></a>
+<!--<a style="width:50%;" href="/index.php/weixin/bus/xhhelp" class="footbar-item link"><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">小红帮忙</span></a>-->
 </nav>
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
 <script src="/static/weixin/js/mui.zoom.js"></script>
@@ -169,7 +166,7 @@ as[nav - 1].className ='link mui-active'
 		}else{
 			var url = '/index.php/weixin/bus/friend';
 		}
-		
+
 		$.ajax(url, {
 			data: {
 				'suid':uid,

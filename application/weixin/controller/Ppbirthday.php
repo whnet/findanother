@@ -33,12 +33,12 @@ class Ppbirthday extends BaseController
 		$num = !empty($num)?$num:0;
 		$limit = "1";
 		$openid = Cookie::get('openid');
+
 		$self=user::alias('a')
             ->field('a.*,a.ID as suid,b.*')
             ->join('weixin b','b.id=a.wid')
 			->where('b.openid',$openid)
 			->find();
-			
 		//echo user::getLastSql();
 		$suid = $self['suid'];	
 
@@ -114,11 +114,10 @@ class Ppbirthday extends BaseController
 				->order('a.ID asc')
 				->limit($limit)
 				->select();
-
 		$istxyx = "异性";
-		
-		//echo user::getLastSql();
-		//exit();
+//
+//		echo user::getLastSql();
+//		exit();
 
 		if(empty($list)){
 			$flag = 1;
@@ -251,11 +250,10 @@ class Ppbirthday extends BaseController
 				$content = "<table>
 							<tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
 							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-							<tr><td>48星区：</td><td>{$heshiweizhi}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
+							<tr><td>48星区：</td><td>{$heshiweizhi}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
 							</table>"; 
 				$tjly = $heshiweizhi;
 			}
-			
 			$this->assign('tuijian', $tuijian);
 			$this->assign('result', $result);
 			$this->assign('content', $content);

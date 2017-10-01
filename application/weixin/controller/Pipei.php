@@ -25,6 +25,7 @@ class Pipei extends BaseController
 {
 	public function index(Request $request)
     {
+
 		$num = $request->param('num');
 		$num = !empty($num)?$num:0;
 		$limit = "1"; 
@@ -35,9 +36,9 @@ class Pipei extends BaseController
 			->join('mfind c','c.uid=a.ID')
 			->where('b.openid',$openid)
 			->find();
-		
 		//echo user::getLastSql();
 		$valsuid = $selfval['suid'];
+
 		if(empty($valsuid)){
 			$self=user::alias('a')
 				->field('a.*,a.ID as suid,b.*')
@@ -59,7 +60,7 @@ class Pipei extends BaseController
             'Lasttime'=>time(),
         ];
         $lastdb->save($lastdata,['ID' => $suid]);
-
+        //认识
 		$get_val = know::where('suid',$suid)->select();
 		if(!empty($get_val)){
 			$usersid="";
@@ -71,7 +72,7 @@ class Pipei extends BaseController
 		}else{
 			$where1 = '1=1';
 		}
-		
+		//忽略
 		$hget_val = hulue::where('suid',$suid)->select();
 		if(!empty($hget_val)){
 			$huusersid="";
@@ -96,7 +97,7 @@ class Pipei extends BaseController
 		}else{
 			$where2 = '1=1';
 		}
-		
+		//好友
 		$get_frval = Friends::where('uid',$suid)->select();
 		if(!empty($get_frval)){
 			$userfsid="";
@@ -108,19 +109,16 @@ class Pipei extends BaseController
 		}else{
 			$where4 = '1=1';
 		}
-		
-		
-		
 
-		if($self['Sex']=='1'){    //判断是同性还是异性
+        //判断是同性还是异性
+		if($self['Sex']=='1'){
 			$tong = 1;
 			$yi = 2;
 		}else{
 			$tong = 2;
 			$yi = 1;
 		}
-		
-		
+
 		if($self['Wanna']=='同性朋友' || $self['Wanna']=='同性恋人'){
 			$list=user::alias('a')
 				->field('a.*,a.ID as nuid,b.*,b.nickname as name ,b.headimgurl as header,b.*')
@@ -137,6 +135,7 @@ class Pipei extends BaseController
 			$istxyx = "非异性";
 			
 		}else{
+
 			$list=user::alias('a')
 				->field('a.*,a.ID as nuid,b.*,b.nickname as name ,b.headimgurl as header,b.*')
 				->join('weixin b','b.id=a.wid')
@@ -148,12 +147,10 @@ class Pipei extends BaseController
 				->order('a.ID asc')
 				->limit($limit)
 				->select();
-
+           echo user::getLastSql();
 			$istxyx = "异性";
 		}
-		
-		//echo user::getLastSql();
-		//exit();
+
 
 		if(empty($list)){
 			$flag = 1;

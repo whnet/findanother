@@ -86,8 +86,9 @@ class Index extends Controller
 						$ydata = user::where('wid',$yval['id'])->find();
 						
 						$val = weixin::where('openid',$bopenid)->find();
+                        $bname = $val['nickname'];
 						$data = user::where('wid',$val['id'])->find();
-						$bname = $val['nickname'];
+
 						//将扫码的记录存到数据表中，
                         //先判断是否是自己，因为有一个break 注意判断顺序
                         if($yopenid == $bopenid){   //自己扫自己的二维码
@@ -168,7 +169,6 @@ class Index extends Controller
                             $bopenid = $message->FromUserName;   //邀请人的openid
                             $message1 = "您的资料不完整，<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">点击这里</a>，填写资料，获取你的专属二维码,看看谁是你的Mr/Ms Right！";
                             $this->sendtxtmessage($message1,$bopenid);
-
                             break;
                         }else if($message->EventKey == 'ERWEIMA' && !empty($data['Birthday'])){
 							$openid = $message->FromUserName;

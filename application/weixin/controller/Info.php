@@ -86,12 +86,11 @@ class Info extends SecdController
 		if(request()->ispost()){
 			$id = Cookie::get('openid');
 			$val = Weixin::where('openid',$id)->find();
-		
+
 		   $db = new user();
            $lab_data=[
 				'wid'=>$val['id'],
-				'Sex'=>$val['wsex'],
-				'Wanna'=>input("find"),
+				'Sex'=>input("sex"),
                 'Birthday'=>strtotime(input("birthday")),
 				'Regtime'=>time(),
            ];
@@ -129,6 +128,12 @@ class Info extends SecdController
                     $guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
                     $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yaoqingpenid."/bopenid/".$beiyaoqingopenid."'>点击查看</a>";
                     $this->sendtxtmessage($message,$beiyaoqingopenid);
+
+                    $val = weixin::where('openid',$beiyaoqingopenid)->find();
+                    $bname = $val['nickname'];
+                    $guanxi2 = $this->get_guanxi($beiyaoqingopenid,$yaoqingpenid);
+                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$guanxi2."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$beiyaoqingopenid."/bopenid/".$yaoqingpenid."'>点击查看</a>";
+                    $this->sendtxtmessage($bmessage,$yaoqingpenid);
                 }
 
             }
@@ -154,9 +159,9 @@ class Info extends SecdController
 				
 				$fdb ->save($ylab_fdata);
 
-//			    $guanxi = $this->get_guanxi($id,$yopenid);
-//				$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
-//				$this->sendtxtmessage($messageGuanxi,$id);
+                //$guanxi = $this->get_guanxi($id,$yopenid);
+                //$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
+                //$this->sendtxtmessage($messageGuanxi,$id);
 			}
 			$this->redirect('Ppbirthday/index',['id'=>$uid]);
         }else{
@@ -175,9 +180,9 @@ class Info extends SecdController
 		   $addr = explode("-",input("city"));
 		   $db = new user();
            $lab_data=[
-                'Sex'=>input("sex"),
 				'Province'=>$addr[0],
 				'City'=>$addr[1],
+                'Wanna'=>input("find"),
                 'Gqzt'=> input("marry"),
 			    'Blood'=>input("boold"),
                 'zhiye'=>input("job"),

@@ -582,7 +582,7 @@ function JsonHtml(obj, data) {
 				var sign = '';
 			}
 			
-			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:100px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'">投诉他/她</a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['renshival']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.renshiage+'</span><span>'+data.renshistart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
+			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:10px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="/tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'"></a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['renshival']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.renshiage+'</span><span>'+data.renshistart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
 			
 			HTML +='<section class="cm-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
 			
@@ -619,8 +619,8 @@ function JsonHtml(obj, data) {
 			HTML +='<nav class="footbar mui-clearfix">';
 			
 			HTML += '<a href="javascript:;" class="footbar-item" onclick=send('+data.uid+','+data.likeid+','+val['nuid']+')><div class="footbar-icon beixuan-icon" status="false"></div><span class="mui-tab-label">加为好友</span></a>';
-			
-			HTML +='<a href="/index.php/weixin/bus/xhhelp" class="footbar-item link"><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">小红帮忙</span></a></nav>';
+
+			// HTML +='<a href="/index.php/weixin/bus/xhhelp" class="footbar-item link"><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">小红帮忙</span></a></nav>';
 			break;
 		
 		case "bei_s":
@@ -632,7 +632,7 @@ function JsonHtml(obj, data) {
 				var sign = '';
 			}
 			
-			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:100px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'">投诉他/她</a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.beixuanage+'</span><span>'+data.beixuanstart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
+			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:10px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="/tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'"></a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.beixuanage+'</span><span>'+data.beixuanstart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
 			
 			HTML +='<section class="cm-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
 			

@@ -31,7 +31,7 @@ as[nav - 1].className ='link mui-active'
     padding-bottom: 10px;
 }
 .self-intro-main{
-	padding-top: 31px;
+	padding-top: 5px;
 }
 </style>
 {include file="public/header" /}
@@ -52,11 +52,16 @@ as[nav - 1].className ='link mui-active'
 <div class="audit-hint">
 </div>
 </div>
+    <style>
+        .data span{
+            margin-left:5px;
+        }
+    </style>
 <div class="data">
-<span class="sex" status="{$list.Sex}"></span>
-<span>{$age}</span>
+<span class="sex" status="{$list['Sex']}"></span>
+<span>{if $age}{$age}岁{/if}</span>
 <span>{$start}{$list['Blood']}</span>
-<span>{$list['zhiye']}{$list['height']}</span>
+<span>{$list['zhiye']}{if $list['height']}{$list['height']}cm{/if}</span>
 </div>
 <div class="data">
     {if $list['Sign']}<span>{$list['Sign']}</span>{/if}
@@ -115,10 +120,10 @@ as[nav - 1].className ='link mui-active'
 {if $list.height}<span class="value-item">{$list.height}</span>{/if}
 {if $list.weight}<span class="value-item">{$list.weight}</span>{/if}
 {if $list.Gqzt}<span class="value-item">{$list.Gqzt}</span>{/if}
-{if $list.Province && $list.City}<span class="value-item">现居:{$list.Province}-{$list.City}</span>{/if}
+{if $list.Province && $list.City}<span class="value-item">{$list.Province}-{$list.City}</span>{/if}
 {if $list.salary}<span class="value-item">{$list.salary}</span>{/if}
 {if $list.character}<span class="value-item">{$list.character}</span>{/if}
-{if $list.Blood}<span class="value-item">血型:{$list.Blood}型</span>{/if}
+{if $list.Blood}<span class="value-item">{$list.Blood}型</span>{/if}
 {if $list.education}<span class="value-item">{$list.education}</span>{/if}
 
 </div>
