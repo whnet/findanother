@@ -28,7 +28,7 @@ class Detail extends BaseController
 		
 		$frid = !empty($request->param('frid'))?$request->param('frid'):0;
 		
-		$kid = !empty($request->param('kid'))?$request->param('kid'):'kid';
+		$kid = !empty($request->param('kid'))?$request->param('kid'):0;
 		
 		$list=user::alias('a')
 			->field('a.*,b.nickname as name ,b.headimgurl as header')

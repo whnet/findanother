@@ -38,7 +38,73 @@ class BaseController extends Controller
 		$this->assign('desc','【爱情巴士】全国第一家专业星座配对网站！性格配对准确率高达90%！10年专注于夫妻情侣的配对研究，注册会员超过1.5万华人。');
 
     }
-	
+	public function match_others($best, $data){
+        $xingcon['best'] = $best;
+        switch($data){
+            case '合适就行':
+                $bestfind = true;
+                $heshiweizhi = '最佳夫妻';
+                break;
+
+            case '异性朋友':
+                if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
+                    $bestfind = true;
+                    $heshiweizhi = '最佳异性朋友';
+                }
+                else{
+                    $bestfind = false;
+                    $heshiweizhi = '最差异性朋友';
+                }
+                break;
+            case '情侣':
+                if(strpos($xingcon['best'],'情侣')!== false){
+                    $bestfind = true;
+                    $heshiweizhi = '最佳情侣';
+                }
+                else{
+                    $bestfind = false;
+                    $heshiweizhi = '最差情侣';
+                }
+                break;
+            case '夫妻':
+                if(strpos($xingcon['best'],'夫妻')!== false){
+                    $bestfind = true;
+                    $heshiweizhi = '最佳夫妻';
+                }
+                else{
+                    $bestfind = false;
+                    $heshiweizhi = '最差夫妻';
+                }
+                break;
+            case '同性朋友':
+                if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
+                    $bestfind = true;
+                    $heshiweizhi = '最佳同性朋友';
+                }
+                else{
+                    $bestfind = false;
+                    $heshiweizhi = '最差同性朋友';
+                }
+                break;
+            case '同性恋人':
+                if(strpos($xingcon['best'],'情侣')!== false || strpos($xingcon['best'],'夫妻')!== false){
+                    $bestfind = true;
+                    $heshiweizhi = '最佳同性恋人';
+                }
+                else{
+                    $bestfind = false;
+                    $heshiweizhi = '最差同性恋人';
+                }
+                break;
+            default:
+                $bestfind = false;
+                $heshiweizhi = '最糟关系';
+                break;
+        }
+        return [$heshiweizhi,$bestfind];
+    }
+
+
 	public function get_guanxi($yopenid,$bopenid){
 		
 		$selfval=user::alias('a')

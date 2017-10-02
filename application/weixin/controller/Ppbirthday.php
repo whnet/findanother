@@ -33,13 +33,15 @@ class Ppbirthday extends BaseController
 		$num = !empty($num)?$num:0;
 		$limit = "1";
 		$openid = Cookie::get('openid');
-
+        //找到自己的信息
 		$self=user::alias('a')
             ->field('a.*,a.ID as suid,b.*')
             ->join('weixin b','b.id=a.wid')
 			->where('b.openid',$openid)
 			->find();
 		//echo user::getLastSql();
+
+        //user表中的id
 		$suid = $self['suid'];	
 
 		$lastdb=new User();
@@ -48,6 +50,7 @@ class Ppbirthday extends BaseController
         ];
         $lastdb->save($lastdata,['ID' => $suid]);
 
+        //是否在认识表
 		$get_val = know::where('suid',$suid)->select();
 		if(!empty($get_val)){
 			$usersid="";
@@ -59,7 +62,7 @@ class Ppbirthday extends BaseController
 		}else{
 			$where1 = '1=1';
 		}
-		
+         //是否在忽略列表中
 		$hget_val = hulue::where('suid',$suid)->select();
 		if(!empty($hget_val)){
 			$huusersid="";
@@ -71,7 +74,7 @@ class Ppbirthday extends BaseController
 		}else{
 			$where3 = '1=1';
 		}
-		
+        //是否在备选列表中
 		$get_alval = Alternative::where('suid',$suid)->select();
 		if(!empty($get_alval)){
 			$ausersid="";
@@ -83,7 +86,7 @@ class Ppbirthday extends BaseController
 		}else{
 			$where2 = '1=1';
 		}
-		
+		//是否在好友列表中
 		$get_frval = Friends::where('uid',$suid)->select();
 		if(!empty($get_frval)){
 			$userfsid="";
@@ -95,13 +98,13 @@ class Ppbirthday extends BaseController
 		}else{
 			$where4 = '1=1';
 		}
-
-		if($self['wsex']=='1'){    //判断是同性还是异性
+        //判断是同性还是异性
+		if($self['wsex']=='1'){
 			$yi = 2;
 		}else{
 			$yi = 1;
 		}
-		
+		//如果在就
 		$list=user::alias('a')
 				->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
 				->join('weixin b','b.id=a.wid')
@@ -175,66 +178,16 @@ class Ppbirthday extends BaseController
 			}
 
 			$xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-			
-			$worst = $xingcon['worst']; //最遭情况
-			
-			switch($self['Wanna']){
-				case '合适就行': 
-					$bestfind = true;
-					$heshiweizhi = '最佳夫妻配';
-					break;
-			
-				case '异性朋友':
-					if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-						$bestfind = true;
-						$heshiweizhi = '最佳异性朋友';
-					}else{
-						$bestfind = false;
-						$heshiweizhi = '最差异性朋友';
-					}
-					break;
-				case '情侣':
-					if(strpos($xingcon['best'],'情侣')!== false){
-						$bestfind = true;
-						$heshiweizhi = '最佳情侣';
-					}else{
-						$bestfind = false;
-						$heshiweizhi = '最差情侣';
-					}
-					break;
-				case '夫妻':
-					if(strpos($xingcon['best'],'夫妻')!== false){
-						$bestfind = true;
-						$heshiweizhi = '最佳夫妻';
-					}else{
-						$bestfind = false;
-						$heshiweizhi = '最差夫妻';
-					}
-					break;
-				case '同性朋友':
-					if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-						$bestfind = true;
-						$heshiweizhi = '最佳同性朋友';
-					}else{
-						$bestfind = false;
-						$heshiweizhi = '最差同性朋友';
-					}
-					break;
-				case '同性恋人':
-					if(strpos($xingcon['best'],'情侣')!== false || strpos($xingcon['best'],'夫妻')!== false){
-						$bestfind = true;
-						$heshiweizhi = '最佳同性恋人';
-					}else{
-						$bestfind = false;
-						$heshiweizhi = '最差同性恋人';
-					}
-					break;
-				default:
-					$bestfind = false;
-					$heshiweizhi = '最糟关系';
-					break;
-			}
-			
+            //最糟情况
+            $worst = $xingcon['worst'];
+            //最佳情况
+            $best = $xingcon['best'];
+
+            //最佳
+            $data = $this->match_others($xingcon['best'], $self['Wanna']);
+            $heshiweizhi = $data[0];
+            $bestfind = $data[1];
+
 			if($fage && $bestfind){
 				$tuijian = "认识一下";
 				$result = "匹配数据";

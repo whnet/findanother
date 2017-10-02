@@ -127,7 +127,7 @@ class Gxpipei extends BaseController
 			$disval = District::where('birthday1',"<=",$zjdata)->where('birthday2',">=",$zjdata)->find();
 			$YC = $disval['constellation'];
 		}
-
+        //数据库中的规则是个大问题
 		$dfm = $bymd[1];
 		$dfd = $bymd[2];
 		$dfdata = '2008-'.$dfm.'-'.$dfd;
@@ -136,87 +136,38 @@ class Gxpipei extends BaseController
 		}else{
 			$disval2 = District::where('birthday1',"<=",$dfdata)->where('birthday2',">=",$dfdata)->find();
 			$NC = $disval2['constellation'];
-		}	
+		}
 
 		$xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-		
-		
-		switch($self['Wanna']){
-			case '合适就行': 
-				$bestfind = true;
-				$heshiweizhi = '最佳夫妻配';
-				break;
-		
-			case '异性朋友':
-				if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-					$bestfind = true;
-					$heshiweizhi = '最佳异性朋友';
-				}else{
-					$bestfind = false;
-					$heshiweizhi = '最差异性朋友';
-				}
-				break;
-			case '情侣':
-				if(strpos($xingcon['best'],'情侣')!== false){
-					$bestfind = true;
-					$heshiweizhi = '最佳情侣';
-				}else{
-					$bestfind = false;
-					$heshiweizhi = '最差情侣';
-				}
-				break;
-			case '夫妻':
-				if(strpos($xingcon['best'],'夫妻')!== false){
-					$bestfind = true;
-					$heshiweizhi = '最佳夫妻';
-				}else{
-					$bestfind = false;
-					$heshiweizhi = '最差夫妻';
-				}
-				break;
-			case '同性朋友':
-				if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-					$bestfind = true;
-					$heshiweizhi = '最佳同性朋友';
-				}else{
-					$bestfind = false;
-					$heshiweizhi = '最差同性朋友';
-				}
-				break;
-			case '同性恋人':
-				if(strpos($xingcon['best'],'情侣')!== false || strpos($xingcon['best'],'夫妻')!== false){
-					$bestfind = true;
-					$heshiweizhi = '最佳同性恋人';
-				}else{
-					$bestfind = false;
-					$heshiweizhi = '最差同性恋人';
-				}
-				break;
-			default:
-				$bestfind = false;
-				$heshiweizhi = '最糟关系';
-				break;
-		}
-		
-		if($fage && $bestfind){
-				$tuijian = "认识一下";
-				$result = "匹配数据";
-				$content = "<table>
+        //最糟情况
+		$worst = $xingcon['worst'];
+        //最佳情况
+        $best = $xingcon['best'];
+		//将下面这一块写成一个方法
+        $data = $this->match_others($xingcon['best'], $self['Wanna']);
+        $heshiweizhi = $data[0];
+        $bestfind = $data[1];
+
+        if($fage && $bestfind){
+            $tuijian = "认识一下";
+            $result = "匹配数据";
+            $content = "<table>
 							<tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
 							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-							<tr><td>48星区：</td><td>{$heshiweizhi}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
-							</table>"; 
-				$tjly = $heshiweizhi;
-			}else{
-				$tuijian = "备选观察";
-				$result = "匹配数据";
-				$content = "<table>
+							<tr><td>48星区：</td><td>最佳{$best}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
+							</table>";
+            $tjly = $heshiweizhi;
+        }else{
+            $tuijian = "备选观察";
+            $result = "匹配数据";
+            $content = "<table>
 							<tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
 							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-							<tr><td>48星区：</td><td>{$heshiweizhi}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
-							</table>"; 
-				$tjly = $heshiweizhi;
-		}
+							<tr><td>48星区：</td><td>最佳{$best}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
+							</table>";
+            $tjly = $heshiweizhi;
+        }
+
 		$this->assign('tuijian', $tuijian);
 		$this->assign('result', $result);
 		$this->assign('content', $content);

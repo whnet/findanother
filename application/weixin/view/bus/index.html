@@ -25,6 +25,10 @@
 .clicks{background-color:#efeff4;}
 .self-intro{background-color:#efeff4;}
 .backgroud-gray{background-color:#fff;}
+.self-intro-main {
+    position: absolute;
+    width: 100%;
+    padding-top: 55px;
 </style>
 <title>我的巴士</title>
 </head>
@@ -71,7 +75,20 @@
 					};
 				}, 1000);
 				})();
-				}
+				}else if(result.error_code== 1){
+                    mui.toast(result.msg);
+                    href="/index.php/weixin/bus/index";
+                    (function(){
+                        var wait = 3;
+                        var interval = setInterval(function(){
+                            var time = --wait;
+                            if(time <= 0) {
+                                location.href = href;
+                                clearInterval(interval);
+                            };
+                        }, 1000);
+                    })();
+                }
 			}
 		});
 	}
