@@ -482,8 +482,23 @@ function JsonHtml(obj, data) {
 				}else{
 					var bstart = '';
 				}	
-				
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link"><div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div><div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p><p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
+				//判断添加好友的
+				if(obj.flag == 0){
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>加为好友+</label>';
+				}else if(obj.flag == 1){
+                    var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>等待同意</label>';
+				}else if(obj.flag == 2){
+                    var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>已同意</label>';
+				}
+				//微信号
+
+
+				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+					'<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+					'<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'<p>微信号：yanjiasangongzi</p></div>' +
+					'</div></li>';
 			}
 			break;
 		case "myfriend":
@@ -596,7 +611,7 @@ function JsonHtml(obj, data) {
 				HTML+='<span class="value-item">'+val['Gqzt']+'</span>';
 			}
 			
-			HTML+='<span class="value-item">现居:'+val['xianju']+'</span>';
+			HTML+='<span class="value-item">'+val['xianju']+'</span>';
 			
 			if(val['salary']){
 				HTML+='<span class="value-item">'+val['salary']+'万</span>';
@@ -607,7 +622,7 @@ function JsonHtml(obj, data) {
 			}
 			
 			if(val['Blood']){
-				HTML+='<span class="value-item">血型:'+val['Blood']+'型</span>';
+				HTML+='<span class="value-item">'+val['Blood']+'型</span>';
 			}
 			
 			if(val['character']){
@@ -783,3 +798,48 @@ function JsonHtml(obj, data) {
 
 	return HTML;
 }
+/*
+ *添加好友
+ */
+function send(suid,id,fid){
+    var url = '/index.php/weixin/bus/friend';
+    $.ajax(url, {
+        data: {
+            'suid':suid,
+            'kid':id,
+            'fid':fid,
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function(result) {
+            if(result.error_code==0){
+                mui.toast(result.msg);
+                href="/index.php/weixin/center/index";
+                (function(){
+                    var wait = 3;
+                    var interval = setInterval(function(){
+                        var time = --wait;
+                        if(time <= 0) {
+                            location.href = href;
+                            clearInterval(interval);
+                        };
+                    }, 1000);
+                })();
+            }else if(result.error_code== 1){
+                mui.toast(result.msg);
+                href="/index.php/weixin/center/index";
+                (function(){
+                    var wait = 3;
+                    var interval = setInterval(function(){
+                        var time = --wait;
+                        if(time <= 0) {
+                            location.href = href;
+                            clearInterval(interval);
+                        };
+                    }, 1000);
+                })();
+            }
+        }
+    });
+}
+

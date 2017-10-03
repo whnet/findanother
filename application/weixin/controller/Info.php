@@ -28,21 +28,23 @@ class Info extends SecdController
 {
 	public function index()
     {
+
 		if(input('flag')){
 			$yaoqingopenid = !empty(input('openid'))?input('openid'):'';//别人
 			Cookie::set('yaoqingopenid',$yaoqingopenid,300);
 			$byaoqingopenid = !empty(input('bopenid'))?input('bopenid'):'';//我自己
 			Cookie::set('byaoqingopenid',$byaoqingopenid,300);
 		}
+
 		$options = Config::get('wechat');
 		$app = new Application($options);
 		
 		$oauth = $app->oauth;
 		if(!Cookie::has('wechat_user')) {
-
 		  session('target_url','info/save_uinfo');
 		  $oauth->redirect()->send();
 		}else{                              // 已经关注过
+
 			$user = Cookie::get('wechat_user');
 			$open_id = $user['original']['openid'];
 
@@ -50,11 +52,10 @@ class Info extends SecdController
 			$result = Weixin::check_login($open_id);
 
 			if(!empty($result['openid'])){
-				
+
 				Cookie::set('openid',$result['openid'],2419200);
 				$data = User::where('wid',$result['id'])->find();
 				if(empty($data)){
-					
 					$this->redirect('birthday');
 				}else{
 					$uid=$data['ID'];
@@ -69,11 +70,12 @@ class Info extends SecdController
 					}elseif($data['flag']==4){
 						$this->redirect('avatar',['id'=>$uid]);
 					}elseif($data['flag']==5){
+
 						$this->panduan_find($uid);
 					}
 				}
 
-			}else{ 
+			}else{
 				Cookie::delete('wechat_user');
 				$this->redirect('index');
 			}
@@ -352,7 +354,6 @@ class Info extends SecdController
 		$uid = empty($uid)?input('uid'):$uid;
 		$data = Mfind::where('uid',$uid)->find();
 		if(!empty($data)){
-			
 			$flag = 1;
 			$flag2 = 1;
 			$url = "-index.php-weixin-pipei-index";
@@ -360,7 +361,7 @@ class Info extends SecdController
 		
 			$this->redirect('zhezhao',['flag'=>$flag,'flag2'=>$flag2,'url'=>$url,'message'=>$message]);
 		}else{
-			$this->redirect('info/index');
+//			$this->redirect('info/index');
 		}
 	}
 	

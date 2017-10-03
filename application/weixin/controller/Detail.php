@@ -11,7 +11,8 @@ use think\Request;
 use app\weixin\model\Mfind; 
 use app\weixin\model\Weixin; 
 use app\weixin\model\User; 
-use app\weixin\model\Photos; 
+use app\weixin\model\Photos;
+use app\weixin\model\Know;
 
 class Detail extends BaseController
 {
@@ -25,8 +26,11 @@ class Detail extends BaseController
 		$jh = !empty($request->param('jh'))?$request->param('jh'):0;
 		
 		$flag2 = !empty($request->param('flag2'))?$request->param('flag2'):1;
-		
-		$frid = !empty($request->param('frid'))?$request->param('frid'):0;
+		//know中的flag
+        $fridDb = new Know();
+         $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+        //echo $fridDb::getLastSql();
+		$frid = $knowFlag['flag'];
 		
 		$kid = !empty($request->param('kid'))?$request->param('kid'):0;
 		

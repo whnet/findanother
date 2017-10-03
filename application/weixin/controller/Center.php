@@ -203,6 +203,8 @@ class Center extends BaseController
 				->find();
 				
 				$userinfo[$k]['id'] = $v['id'];
+				$userinfo[$k]['flag'] = $v['flag'];
+				$userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];

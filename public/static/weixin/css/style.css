@@ -625,11 +625,11 @@ header.index .mui-title{font-size: 1em;}
 
 .focus-list .mui-table-view .mui-media{position: relative; padding-top: 0.7em;}
 
-.focus-list .mui-table-view .mui-media .mui-media-object{width: 4em!important; max-width: initial; height: 4em!important; border-radius: 4em!important;}
+.focus-list .mui-table-view .mui-media .mui-media-object{width: 5em!important; max-width: initial; height: 5em!important; border-radius: 4em!important;}
 
 .focus-list .mui-table-view .mui-media .title b{color: #f7b260;}
 
-.focus-list .mui-table-view .mui-media .title span{font-size: 0.8em; margin-top: 0; margin-bottom: 0.5em; display: block;}
+.focus-list .mui-table-view .mui-media .title span{font-size: 0.8em; margin-top: 0;  display: block;}
 
 .focus-list .mui-table-view .mui-media label{font-size: 0.8em; position: absolute; top: 0; right: 0; color: #999;}
 

@@ -317,14 +317,16 @@ class Bus extends BaseController
             $msg="请勿重复请求！";
             die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
         }
-        $lab_data=[
-            'uid'=>$uid,
-            'fid'=>$fid,
-            'flag'=>1,
-            'create_at'=>time(),
-        ];
 
-        $frid = $db ->insertGetId($lab_data);
+        //$lab_data=[
+        //    'uid'=>$uid,
+        //    'fid'=>$fid,
+        //    'flag'=>1,
+        //    'create_at'=>time(),
+        //];
+//
+//        $frid = $db ->insertGetId($lab_data);
+        $frid = 0;
 
         $kdb = new Know();   //标记这个id已发送添加好友消息
 
@@ -387,31 +389,23 @@ class Bus extends BaseController
         $kid = input('kid');  //konw 表id
 
         //向tb_friends加数据
-        $db = new friends();
+        $db = new know();
         //先判断是否已经发送了添加好友请求
-        $isHave = $db->where('uid',$uid)->where('fid',$fid)->count();
-        if($isHave){
+        $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
+
+        if($isHave['flag'] != 1){
             $error_code='0';
             $msg="请勿重复请求！";
             die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
         }
+
+        //改变know中flag状态
+        $knowDb = new know();
         $lab_data=[
             'flag'=>2,
         ];
-		$db ->save($lab_data,['id' => $id]);
+        $knowDb ->save($lab_data,['id' => $isHave['id']]);
 
-        //向tb_friends加数据
-		$fdb = new friends();
-		$lab_fdata=[
-            'uid' =>$uid,
-            'fid' =>$fid,
-            'flag'=>2,
-            'create_at'=>time(),
-        ];
-		$fdb ->save($lab_fdata);   //添加对方为好友
-
-        //根据 kid 进行数据删除
-        //know::where('id',$kid)->delete();
 
 		$data=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
@@ -435,7 +429,7 @@ class Bus extends BaseController
 
 		$error_code='0';
 	   $msg="添加对方为好友成功！";
-	   echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
+	   echo json_encode(['error_code'=>$error_code,'msg'=>$msg, 'id'=>1]);
 	}
 
     function tousu(Request $request){
