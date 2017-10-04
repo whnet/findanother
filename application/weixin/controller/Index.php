@@ -20,6 +20,7 @@ use app\weixin\model\District;
 use app\weixin\model\Constellation; 
 use app\weixin\model\Blood;
 use app\weixin\model\Saoma;
+use app\weixin\model\Friends;
 
 class Index extends Controller
 {
@@ -126,7 +127,28 @@ class Index extends Controller
                                 ];
                                 $db ->save($lab_data);
                             }
+                            //扫码就将扫码者的信息写入到数据know表中
+                            $yval = weixin::where('openid',$yopenid)->find();
+                            $yuinfo = user::where('wid',$yval['id'])->find();
+                            //被邀请者
+                            $bval = weixin::where('openid',$bopenid)->find();
+                            $buinfo = user::where('wid',$bval['id'])->find();
+                            $uid = $yuinfo['ID'];
+                            $fid = $buinfo['ID'];
+                            $friendDb = new Friends();
+                            $friendExist = $friendDb->where('uid',$uid)->where('fid',$fid)->count();
+                            if(!$friendExist){
+                                $fdb = new friends();
+                                $ylab_fdata=[
+                                    'uid'=>$uid,
+                                    'fid'=>$fid,
+                                    'flag'=>2,
+                                    'create_at'=>time(),
+                                ];
 
+                                $fdb ->save($ylab_fdata);
+                            }
+                            //通过扫码查看与其他人的关系
                             $guanxi = $this->get_guanxi($yopenid,$bopenid);
                             $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
                             $this->sendtxtmessage($message,$bopenid);

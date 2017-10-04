@@ -146,12 +146,12 @@ class Info extends SecdController
 			if(!empty($yopenid)){
 				
 			   $yval = weixin::where('openid',$yopenid)->find();
+			   $yuinfo = user::where('wid',$yval['id'])->find();
 			   $name = $yval['nickname'];
 			   $bname = $val['nickname'];
-			   $yuinfo = user::where('wid',$yval['id'])->find();
+
 
 				$fdb = new friends();
-				
 				$ylab_fdata=[
 						'uid'=>$yuinfo['ID'],
 						'fid'=>$uid,

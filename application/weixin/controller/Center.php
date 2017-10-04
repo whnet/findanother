@@ -29,12 +29,15 @@ class Center extends BaseController
 		
 		$suid = $uinfo['ID'];
 		
-		$knum = know::where('flag','<>','3')->where('suid',$suid)->count();
+		$knum = know::where('flag','<>','2')->where('suid',$suid)->count();
+		$othersnum = know::where('suid',$suid)->where('flag',2)->count();
 		$hnum = hulue::where('flag','<>','3')->where('suid',$suid)->count();
 		$fnum = friends::where('flag','<>','3')->where('uid',$suid)->count();
 		$anum = alternative::where('flag','<>','3')->where('suid',$suid)->count();
 		$xknum = know::where('flag','<>','3')->where('uid',$suid)->count();
 
+		$this->assign('suid', $suid);
+		$this->assign('othersnum', $othersnum);
 		$this->assign('knum', $knum);
 		$this->assign('hnum', $hnum);
 		$this->assign('fnum', $fnum);
@@ -44,7 +47,13 @@ class Center extends BaseController
 		return $this->fetch();
         
     }
-	
+	/*
+	 * 相互认识
+	 */
+	public function knowothers(){
+        return $this->fetch();
+    }
+
 	public function mylike(){
 		return $this->fetch();
 	}
@@ -226,6 +235,54 @@ class Center extends BaseController
 			$userinfo='';
 		}
 		
+		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo,'msg'=>$msg]);
+	}
+	public function ajaxknowothers(){
+		$page = input('page');
+		$userinfo[]=array();
+		$limit = $page.",10";
+		$openid = Cookie::get('openid');
+		$uval=weixin::alias('a')
+			->join('user b','a.id=b.wid')
+			->where('a.openid',$openid)
+			->find();
+
+		$data = know::where('suid',$uval['ID'])->where('flag','<>','3')->limit($limit)->select();
+
+		if(!empty($data)){
+
+			foreach($data as $k => $v){
+
+				$uinfo=user::alias('a')
+				->field('a.*,a.ID as suid,b.*')
+				->join('weixin b','b.id=a.wid')
+				->where('a.ID',$v['uid'])
+				->find();
+
+				$userinfo[$k]['id'] = $v['id'];
+				$userinfo[$k]['flag'] = $v['flag'];
+				$userinfo[$k]['uid'] = $uval['ID'];
+				$userinfo[$k]['nuid'] = $uinfo['suid'];
+				$userinfo[$k]['Province'] = $uinfo['Province'];
+				$userinfo[$k]['City'] = $uinfo['City'];
+				$userinfo[$k]['height'] = $uinfo['height'];
+				$userinfo[$k]['addtime'] = $v['create_at'];
+				$userinfo[$k]['nickname'] = $uinfo['nickname'];
+				$userinfo[$k]['headimgurl'] = $uinfo['headimgurl'];
+				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
+				$userinfo[$k]['sex'] = $uinfo['Sex'];
+				$userinfo[$k]['blood'] = $uinfo['Blood'];
+				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
+				$userinfo[$k]['Sign'] = $uinfo['Sign'];
+			}
+			$msg = '成功';
+			$error_code = 0;
+		}else{
+			$msg = '暂无数据';
+			$error_code = 0;
+			$userinfo='';
+		}
+
 		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo,'msg'=>$msg]);
 	}
 	

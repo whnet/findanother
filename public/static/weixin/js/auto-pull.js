@@ -27,6 +27,8 @@ arr['apply'] = new Array();
 arr['apply']['url'] = '//' + api_url + '/party/wap/enroll/user';
 arr['mylike'] = new Array();
 arr['mylike']['url'] = '/index.php/weixin/center/ajaxmylike';
+arr['knowothers'] = new Array();
+arr['knowothers']['url'] = '/index.php/weixin/center/ajaxknowothers';
 arr['likeme'] = new Array();
 arr['likeme']['url'] = '/index.php/weixin/center/ajaxlikeme';
 arr['mysaw'] = new Array();
@@ -119,6 +121,9 @@ $(function() {
 			ajax_data['token'] = '1';
 			break;
 		case "mylike" :
+			ajax_data['token'] = '1';
+			break;
+		case "knowothers" :
 			ajax_data['token'] = '1';
 			break;
 		case "likeme" :
@@ -485,22 +490,90 @@ function JsonHtml(obj, data) {
 				//判断添加好友的
 				if(obj.flag == 0){
 					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>加为好友+</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'<p>微信号：yanjiasangongzi</p></div>' +
+                        '</div></li>';
 				}else if(obj.flag == 1){
                     var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>等待同意</label>';
-				}else if(obj.flag == 2){
-                    var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>已同意</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'<p>微信号：yanjiasangongzi</p></div>' +
+                        '</div></li>';
+				}else{
+                    HTML += '';
 				}
 				//微信号
 
 
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-					'<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
-					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
-					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-					'<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'<p>微信号：yanjiasangongzi</p></div>' +
-					'</div></li>';
+
 			}
 			break;
+		case "knowothers":
+            var y = new Date();
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+
+                if(obj.Province){
+                    var pro = obj.Province;
+                }else{
+                    var pro = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.blood && obj.start){
+                    var bstart = obj.start+obj.blood;
+                }else{
+                    var bstart = '';
+                }
+                //判断添加好友的
+                if(obj.flag == 2){
+                    var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>互相认识</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'<p>微信号：yanjiasangongzi</p></div>' +
+                        '</div></li>';
+                }else{
+                    HTML += '';
+				}
+                //微信号
+
+
+
+            }
+            break;
 		case "myfriend":
 			var y = new Date();
 			for (var i = 0; i < data.length; i++) {
