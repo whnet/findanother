@@ -130,7 +130,6 @@ class Ppbirthday extends BaseController
                 $myYmd = explode('-',date('Y-m-d',$self['Birthday']));
                 $myData = '2008-'.$myYmd[1].'-'.$myYmd[2];
                 $myConstellation = $this->getConstellation($myData);
-
                 $otherYmd = explode('-',date('Y-m-d',$newlist[$k]['Birthday']));
                 $otherData = '2008-'.$otherYmd[1].'-'.$otherYmd[2];
                 $otherConstellation = $this->getConstellation($otherData);
@@ -241,7 +240,7 @@ class Ppbirthday extends BaseController
                                 </tr>
                                 <tr><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
                                 </table>";
-                    $tjly = $heshiweizhi;
+                    $tjly = $best.$worst;
                 }else{
                     $tuijian = "备选观察";
                     $result = "匹配数据";
@@ -256,7 +255,7 @@ class Ppbirthday extends BaseController
                                 <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
                                 </tr>
                                 </table>";
-                    $tjly = $heshiweizhi;
+                    $tjly = $best.$worst;
                 }
                 $this->assign('tuijian', $tuijian);
                 $this->assign('result', $result);
@@ -411,15 +410,8 @@ class Ppbirthday extends BaseController
         return $this->fetch('zhezhao');
     }
 
-    private function getConstellation($data){
-        if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
-            $constellation = "魔羯座一";
-        }else{
-            $disval = District::where('birthday1',"<=",$data)->where('birthday2',">=",$data)->find();
-            $constellation = $disval['constellation'];
-        }
-        return $constellation;
-    }
+
+
 
 
 }

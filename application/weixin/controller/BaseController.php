@@ -448,5 +448,15 @@ class BaseController extends Controller
 			$app = new Application($options);
 			$result = $app->staff->message($message)->to($openId)->send();
 	}
+
+    function getConstellation($data){
+        if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
+            $constellation = "魔羯座一";
+        }else{
+            $disval = District::where('birthday1',"<=",$data)->where('birthday2',">=",$data)->find();
+            $constellation = $disval['constellation'];
+        }
+        return $constellation;
+    }
 	
 }

@@ -124,17 +124,37 @@ class Info extends SecdController
                 $yaoqingpenid = Cookie::get('yaoqingopenid');
                 $beiyaoqingopenid = Cookie::get('byaoqingopenid');
 
+
                 if($yaoqingpenid && $beiyaoqingopenid){
+                    //通过生日获得两人的关系
+                    $yval = weixin::where('openid',$yaoqingpenid)->find();
+                    $yuinfo = user::where('wid',$yval['id'])->find();
+                    //被邀请者
+                    $bval = weixin::where('openid',$beiyaoqingopenid)->find();
+                    $buinfo = user::where('wid',$bval['id'])->find();
+                    $myYmd =date('m-d',$yuinfo['Birthday']);
+                    $myData = '2008-'.$myYmd;
+                    $myConstellation = $this->getConstellation($myData);
+
+                    $otherYmd = date('m-d',$buinfo['Birthday']);
+                    $otherData = '2008-'.$otherYmd;
+                    $otherConstellation = $this->getConstellation($otherData);
+                    //查出他们的最佳为朋友、夫妻、情侣的数据
+                    $Constellation = Constellation::where("C_1='".$myConstellation."' and C_2='".$otherConstellation."'")->whereOr("C_1='".$otherConstellation."' and C_2='".$myConstellation."'")->find();
+                    $best = '最佳'.$Constellation['best'];
+                    $worst = '最糟'.$Constellation['worst'];
+                    //通过生日获得两人的关系 END
+
                     $yval = weixin::where('openid',$yaoqingpenid)->find();
                     $aname = $yval['nickname'];
-                    $guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
-                    $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yaoqingpenid."/bopenid/".$beiyaoqingopenid."'>点击查看</a>";
+                    //$guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
+                    $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yaoqingpenid."/bopenid/".$beiyaoqingopenid."'>点击查看</a>";
                     $this->sendtxtmessage($message,$beiyaoqingopenid);
 
                     $val = weixin::where('openid',$beiyaoqingopenid)->find();
                     $bname = $val['nickname'];
-                    $guanxi2 = $this->get_guanxi($beiyaoqingopenid,$yaoqingpenid);
-                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$guanxi2."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$beiyaoqingopenid."/bopenid/".$yaoqingpenid."'>点击查看</a>";
+                    //$guanxi2 = $this->get_guanxi($beiyaoqingopenid,$yaoqingpenid);
+                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$beiyaoqingopenid."/bopenid/".$yaoqingpenid."'>点击查看</a>";
                     $this->sendtxtmessage($bmessage,$yaoqingpenid);
                 }
 
@@ -401,4 +421,13 @@ class Info extends SecdController
 		$this->assign('message',$message);
 		return $this->fetch('zhezhao');
 	}
+   public function getConstellation($data){
+        if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
+            $constellation = "魔羯座一";
+        }else{
+            $disval = District::where('birthday1',"<=",$data)->where('birthday2',">=",$data)->find();
+            $constellation = $disval['constellation'];
+        }
+        return $constellation;
+    }
 }

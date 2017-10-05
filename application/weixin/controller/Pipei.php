@@ -298,7 +298,7 @@ class Pipei extends BaseController
 							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
 							<tr><td>48星区：</td><td>{$heshiweizhi}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
 							</table>";
-                $tjly = $heshiweizhi;
+                $tjly = $best.$worst;
             }else{
                 $tuijian = "备选观察";
                 $result = "匹配数据";
@@ -307,7 +307,7 @@ class Pipei extends BaseController
 							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
 							<tr><td>48星区：</td><td>{$heshiweizhi}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
 							</table>";
-                $tjly = $heshiweizhi;
+                $tjly = $best.$worst;
             }
 
             $this->assign('tuijian', $tuijian);

@@ -133,6 +133,7 @@ class Index extends Controller
                             //被邀请者
                             $bval = weixin::where('openid',$bopenid)->find();
                             $buinfo = user::where('wid',$bval['id'])->find();
+
                             $uid = $yuinfo['ID'];
                             $fid = $buinfo['ID'];
                             $friendDb = new Friends();
@@ -149,13 +150,26 @@ class Index extends Controller
                                 $fdb ->save($ylab_fdata);
                             }
                             //通过扫码查看与其他人的关系
+                            //通过生日获得两人的关系
+                            $myYmd =date('m-d',$yuinfo['Birthday']);
+                            $myData = '2008-'.$myYmd;
+                            $myConstellation = $this->getConstellation($myData);
+
+                            $otherYmd = date('m-d',$buinfo['Birthday']);
+                            $otherData = '2008-'.$otherYmd;
+                            $otherConstellation = $this->getConstellation($otherData);
+                            //查出他们的最佳为朋友、夫妻、情侣的数据
+                            $Constellation = Constellation::where("C_1='".$myConstellation."' and C_2='".$otherConstellation."'")->whereOr("C_1='".$otherConstellation."' and C_2='".$myConstellation."'")->find();
+                            $best = '最佳'.$Constellation['best'];
+                            $worst = '最糟'.$Constellation['worst'];
+                            //通过生日获得两人的关系 END
                             $guanxi = $this->get_guanxi($yopenid,$bopenid);
-                            $message = "您和".$aname."的关系是：".$guanxi."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
+                            $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
                             $this->sendtxtmessage($message,$bopenid);
 
 
                             $guanxi2 = $this->get_guanxi($bopenid,$yopenid);
-                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$guanxi2."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
+                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
                             $this->sendtxtmessage($bmessage,$yopenid);
                             break;
                         }
@@ -604,4 +618,14 @@ class Index extends Controller
 		$app = new Application($options);
 		$result = $app->staff->message($message)->to($openId)->send();
 	}
+
+    public function getConstellation($data){
+        if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
+            $constellation = "魔羯座一";
+        }else{
+            $disval = District::where('birthday1',"<=",$data)->where('birthday2',">=",$data)->find();
+            $constellation = $disval['constellation'];
+        }
+        return $constellation;
+    }
 }
