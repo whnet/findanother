@@ -30,7 +30,7 @@ as[nav - 1].className ='link mui-active'
     padding-bottom: 10px;
 }
 .self-intro-main{
-	padding-top: 30px;
+    padding-top: 5px;
 }
 </style>
 {include file="public/header" /}
@@ -40,13 +40,9 @@ as[nav - 1].className ='link mui-active'
 </head>
 <body userid="{$list.nuid}">
 <div class="mui-content backgroud-gray">
-<header class="mui-bar mui-bar-nav nav-transparent">
-<h1 class="mui-title">{$list.name}</h1>
-<a href="/index.php/weixin/center/index" class="mui-bar-nav-home link"></a>
-</header>
-
 <div class="self-intro">
 <div class="self-intro-main">
+<h4 style="color:#fff;text-align:center;widht:100%;">{$list.name}</h4>
 <div class="self-avatar" style="background-image:url({$list.header});">
 <div class="audit-hint">
 </div>
@@ -194,9 +190,7 @@ as[nav - 1].className ='link mui-active'
 </a>
 <a href="javascript:;" class="footbar-item" id="like">
 <div class="footbar-icon renshi-icon" status="false"></div>
-<span class="mui-tab-label">
-认识一下
-</span>
+<span class="mui-tab-label">认识一下</span>
 </a>
 </nav>
 

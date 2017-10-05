@@ -236,7 +236,7 @@ $(function(){
 						var url = result.url;
 						
 						(function(){
-							var wait = 3;
+							var wait = 2;
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {

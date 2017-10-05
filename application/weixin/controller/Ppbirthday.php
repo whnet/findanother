@@ -98,29 +98,69 @@ class Ppbirthday extends BaseController
         }else{
             $where4 = '1=1';
         }
-        //判断是同性还是异性
-        if($self['wsex']=='1'){
+        //判断是同性还是异性，这里应该改成user表中，而不是weixin表
+        if($self['Sex']=='1'){
             $yi = 2;
         }else{
             $yi = 1;
         }
+
         //如果在就
-        $list=user::alias('a')
+        $istxyx = "异性";
+        $newlist=user::alias('a')
             ->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
             ->join('weixin b','b.id=a.wid')
-            ->where('b.wsex',$yi)
+            ->where('a.Sex',$yi)
             ->where($where1)
             ->where($where2)
             ->where($where3)
             ->where($where4)
             ->where('a.ID','<>',$suid)
             ->order('a.ID asc')
-            ->limit($limit)
             ->select();
-        $istxyx = "异性";
-        //echo user::getLastSql();
-        //exit();
 
+        /*
+         * 朋友、夫妻、情侣这三个关系，是同城且异性，就匹配！否则不推荐的
+         */
+        $str = '';
+        if($newlist){
+            foreach($newlist as $k=>$v){
+
+                //得出自己和其他人的星座
+                $myYmd = explode('-',date('Y-m-d',$self['Birthday']));
+                $myData = '2008-'.$myYmd[1].'-'.$myYmd[2];
+                $myConstellation = $this->getConstellation($myData);
+
+                $otherYmd = explode('-',date('Y-m-d',$newlist[$k]['Birthday']));
+                $otherData = '2008-'.$otherYmd[1].'-'.$otherYmd[2];
+                $otherConstellation = $this->getConstellation($otherData);
+
+                //查出他们的最佳为朋友、夫妻、情侣的数据
+                $Constellation = Constellation::where("C_1='".$myConstellation."' and C_2='".$otherConstellation."'")->whereOr("C_1='".$otherConstellation."' and C_2='".$myConstellation."'")->find();
+                $best = $Constellation['best'];
+                $ifExist = (strpos($best,'朋友') !== false || strpos($best,'夫妻') !== false || strpos($best,'情侣') !== false);
+                //得出自己和其他人的星座 END
+                if($ifExist){
+                    $str .= $v['id'].',';
+                }
+
+
+            }
+        }
+        //去除最后一个字符串
+        $listStr = substr($str,0,-1);
+        $list=user::alias('a')
+            ->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
+            ->join('weixin b','b.id=a.wid')
+            ->where('a.Sex',$yi)
+            ->where($where1)
+            ->where($where2)
+            ->where($where3)
+            ->where($where4)
+            ->where('a.wid','in',$listStr)
+            ->order('a.ID asc')
+            ->select();
+            //echo user::getLastSql();
         if(empty($list)){
             $flag = 1;
             $flag2 = 1;
@@ -129,108 +169,121 @@ class Ppbirthday extends BaseController
 
             $this->redirect('zhezhao',['flag'=>$flag,'flag2'=>$flag2,'url'=>$url,'message'=>$message]);
         }else{
-            $list = $list[0];
-            $findval=mfind::where('uid',$list['nuid'])->find();
-            $year=date("Y",time());
+                $list = $list[0];
+                $findval=mfind::where('uid',$list['nuid'])->find();
+                $year=date("Y",time());
 
-            $ymd = date('Y-m-d',$list['Birthday']);
-            $bymd = explode('-',$ymd);
-            $age=$year-$bymd[0];
-            $start = $this->birthext($list['Birthday']);
-            $selfstart = $this->birthext($self['Birthday']);
-            $bymd2 = date('Y-m-d',$self['Birthday']);
-            $selfymd = explode('-',$bymd2);
-            $selfage=$year-$selfymd[0];
+                $ymd = date('Y-m-d',$list['Birthday']);
+                $bymd = explode('-',$ymd);
+                $age=$year-$bymd[0];
+                $start = $this->birthext($list['Birthday']);
+                $selfstart = $this->birthext($self['Birthday']);
+                $bymd2 = date('Y-m-d',$self['Birthday']);
+                $selfymd = explode('-',$bymd2);
+                $selfage=$year-$selfymd[0];
 
-            $isnianling = "年龄符合";
-            if($self['Sex']=='1' && $selfage > $age){    //判断是同性还是异性  男
-                $fage=true;
-                $newage = $selfage-$age;
-                $isnianling = "Ta小你".$newage."岁";
-            }elseif($self['Sex']=='2' && $selfage <= $age){
-                $fage=true;
-                $newage = $age-$selfage;
-                $isnianling = "Ta大你".$newage."岁";
-            }else{
-                $fage=false;
-                $isnianling = "年龄相差太大了吧";
-            }
+                $isnianling = "年龄符合";
+                if($self['Sex']=='1' && $selfage > $age){
+                    $fage=true;
+                    $newage = $selfage-$age;
+                    $isnianling = "Ta小你".$newage."岁";
+                }elseif($self['Sex']=='2' && $selfage <= $age){
+                    $fage=true;
+                    $newage = $age-$selfage;
+                    $isnianling = "Ta大你".$newage."岁";
+                }else{
+                    $fage=false;
+                    $isnianling = "年龄相差太大了";
+                }
+                //得出自己的星座
+                $zjdata = '2008-'.$selfymd[1].'-'.$selfymd[2];
+                $YC = $this->getConstellation($zjdata);
+                $dfdata = '2008-'.$bymd[1].'-'.$bymd[2];
+                $NC = $this->getConstellation($dfdata);
 
-            $zjm = $selfymd[1];
-            $zjd = $selfymd[2];
-            $zjdata = '2008-'.$zjm.'-'.$zjd;
-            if(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
-                $YC = "魔羯座一";
-            }else{
-                $disval = District::where('birthday1',"<=",$zjdata)->whereOr('birthday2',">=",$zjdata)->find();
-                $YC = $disval['constellation'];
-            }
-            //echo user::getLastSql();
-            // exit();
-            $dfm = $bymd[1];
-            $dfd = $bymd[2];
-            $dfdata = '2008-'.$dfm.'-'.$dfd;
-            if(strtotime($dfdata) >=strtotime("2008-12-26") and strtotime($dfdata)<=strtotime("2009-1-2")){
-                $NC = "魔羯座一";
-            }else{
-                $disval2 = District::where('birthday1',"<=",$dfdata)->where('birthday2',">=",$dfdata)->find();
-                $NC = $disval2['constellation'];
-            }
+                //if(strtotime($zjdata) >=strtotime("2007-12-26") and strtotime($zjdata)<=strtotime("2008-1-2")){
+                //    $YC = "魔羯座一";
+                //}elseif(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
+                //    $YC = "魔羯座一";
+                //}else{
+                //    $disval = District::where('birthday1',"<=",$zjdata)->whereOr('birthday2',">=",$zjdata)->find();
+                //    $YC = $disval['constellation'];
+                //}
 
-            $xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-            //echo user::getLastSql();
-            //最糟情况，最佳情况
-            $worst = $xingcon['worst'];
-            $best = $xingcon['best'];
-            //匹配意愿
-            $data = $this->match_others($xingcon['best'], $self['Wanna']);
-            $heshiweizhi = $data[0];
-            $bestfind = $data[1];
+                //if(strtotime($dfdata) >=strtotime("2007-12-26") and strtotime($dfdata)<=strtotime("2008-1-2")){
+                //    $NC = "魔羯座一";
+                //}elseif(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
+                //    $NC = "魔羯座一";
+                //}else{
+                //    $disval2 = District::where('birthday1',"<=",$dfdata)->where('birthday2',">=",$dfdata)->find();
+                //    $NC = $disval2['constellation'];
+                //}
+                $xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
 
-            if($fage && $bestfind){
-                $tuijian = "认识一下";
-                $result = "匹配数据";
-                $content = "<table>
-							<tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-							<tr><td>48星区：</td><td>最佳{$best}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
-							</table>";
-                $tjly = $heshiweizhi;
-            }else{
-                $tuijian = "备选观察";
-                $result = "匹配数据";
-                $content = "<table>
-							<tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-							<tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-							<tr><td>48星区：</td><td>最佳{$best}，最糟{$worst}</td><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
-							</table>";
-                $tjly = $heshiweizhi;
-            }
-            $this->assign('tuijian', $tuijian);
-            $this->assign('result', $result);
-            $this->assign('content', $content);
-            $this->assign('uid', $list['nuid']);
-            $this->assign('suid', $suid);
-            $this->assign('num', $num+1);
-            $this->assign('age', $age);
-            $this->assign('tjly', $tjly);
-            $this->assign('start', $start);
-            $this->assign('list', $list);
-            $this->assign('fval',$findval);
-            $xiangce = photos::where('uid',$list['nuid'])->select();
-            if(!empty($xiangce)){
-                $flag = 1;
-            }else{
-                $flag = 2;
-            }
-            $intes = explode(",",$list['interest']);
-            $this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));
+                //最糟情况，最佳情况
+                $worst = $xingcon['worst'];
+                $best = $xingcon['best'];
+                //匹配意愿
+                $data = $this->match_others($xingcon['best'], $self['Wanna']);
+                $heshiweizhi = $data[0];
+                $bestfind = $data[1];
 
-            $this->assign('intes', $intes);
-            $this->assign('xc', $xiangce);
-            $this->assign('flag', $flag);
-            return $this->fetch();
+                if($fage && $bestfind){
+                    $tuijian = "认识一下";
+                    $result = "匹配数据";
+                    $content = "<table>
+                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
+                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
+                                <tr>
+                                <td>48星区：</td>
+                                <td>最佳{$best}</td>
+                                <td>最糟{$worst}</td>
+                                </tr>
+                                <tr><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
+                                </table>";
+                    $tjly = $heshiweizhi;
+                }else{
+                    $tuijian = "备选观察";
+                    $result = "匹配数据";
+                    $content = "<table>
+                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
+                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
+                                <tr>
+                                <td>48星区：</td>
+                                <td>最佳{$best};最糟{$worst}</td>
+                                </tr>
+                                <tr>
+                                <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
+                                </tr>
+                                </table>";
+                    $tjly = $heshiweizhi;
+                }
+                $this->assign('tuijian', $tuijian);
+                $this->assign('result', $result);
+                $this->assign('content', $content);
+                $this->assign('uid', $list['nuid']);
+                $this->assign('suid', $suid);
+                $this->assign('num', $num+1);
+                $this->assign('age', $age);
+                $this->assign('tjly', $tjly);
+                $this->assign('start', $start);
+                $this->assign('list', $list);
+                $this->assign('fval',$findval);
+                $xiangce = photos::where('uid',$list['nuid'])->select();
+                if(!empty($xiangce)){
+                    $flag = 1;
+                }else{
+                    $flag = 2;
+                }
+                $intes = explode(",",$list['interest']);
+                $this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));
+
+                $this->assign('intes', $intes);
+                $this->assign('xc', $xiangce);
+                $this->assign('flag', $flag);
+                return $this->fetch();
         }
+
     }
 
     function birthshuxing($birth){
@@ -357,4 +410,16 @@ class Ppbirthday extends BaseController
         $this->assign('message',$message);
         return $this->fetch('zhezhao');
     }
+
+    private function getConstellation($data){
+        if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
+            $constellation = "魔羯座一";
+        }else{
+            $disval = District::where('birthday1',"<=",$data)->where('birthday2',">=",$data)->find();
+            $constellation = $disval['constellation'];
+        }
+        return $constellation;
+    }
+
+
 }
