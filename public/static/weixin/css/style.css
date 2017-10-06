@@ -625,7 +625,7 @@ header.index .mui-title{font-size: 1em;}
 
 .focus-list .mui-table-view .mui-media{position: relative; padding-top: 0.7em;}
 
-.focus-list .mui-table-view .mui-media .mui-media-object{width: 5em!important; max-width: initial; height: 5em!important; border-radius: 4em!important;}
+.focus-list .mui-table-view .mui-media .mui-media-object{width: 3em!important; max-width: initial; height: 3em!important; border-radius: 4em!important;}
 
 .focus-list .mui-table-view .mui-media .title b{color: #f7b260;}
 
@@ -635,7 +635,7 @@ header.index .mui-title{font-size: 1em;}
 
 .focus-list .mui-table-view .mui-ellipsis{font-size: 0.6em; color: #7c7c7c;}
 
-.focus-list .mui-table-view-cell:after{left: 6em; background:#eee;}
+.focus-list .mui-table-view-cell:after{left: 0em; background:#eee;}
 
 
 

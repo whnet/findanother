@@ -13,25 +13,34 @@ use app\weixin\model\Weixin;
 use app\weixin\model\User; 
 use app\weixin\model\Photos;
 use app\weixin\model\Know;
+use app\weixin\model\Alternative;
 
 class Detail extends BaseController
 {
 	public function index(Request $request)
     {
 		$suid = $request->param('suid'); //推荐人的id
-		$tjly = !empty($request->param('tjly'))?$request->param('tjly'):"0";
+		$type = $request->param('type'); //添加好友的方式 0从我想认识中加，1从我的备选中加
+		$tjly = !empty($request->param('tjly'))?$request->param('tjly'):0;
 		
 		$uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //被推荐人的id 
 		
 		$jh = !empty($request->param('jh'))?$request->param('jh'):0;
 		
 		$flag2 = !empty($request->param('flag2'))?$request->param('flag2'):1;
-		//know中的flag
-        $fridDb = new Know();
-         $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+
+         if($type == 0){
+             $fridDb = new Know();
+             $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+             $frid = $knowFlag['flag'];
+         }else if($type == 1){
+             $fridDb = new Alternative();
+             $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+             $frid = $knowFlag['flag'];
+         }
+
+
         //echo $fridDb::getLastSql();
-		$frid = $knowFlag['flag'];
-		
 		$kid = !empty($request->param('kid'))?$request->param('kid'):0;
 		
 		$list=user::alias('a')
@@ -69,6 +78,7 @@ class Detail extends BaseController
 		$this->assign('jh', $jh);
 		$this->assign('flag', $flag);
 		$this->assign('flag2', $flag2);
+		$this->assign('type', $type);
 		$this->assign('start',$this->birthext(date('Y-m-d',$list['Birthday'])));
 		return $this->fetch();
     }

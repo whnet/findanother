@@ -150,7 +150,9 @@ as[nav - 1].className ='link mui-active'
 </div>
 
 <nav class="footbar mui-clearfix" {if $flag2==1}style="display:none;"{/if}>
-<a style="width:100%;" href="javascript:;" class="footbar-item" onclick='agree({$uid},{$suid},{$frid});'><div class="footbar-icon beixuan-icon" status="false"></div><span class="mui-tab-label">{if $frid == 1}同意{else}加为好友{/if}</span></a>
+<a style="width:100%;" href="javascript:;" class="footbar-item" onclick='agree({$uid},{$suid},{$frid},{$type});'>
+    <div class="footbar-icon beixuan-icon" status="false"></div>
+    <span class="mui-tab-label">{if $frid == 1}同意{else}加为好友{/if}</span></a>
 </nav>
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
 <script src="/static/weixin/js/mui.zoom.js"></script>
@@ -159,7 +161,7 @@ as[nav - 1].className ='link mui-active'
 <script src="/static/weixin/js/detail.js"></script>
 <script>mui.previewImage();</script>
 <script>
-	function agree(fid,uid,id){
+	function agree(fid,uid,id,type=0){
 		if(id){
 			var url = '/index.php/weixin/bus/agree';
 		}else{
@@ -171,6 +173,7 @@ as[nav - 1].className ='link mui-active'
 				'suid':uid,
 				'fid':fid,
 				'frid':id,
+				'type':type,
 			},
 			dataType: 'json',
 			type: 'post',

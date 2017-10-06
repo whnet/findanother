@@ -247,6 +247,7 @@ $(function(){
 						})();
 					}
 				}else{
+					console.log(result);
 					if(result.error_code ==0){
 						mui.toast(result.msg);
 					}else{
@@ -258,7 +259,7 @@ $(function(){
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {
-									location.href = '/index.php/weixin/'+url;
+									// location.href = '/index.php/weixin/center/'+url;
 									clearInterval(interval);
 								};
 							}, 1000);

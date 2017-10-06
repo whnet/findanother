@@ -26,16 +26,19 @@ class Center extends BaseController
 		$list = weixin::where('openid',$openid)->find();
 		
 		$uinfo = user::where('wid',$list['id'])->find();
-		
 		$suid = $uinfo['ID'];
 		
 		$knum = know::where('flag','<>','2')->where('suid',$suid)->count();
-		$othersnum = know::where('suid',$suid)->where('flag',2)->count();
-		$hnum = hulue::where('flag','<>','3')->where('suid',$suid)->count();
-		$fnum = friends::where('flag','<>','3')->where('uid',$suid)->count();
-		$anum = alternative::where('flag','<>','3')->where('suid',$suid)->count();
-		$xknum = know::where('flag','<>','3')->where('uid',$suid)->count();
+		$knowCount = know::where('uid',$suid)->whereOr('suid',$suid)->where('flag',2)->count();
+		$alterCount = know::where('uid',$suid)->whereOr('suid',$suid)->where('flag',2)->count();
+        $othersnum = $knowCount + $alterCount;
 
+		$hnum = hulue::where('flag','<>','2')->where('suid',$suid)->count();
+		$fnum = friends::where('flag','<>','2')->where('uid',$suid)->count();
+		$anum = alternative::where('flag','<>','2')->where('suid',$suid)->count();
+		$xknum = know::where('flag',0)->where('uid',$suid)->count();
+
+        //echo know::getlastSql();
 		$this->assign('suid', $suid);
 		$this->assign('othersnum', $othersnum);
 		$this->assign('knum', $knum);
@@ -199,7 +202,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = know::where('suid',$uval['ID'])->where('flag','<>','3')->limit($limit)->select();
+		$data = know::where('suid',$uval['ID'])->where('flag',0)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -215,6 +218,7 @@ class Center extends BaseController
 				$userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+				$userinfo[$k]['wechat'] = $uinfo['wxnumber'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -242,46 +246,47 @@ class Center extends BaseController
 		$userinfo[]=array();
 		$limit = $page.",10";
 		$openid = Cookie::get('openid');
+		//自己的信息
 		$uval=weixin::alias('a')
 			->join('user b','a.id=b.wid')
 			->where('a.openid',$openid)
 			->find();
 
-		$data = know::where('suid',$uval['ID'])->where('flag','<>','3')->limit($limit)->select();
-
+		//从想认识表中查找已经成为好友的数据
+		$data = know::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
+		$mdata = know::where('uid',$uval['ID'])->where('flag',2)->limit($limit)->select();
 		if(!empty($data)){
-
-			foreach($data as $k => $v){
-
-				$uinfo=user::alias('a')
-				->field('a.*,a.ID as suid,b.*')
-				->join('weixin b','b.id=a.wid')
-				->where('a.ID',$v['uid'])
-				->find();
-
-				$userinfo[$k]['id'] = $v['id'];
-				$userinfo[$k]['flag'] = $v['flag'];
-				$userinfo[$k]['uid'] = $uval['ID'];
-				$userinfo[$k]['nuid'] = $uinfo['suid'];
-				$userinfo[$k]['Province'] = $uinfo['Province'];
-				$userinfo[$k]['City'] = $uinfo['City'];
-				$userinfo[$k]['height'] = $uinfo['height'];
-				$userinfo[$k]['addtime'] = $v['create_at'];
-				$userinfo[$k]['nickname'] = $uinfo['nickname'];
-				$userinfo[$k]['headimgurl'] = $uinfo['headimgurl'];
-				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
-				$userinfo[$k]['sex'] = $uinfo['Sex'];
-				$userinfo[$k]['blood'] = $uinfo['Blood'];
-				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
-				$userinfo[$k]['Sign'] = $uinfo['Sign'];
-			}
+            $kuserinfo = $this->userInfo($uval,$data);
 			$msg = '成功';
 			$error_code = 0;
-		}else{
-			$msg = '暂无数据';
-			$error_code = 0;
-			$userinfo='';
-		}
+		}else if(!empty($mdata)){
+            $kuserinfo = $this->userInfo($uval,$mdata);
+            $msg = '成功';
+            $error_code = 0;
+        }else{
+            $kuserinfo = [];
+            $msg = '暂无数据';
+            $error_code = 0;
+        }
+
+        //从备选表中获取已经成为好友的数据
+        $alterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
+        $malterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
+        if(!empty($alterData)){
+            $auserinfo = $this->userInfo($uval,$malterData);
+            $msg = '成功';
+            $error_code = 0;
+        }else if(!empty($malterData)){
+            $auserinfo = $this->userInfo($uval,$malterData);
+            $msg = '成功';
+            $error_code = 0;
+        }else{
+            $auserinfo = [];
+            $msg = '暂无数据';
+            $error_code = 0;
+        }
+		//合并数组，得出一个联合三个表的总数组
+        $userinfo = array_merge($kuserinfo, $auserinfo);
 
 		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo,'msg'=>$msg]);
 	}
@@ -310,6 +315,7 @@ class Center extends BaseController
 				
 				$userinfo[$k]['id'] = $v['id'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -343,7 +349,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = know::where('uid',$uval['ID'])->limit($limit)->select();
+		$data = know::where('uid',$uval['ID'])->where('flag',0)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -357,6 +363,8 @@ class Center extends BaseController
 				
 				$userinfo[$k]['id'] = $v['id'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['flag'] = $v['flag'];
+                $userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -403,7 +411,9 @@ class Center extends BaseController
 				->find();
 				
 				$userinfo[$k]['id'] = $v['id'];
+                $userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -450,7 +460,9 @@ class Center extends BaseController
 				->find();
 				
 				$userinfo[$k]['id'] = $v['id'];
+                $userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -497,7 +509,9 @@ class Center extends BaseController
 				->find();
 				
 				$userinfo[$k]['id'] = $v['id'];
+                $userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -922,4 +936,45 @@ class Center extends BaseController
 		$this->assign('message',$message);
 		return $this->fetch('zhezhao');
 	}
+     public function userInfo($uval,$data){
+         foreach($data as $k => $v){
+
+             $uinfo=user::alias('a')
+                 ->field('a.*,a.ID as suid,b.*')
+                 ->join('weixin b','b.id=a.wid')
+                 ->where('a.ID',$v['uid'])
+                 ->find();
+             $test = user::getLastSql();
+             $userinfo[$k]['id'] = $v['id'];
+             $userinfo[$k]['wechat'] = $uinfo['wxnumber'];
+             $userinfo[$k]['flag'] = $v['flag'];
+             $userinfo[$k]['uid'] = $uval['ID'];
+             $userinfo[$k]['nuid'] = $uinfo['suid'];
+             $userinfo[$k]['Province'] = $uinfo['Province'];
+             $userinfo[$k]['City'] = $uinfo['City'];
+             $userinfo[$k]['height'] = $uinfo['height'];
+             $userinfo[$k]['addtime'] = $v['create_at'];
+             $userinfo[$k]['nickname'] = $uinfo['nickname'];
+             $userinfo[$k]['headimgurl'] = $uinfo['headimgurl'];
+             $userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
+             $userinfo[$k]['sex'] = $uinfo['Sex'];
+             $userinfo[$k]['blood'] = $uinfo['Blood'];
+             $userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
+             $userinfo[$k]['Sign'] = $uinfo['Sign'];
+         }
+         return $userinfo;
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

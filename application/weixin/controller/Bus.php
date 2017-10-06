@@ -308,6 +308,7 @@ class Bus extends BaseController
         $uid = input('suid');
         $fid = input('fid');
         $kid = input('kid'); //konw 表id
+        $type = input('type'); //konw 表id
         $tjly = input('tjly');
         $db = new friends();
         //先判断是否已经发送了添加好友请求
@@ -318,29 +319,29 @@ class Bus extends BaseController
             die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
         }
 
-        //$lab_data=[
-        //    'uid'=>$uid,
-        //    'fid'=>$fid,
-        //    'flag'=>1,
-        //    'create_at'=>time(),
-        //];
-//
-//        $frid = $db ->insertGetId($lab_data);
         $frid = 0;
+        if($type == 0){
+                $kdb = new Know();   //标记这个id已发送添加好友消息
+                if($kid=='kid'){
+                    $lab_kdata=[
+                        'uid'=>$fid,
+                        'suid'=>$uid,
+                        'tjly'=>$tjly,
+                        'flag'=>1,
+                        'addtime'=>time(),
+                    ];
 
-        $kdb = new Know();   //标记这个id已发送添加好友消息
+                    $kid = $db ->insertGetId($lab_kdata);
+                }else{
+                    $lab_kdata=[
+                        'flag'=>1,
+                        'addtime'=>time(), //标记添加时间七天后继续添加
+                    ];
 
-        if($kid=='kid'){
-            $lab_kdata=[
-                'uid'=>$fid,
-                'suid'=>$uid,
-                'tjly'=>$tjly,
-                'flag'=>1,
-                'addtime'=>time(),
-            ];
-
-            $kid = $db ->insertGetId($lab_kdata);
-        }else{
+                    $kdb ->save($lab_kdata,['id' => $kid]);
+                }
+        }else if($type == 1){
+            $kdb = new Alternative();
             $lab_kdata=[
                 'flag'=>1,
                 'addtime'=>time(), //标记添加时间七天后继续添加
@@ -348,6 +349,7 @@ class Bus extends BaseController
 
             $kdb ->save($lab_kdata,['id' => $kid]);
         }
+
 
         $data=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
@@ -366,7 +368,7 @@ class Bus extends BaseController
         $notice = $app->notice;
         $userId = $fdata["openid"];
         $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
-        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/flag2/2';
+        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/flag2/2/type/'.$type;
         $data = array(
             "first"  => "有人添加你为好友:",
             "keyword1"   => $data['name'],
@@ -382,29 +384,47 @@ class Bus extends BaseController
     }
 
     function agree(){
-
         $fid = input('fid');  //想加为好友的id
         $uid = input('suid'); //同意者的id
         $id = input('frid');  //发起请求者的朋友id
         $kid = input('kid');  //konw 表id
+        $type = input('type');  // 添加好友的方式
 
-        //向tb_friends加数据
-        $db = new know();
-        //先判断是否已经发送了添加好友请求
-        $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
+        //更新对应表中的状态
+        if($type == 0){
+            $db = new know();
+            $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
+        }else if($type == 1){
+            $db = new Alternative();
+            $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
+        }
 
+        //防止重复添加
         if($isHave['flag'] != 1){
             $error_code='0';
             $msg="请勿重复请求！";
             die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
         }
 
-        //改变know中flag状态
-        $knowDb = new know();
-        $lab_data=[
-            'flag'=>2,
-        ];
-        $knowDb ->save($lab_data,['id' => $isHave['id']]);
+        if($type == 0) {
+            //改变know中flag状态
+            $knowDb = new know();
+            $lab_data = [
+                'flag' => 2,
+                'addtime' => time(),
+            ];
+
+            $knowDb->save($lab_data, ['id' => $isHave['id']]);
+        }elseif($type == 1){
+            //改变alertnative中flag状态
+            $knowDb = new Alternative();
+            $lab_data = [
+                'flag' => 2,
+                'addtime' => time(),
+            ];
+
+            $knowDb->save($lab_data, ['id' => $isHave['id']]);
+        }
 
 
 		$data=user::alias('a')
@@ -428,8 +448,8 @@ class Bus extends BaseController
 
 
 		$error_code='0';
-	   $msg="添加对方为好友成功！";
-	   echo json_encode(['error_code'=>$error_code,'msg'=>$msg, 'id'=>1]);
+	   $msg="添加对方为好友成功";
+	   echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
 	}
 
     function tousu(Request $request){
