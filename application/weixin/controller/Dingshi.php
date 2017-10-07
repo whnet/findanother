@@ -26,6 +26,7 @@ class Dingshi extends BaseController
 {
 	public function index()
     {
+
 		$options = Config::get('wechat');
 		$app = new Application($options);
 		
@@ -201,9 +202,9 @@ class Dingshi extends BaseController
 							$fage=false;
 						}
 					}
-				
+                    //是否同城
 					if(!empty($self['City']) && !empty($list['City'])){
-						if($self['City']==$list['City']){  //是否同城
+						if($self['City']==$list['City']){
 							$city=true;
 						}else{
 							$city=false;
@@ -212,111 +213,34 @@ class Dingshi extends BaseController
 					}else{
 						$city=true;
 					}
-					
-					$zjm = $selfymd[1];
-					$zjd = $selfymd[2];
-					$zjdata = '2008-'.$zjm.'-'.$zjd;
-					if(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
-						$YC = "魔羯座一";
-					}else{
-						$disval = District::where('birthday1',"<=",$zjdata)->where('birthday2',">=",$zjdata)->find();
-						$YC = $disval['constellation'];
-					}
+                    $zjdata = '2008-'.$selfymd[1].'-'.$selfymd[2];
+                    $YC = $this->getConstellation($zjdata);
 
-					$dfm = $bymd[1];
-					$dfd = $bymd[2];
-					$dfdata = '2008-'.$dfm.'-'.$dfd;
-					if(strtotime($dfdata) >=strtotime("2008-12-26") and strtotime($dfdata)<=strtotime("2009-1-2")){
-						$NC = "魔羯座一";
-					}else{
-						$disval2 = District::where('birthday1',"<=",$dfdata)->where('birthday2',">=",$dfdata)->find();
-						$NC = $disval2['constellation'];
-					}	
+                    $dfdata = '2008-'.$bymd[1].'-'.$bymd[2];
+                    $NC = $this->getConstellation($dfdata);
 
 					$xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-					
-					
-					switch($self['Wanna']){
-						case '合适就行': 
-							$bestfind = true;
-							$tjly = '最佳夫妻';
-							break;
-					
-						case '异性朋友':
-							if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-								$bestfind = true;
-								$tjly = '最佳异性朋友';
-							}else{
-								$bestfind = false;
-								$tjly = '最差异性朋友';
-							}
-							break;
-						case '情侣':
-							if(strpos($xingcon['best'],'情侣')!== false){
-								$bestfind = true;
-								$tjly = '最佳情侣';
-							}else{
-								$bestfind = false;
-								$tjly = '最差情侣';
-							}
-							break;
-						case '夫妻':
-							if(strpos($xingcon['best'],'夫妻')!== false){
-								$bestfind = true;
-								$tjly = '最佳夫妻';
-							}else{
-								$bestfind = false;
-								$tjly = '最差夫妻';
-							}
-							break;
-						case '同性朋友':
-							if(strpos($xingcon['best'],'朋友')!== false || strpos($xingcon['best'],'工作伙伴')!== false || strpos($xingcon['best'],'社交伙伴')!== false){
-								$bestfind = true;
-								$tjly = '最佳同性朋友';
-							}else{
-								$bestfind = false;
-								$tjly = '最差同性朋友';
-							}
-							break;
-						case '同性恋人':
-							if(strpos($xingcon['best'],'情侣')!== false || strpos($xingcon['best'],'夫妻')!== false){
-								$bestfind = true;
-								$tjly = '最佳同性恋人';
-							}else{
-								$bestfind = false;
-								$tjly = '最差同性恋人';
-							}
-							break;
-						default:
-							$bestfind = false;
-							$tjly = '最糟关系';
-							break;
-					} 
+                    $data = $this->match_others($xingcon['best'], $self['Wanna']);
+                    $heshiweizhi = $data[0];
+                    $bestfind = $data[1];
 					
 
 					$uid = $val['nuid'];
-					
+
 					if($city && $bestfind){
-						
-						//$tmessage = "本周为你推荐的人为".$val['nickname']."点击<a href=\"http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/".$uid."/suid/".$suid."/tjly/".$tjly."\">这里</a>查看TA的详细资料加为好友吧！";
-						//$openid = $val['openid'];
-						//$this->sendtxtmessage($tmessage,$openid);
-						
-						//$options = Config::get('wechat');
-						//$app = new Application($options);
 						$notice = $app->notice;
 						$userId = $openid;
+                      //response out of time limit or subscription is canceled hint: [L5xFRa0341ge20] 用户超过24小时未与公众号取得交互
 						$templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
-						$url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid."/suid/".$suid.'/jh/1/flag2/2/tjly/'.$tjly;
+						$url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid."/suid/".$suid.'/jh/1/flag2/2';
 						$data = array(
 									"first"  => "本周为你推荐的人为:",
 									"keyword1"   => $val['nickname'],
 									"keyword2"  => "星数奇缘",
-									"keyword3"  => date("Y-m-d",time()),
+									"keyword3"  => date("Y-m-d H:i:s",time()),
 									"remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
 									);
 						$result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
-						
 						$flag = 2;
 						break;
 					}

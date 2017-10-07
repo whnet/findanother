@@ -27,16 +27,20 @@ class Center extends BaseController
 		
 		$uinfo = user::where('wid',$list['id'])->find();
 		$suid = $uinfo['ID'];
-		
-		$knum = know::where('flag','<>','2')->where('suid',$suid)->count();
-		$knowCount = know::where('uid',$suid)->whereOr('suid',$suid)->where('flag',2)->count();
-		$alterCount = know::where('uid',$suid)->whereOr('suid',$suid)->where('flag',2)->count();
-        $othersnum = $knowCount + $alterCount;
 
-		$hnum = hulue::where('flag','<>','2')->where('suid',$suid)->count();
-		$fnum = friends::where('flag','<>','2')->where('uid',$suid)->count();
-		$anum = alternative::where('flag','<>','2')->where('suid',$suid)->count();
-		$xknum = know::where('flag',0)->where('uid',$suid)->count();
+        //互相认识的
+        $knowCountOne = know::where('flag',2)->where('suid',$suid)->count();
+        $knowCountTwo = know::where('flag',2)->where('uid',$suid)->count();
+        $alterCountOne = alternative::where('flag',2)->where('uid',$suid)->count();
+        $alterCountTwo = alternative::where('flag',2)->where('suid',$suid)->count();
+        $othersnum = $knowCountOne + $knowCountTwo + $alterCountOne + $alterCountTwo;
+        //互相认识的 END
+		$knum = know::where('flag','<>',2)->where('suid',$suid)->count(); //我想认识的
+        //echo know::getlastSql();
+		$hnum = hulue::where('flag','<>',2)->where('suid',$suid)->count(); //我忽略的
+		$fnum = friends::where('flag',2)->where('uid',$suid)->count();//我的好友
+		$anum = alternative::where('flag','<>',2)->where('suid',$suid)->count();//我的备选
+		$xknum = know::where('flag',0)->where('uid',$suid)->count();//想认识我的
 
         //echo know::getlastSql();
 		$this->assign('suid', $suid);
@@ -178,19 +182,7 @@ class Center extends BaseController
 		}
 		echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
 	}
-	
-/* 	public function sawmedel(){
-		$id = input('homeuserid');
-	 	$bool = Alternative::where('id',$id)->delete();
-		if($bool){
-			$msg = '删除成功！';
-			$error_code = 0;
-		}else{
-			$msg = '删除失败！';
-			$error_code = 1250;
-		}
-		echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
-	} */
+
 	
 	public function ajaxmylike(){
 		$page = input('page');
@@ -256,11 +248,11 @@ class Center extends BaseController
 		$data = know::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
 		$mdata = know::where('uid',$uval['ID'])->where('flag',2)->limit($limit)->select();
 		if(!empty($data)){
-            $kuserinfo = $this->userInfo($uval,$data);
+            $kuserinfo = $this->userInfo($uval,$data,0);
 			$msg = '成功';
 			$error_code = 0;
 		}else if(!empty($mdata)){
-            $kuserinfo = $this->userInfo($uval,$mdata);
+            $kuserinfo = $this->userInfo($uval,$mdata,1);
             $msg = '成功';
             $error_code = 0;
         }else{
@@ -273,11 +265,11 @@ class Center extends BaseController
         $alterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
         $malterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
         if(!empty($alterData)){
-            $auserinfo = $this->userInfo($uval,$malterData);
+            $auserinfo = $this->userInfo($uval,$malterData,0);
             $msg = '成功';
             $error_code = 0;
         }else if(!empty($malterData)){
-            $auserinfo = $this->userInfo($uval,$malterData);
+            $auserinfo = $this->userInfo($uval,$malterData,1);
             $msg = '成功';
             $error_code = 0;
         }else{
@@ -301,7 +293,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = hulue::where('suid',$uval['ID'])->where('flag','<>','3')->limit($limit)->select();
+		$data = hulue::where('suid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -398,12 +390,11 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = Alternative::where('suid',$uval['ID'])->where('flag','<>','3')->limit($limit)->select();
+		$data = Alternative::where('suid',$uval['ID'])->where('flag',0)->limit($limit)->select();
 
 		if(!empty($data)){
 			
 			foreach($data as $k => $v){
-				
 				$uinfo=user::alias('a')
 				->field('a.*,a.ID as suid,b.*')
 				->join('weixin b','b.id=a.wid')
@@ -936,13 +927,18 @@ class Center extends BaseController
 		$this->assign('message',$message);
 		return $this->fetch('zhezhao');
 	}
-     public function userInfo($uval,$data){
-         foreach($data as $k => $v){
+     public function userInfo($uval,$data,$type){
 
+         foreach($data as $k => $v){
+             if($type == 1){
+                 $id = $v['suid'];
+              }else{
+                 $id = $v['uid'];
+             }
              $uinfo=user::alias('a')
                  ->field('a.*,a.ID as suid,b.*')
                  ->join('weixin b','b.id=a.wid')
-                 ->where('a.ID',$v['uid'])
+                 ->where('a.ID',$id)
                  ->find();
              $test = user::getLastSql();
              $userinfo[$k]['id'] = $v['id'];

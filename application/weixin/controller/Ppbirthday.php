@@ -199,24 +199,6 @@ class Ppbirthday extends BaseController
                 $YC = $this->getConstellation($zjdata);
                 $dfdata = '2008-'.$bymd[1].'-'.$bymd[2];
                 $NC = $this->getConstellation($dfdata);
-
-                //if(strtotime($zjdata) >=strtotime("2007-12-26") and strtotime($zjdata)<=strtotime("2008-1-2")){
-                //    $YC = "魔羯座一";
-                //}elseif(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
-                //    $YC = "魔羯座一";
-                //}else{
-                //    $disval = District::where('birthday1',"<=",$zjdata)->whereOr('birthday2',">=",$zjdata)->find();
-                //    $YC = $disval['constellation'];
-                //}
-
-                //if(strtotime($dfdata) >=strtotime("2007-12-26") and strtotime($dfdata)<=strtotime("2008-1-2")){
-                //    $NC = "魔羯座一";
-                //}elseif(strtotime($zjdata) >=strtotime("2008-12-26") and strtotime($zjdata)<=strtotime("2009-1-2")){
-                //    $NC = "魔羯座一";
-                //}else{
-                //    $disval2 = District::where('birthday1',"<=",$dfdata)->where('birthday2',">=",$dfdata)->find();
-                //    $NC = $disval2['constellation'];
-                //}
                 $xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
 
                 //最糟情况，最佳情况

@@ -389,6 +389,7 @@ class Bus extends BaseController
         $id = input('frid');  //发起请求者的朋友id
         $kid = input('kid');  //konw 表id
         $type = input('type');  // 添加好友的方式
+        $from = input('from');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
 
         //更新对应表中的状态
         if($type == 0){
@@ -399,12 +400,23 @@ class Bus extends BaseController
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
         }
 
-        //防止重复添加
-        if($isHave['flag'] != 1){
-            $error_code='0';
-            $msg="请勿重复请求！";
-            die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
+        //防止重复添加 如果是从likeme中同意，那就是不为0就行，如果detail/index中同意则需要 不为 1
+        //设置状态 from = 1 从likeme， 其余是从detail中来
+        //通过判断
+        if($from){
+            if($isHave['flag'] != 0){
+                $error_code='0';
+                $msg="请勿重复请求！";
+                die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
+            }
+        }else{
+            if($isHave['flag'] != 1){
+                $error_code='0';
+                $msg="请勿重复请求！";
+                die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
+            }
         }
+
 
         if($type == 0) {
             //改变know中flag状态
@@ -425,6 +437,7 @@ class Bus extends BaseController
 
             $knowDb->save($lab_data, ['id' => $isHave['id']]);
         }
+
 
 
 		$data=user::alias('a')

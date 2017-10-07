@@ -394,7 +394,7 @@ function JsonHtml(obj, data) {
 				}else{
 					var bstart = '';
 				}
-                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+')>同意</label>';
+                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,1)>同意</label>';
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
@@ -446,6 +446,7 @@ function JsonHtml(obj, data) {
 				}else{
 					var bstart = '';
 				}
+
 				if(obj.flag == 0){
 					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>加为好友+</label>';
 					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
@@ -917,8 +918,13 @@ function JsonHtml(obj, data) {
 /*
  *添加好友
  */
-function send(suid,id,fid,type=0){
+function send(suid,id,fid,types){
     var url = '/index.php/weixin/bus/friend';
+    if(types){
+        type = 1;
+    }else{
+        type = 0;
+    }
     $.ajax(url, {
         data: {
             'suid':suid,
@@ -962,7 +968,17 @@ function send(suid,id,fid,type=0){
 /*
 同意
  */
-function agree(fid,uid,id,type=0){
+function agree(fid,uid,id,types,froms){
+	if(froms){
+         from = 1;//从likeme
+	}else{
+		from = 0;//默认的
+	}
+    if(types){
+        type = 1;
+    }else{
+        type = 0;
+    }
     if(id){
         var url = '/index.php/weixin/bus/agree';
     }else{
@@ -974,6 +990,7 @@ function agree(fid,uid,id,type=0){
             'fid':fid,
             'frid':id,
             'type':type,
+            'from':from,
         },
         dataType: 'json',
         type: 'post',
