@@ -325,54 +325,56 @@ class Index extends Controller
 			}
 		}
 	}
-	
-	function erweima($bopenid=''){
+
+	function erweima($bopenid='oEpqywIbMGf52sBBKIZ_qSt-kuuk'){
 		
 		$weixinval = weixin::where('openid',$bopenid)->find();
 		$nickname = $weixinval['nickname'];
 		$headimg = $weixinval['headimgurl'];
-		
+
 		$options = Config::get('wechat');
 		$app = new Application($options);
 		$qrcode = $app->qrcode;
 		$result = $qrcode->temporary($bopenid, 6 * 24 * 3600);
-		$ticket = $result->ticket; 
-		$markimgurl = $qrcode->url($ticket); // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
-		$mubiaoimg = 'uploads/ewm/code.jpeg';
-		$content = file_get_contents($markimgurl); // 得到二进制图片内容
-		file_put_contents($mubiaoimg, $content); // 写入文件
+		$ticket = $result->ticket;
+       // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
+		$markimgurl = $qrcode->url($ticket);
+		$mubiaoimg = 'uploads/ewm/'.$bopenid.'.jpeg';
+		$content = file_get_contents($markimgurl);
+		file_put_contents($mubiaoimg, $content);
 
-		
-		$phone = true;
-		$src = 'static/weixin/images/timg.jpg';
-		$markimgurl = $this->myImageResize($mubiaoimg, '183', '183');   //缩放图片
-		
+		$phone = 1;
+		$src = 'uploads/background/background.jpg';//背景图片
+		$markimgurl = $this->myImageResize($mubiaoimg, '180', '180');   //缩放图片
+
 		if($phone){
 			$imgpath = $this->water_mark($src,$markimgurl,$phone);
-
-/* 			$mubiaoimg = 'uploads/ewm/head.jpeg';
-			$content = file_get_contents($headimg); // 得到二进制图片内容
-			file_put_contents($mubiaoimg, $content); // 写入文件
-			$markimgurl = $this->myImageResize($mubiaoimg, '85', '85');
-			$imgg = $this->yuan_img($markimgurl);
-
-			@unlink($markimgurl);		
-			$imgss = $this->water_mark($imgpath,$imgg,true,2);
-			@unlink($imgg);
-			$tupian = $this->myImgString($imgss,$nickname,'268'); */
-			
-			//@unlink($mubiaoimg);  //删除生成的二维码
 			return $imgpath;
 		}else{
 			header("Content-type: image/jpeg"); 
 			$this->water_mark($src,$markimgurl,$phone);
-			//@unlink($mubiaoimg);  //删除生成的二维码
 		}
 	}
-	
+	/*
+	 * 将微信的头像下载下来
+	 */
+    function downloadWechatImage($remoteImg, $fileName){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch,CURLOPT_URL,$remoteImg);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $file_content = curl_exec($ch);
+        curl_close($ch);
+        $downloaded_file = fopen($fileName, 'w');
+        fwrite($downloaded_file, $file_content);
+        fclose($downloaded_file);
+        return true;
+    }
+
 	public function water_mark($src,$mark_img,$phone,$pct = 100)
     {
         if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
+
             $data = getimagesize($src);
             if ($data[2] > 3)
             {
@@ -430,7 +432,10 @@ class Index extends Controller
         }
     }
 
-	function yuan_img($imgpath) {
+    /*
+     * 将用户头像处理成圆形
+     */
+	function yuan_img($imgpath, $name) {
 		$ext     = pathinfo($imgpath);
 		$src_img = null;
 		switch ($ext['extension']) {
@@ -463,11 +468,14 @@ class Index extends Controller
 				}
 			}
 		}
-		imagepng($img, 'uploads/ewm/yuanhead.png');
+		imagepng($img, 'uploads/circlehead/'.$name.'.png');
 		imagedestroy($img);			// 释放内存 
-		return 'uploads/ewm/yuanhead.png';
+		return 'uploads/circlehead/'.$name.'.png';
 	}
-	
+
+	/*
+	 * 添加字体
+	 */
 	function myImgString($bigImgPath,$content,$top){
 		
 		
@@ -491,10 +499,12 @@ class Index extends Controller
 	 
 		$picname = MD5(time()).rand(1000,2000);
 		imagejpeg($img, 'uploads/ewm/'.$picname.'.png');
-		imagedestroy($img);			// 释放内存 
+		imagedestroy($img);			// 释放内存
 		return 'uploads/ewm/'.$picname.'.png';
 	}
-	
+	/*
+	 * 缩小图片
+	 */
 	function myImageResize($source_path, $target_width = 200, $target_height = 200, $fixed_orig = ''){
 		$source_info = getimagesize($source_path);
 		$source_width = $source_info[0];
@@ -535,9 +545,8 @@ class Index extends Controller
 		
 		$target_image = imagecreatetruecolor($target_width, $target_height);
 		imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
-		//header('Content-type: image/jpeg');
 		$imgArr = explode('.', $source_path);
-		$target_path = $imgArr[0] . '_new.' . $imgArr[1];
+		$target_path = $imgArr[0] . '.' . $imgArr[1];
 		imagejpeg($target_image, $target_path, 100);
 		imagedestroy($target_image);	
 		return $target_path;

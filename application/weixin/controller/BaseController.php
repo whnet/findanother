@@ -448,7 +448,7 @@ class BaseController extends Controller
 			$app = new Application($options);
 			$result = $app->staff->message($message)->to($openId)->send();
 	}
-
+    //获得星座
     function getConstellation($data){
         if(strtotime($data) >=strtotime("2007-12-26") and strtotime($data)<=strtotime("2008-1-2")){
             $constellation = "魔羯座一";

@@ -28,7 +28,13 @@ class Info extends SecdController
 {
 	public function index()
     {
-
+        echo phpinfo();
+        if (!extension_loaded('Imagick')) {
+             echo 'error';
+        }else{
+            var_dump(1);
+        }
+      exit();
 		if(input('flag')){
 			$yaoqingopenid = !empty(input('openid'))?input('openid'):'';//别人
 			Cookie::set('yaoqingopenid',$yaoqingopenid,300);
@@ -84,11 +90,29 @@ class Info extends SecdController
     }
 	
 	public function birthday(){
+
+        $user = Cookie::get('wechat_user');
+        $nickname = $user['nickname'];
+        $headimg = $user['avatar'];
+        $openid = $user["id"];
+         // 提交资料之前将头像下载下来，并且变成圆形, 存放在circlehead中,在这一步可以同时将所需的字体合成，
+            $fileName = 'uploads/header/'.$openid.'.jpeg';
+            $this->downloadWechatImage($headimg, $fileName);
+//            $circleHead = $this->yuan_img($fileName,$openid);
+            $circleHead = $this->toCircle($fileName,$openid);
+            var_dump($circleHead);
+            exit();
+
+        //和背景图结合起来
+        $src = 'uploads/background/background.jpg';//背景图片
+        $markimgurl = $this->myImageResize($circleHead, '180', '180');   //缩放图片
+        $imgpath = $this->water_mark($src,$markimgurl,$openid);
+
 		//判断是否是扫别人分享的二维码进来的，在scan中写入cookies
 		if(request()->ispost()){
-			$id = Cookie::get('openid');
-			$val = Weixin::where('openid',$id)->find();
+            $id = Cookie::get('openid');
 
+			$val = Weixin::where('openid',$id)->find();
 		   $db = new user();
            $lab_data=[
 				'wid'=>$val['id'],
@@ -430,4 +454,190 @@ class Info extends SecdController
         }
         return $constellation;
     }
+
+    /*
+     * 将微信的头像下载下来
+     */
+    function downloadWechatImage($remoteImg, $fileName){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_POST, 0);
+        curl_setopt($ch,CURLOPT_URL,$remoteImg);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $file_content = curl_exec($ch);
+        curl_close($ch);
+        $downloaded_file = fopen($fileName, 'w');
+        fwrite($downloaded_file, $file_content);
+        fclose($downloaded_file);
+        return true;
+    }
+
+    /*
+     * Imagick
+     */
+    function toCircle($url, $openid){
+        header('Content-type: image/jpeg');
+        $image = new \Imagick('http://static.oschina.net/uploads/user/29/58387_100.jpg');
+        $image->setImageFormat('png');
+        $image->roundCorners(360,360);
+        echo $image;
+        $image->destroy();
+        return $openid.$image;
+    }
+
+    /*
+     * 将用户头像处理成圆形
+     */
+    function yuan_img($imgpath, $name) {
+        $ext     = pathinfo($imgpath);
+        $src_img = null;
+        switch ($ext['extension']) {
+            case 'jpeg':
+                $src_img = imagecreatefromjpeg($imgpath);
+                break;
+            case 'png':
+                $src_img = imagecreatefrompng($imgpath);
+                break;
+        }
+        $wh  = getimagesize($imgpath);
+        $w   = $wh[0];
+        $h   = $wh[1];
+        $w   = min($w, $h);
+        $h   = $w;
+        $img = imagecreatetruecolor($w, $h);
+        //这一句一定要有
+        $bg = imagecolorallocatealpha($img, 255, 255, 255, 127);
+        imagecolortransparent($img,$bg);
+        imagefill($img, 0, 0, $bg);
+        imagesavealpha($img, true);//这里很重要,意思是不要丢了$thumb图像的透明色;
+        imagealphablending($img,false); //这里很重要,意思是不合并颜色,直接用$img图像颜色替换,包括透明色;
+        //拾取一个完全透明的颜色,最后一个参数127为全透明
+
+        $r   = $w / 2; //圆半径
+        $y_x = $r; //圆心X坐标
+        $y_y = $r; //圆心Y坐标
+        for ($x = 0; $x < $w; $x++) {
+            for ($y = 0; $y < $h; $y++) {
+                $rgbColor = imagecolorat($src_img, $x, $y);
+                if (((($x - $r) * ($x - $r) + ($y - $r) * ($y - $r)) < ($r * $r))) {
+                    imagesetpixel($img, $x, $y, $rgbColor);
+                }
+            }
+        }
+        header("content-type:image/png");
+        imagepng($img, 'uploads/circlehead/'.$name.'.png');
+        imagedestroy($img);			// 释放内存
+        return 'uploads/circlehead/'.$name.'.png';
+    }
+
+    /*
+     * 缩小图片
+     */
+    function myImageResize($source_path, $target_width = 200, $target_height = 200, $fixed_orig = ''){
+        $source_info = getimagesize($source_path);
+        $source_width = $source_info[0];
+        $source_height = $source_info[1];
+        $source_mime = $source_info['mime'];
+        $ratio_orig = $source_width / $source_height;
+        if ($fixed_orig == 'width'){
+            //宽度固定
+            $target_height = $target_width / $ratio_orig;
+        }elseif ($fixed_orig == 'height'){
+            //高度固定
+            $target_width = $target_height * $ratio_orig;
+        }else{
+            //最大宽或最大高
+            if ($target_width / $target_height > $ratio_orig){
+                $target_width = $target_height * $ratio_orig;
+            }else{
+                $target_height = $target_width / $ratio_orig;
+            }
+        }
+        switch ($source_mime){
+            case 'image/gif':
+                $source_image = imagecreatefromgif($source_path);
+                break;
+
+            case 'image/jpeg':
+                $source_image = imagecreatefromjpeg($source_path);
+                break;
+
+            case 'image/png':
+                $source_image = imagecreatefrompng($source_path);
+                break;
+
+            default:
+                return false;
+                break;
+        }
+
+        $target_image = imagecreatetruecolor($target_width, $target_height);
+        imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
+        $imgArr = explode('.', $source_path);
+        $target_path = $imgArr[0] . '.' . $imgArr[1];
+        imagejpeg($target_image, $target_path, 100);
+        imagedestroy($target_image);
+        return $target_path;
+    }
+    public function water_mark($src,$mark_img,$openid,$pct = 100)
+    {
+        if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
+
+            $data = getimagesize($src);
+            if ($data[2] > 3)
+            {
+                return false;
+            }
+            $src_width = $data[0];
+            $src_height = $data[1];
+            $src_type = $data[2];
+            $data = getimagesize($mark_img);
+            $mark_width = $data[0];
+            $mark_height = $data[1];
+            $mark_type = $data[2];
+
+            if ($src_width < ($mark_width + 20) || $src_width < ($mark_height + 20))
+            {
+                return false;
+            }
+            switch ($src_type)
+            {
+                case 1:
+                    $src_im = imagecreatefromgif($src);
+                    break;
+                case 2:
+                    $src_im = imagecreatefromjpeg($src);
+                    break;
+                case 3:
+                    $src_im = imagecreatefrompng($src);
+                    break;
+            }
+            switch ($mark_type)
+            {
+                case 1:
+                    $mark_im = imagecreatefromgif($mark_img);
+                    break;
+                case 2:
+                    $mark_im = imagecreatefromjpeg($mark_img);
+                    break;
+                case 3:
+                    $mark_im = imagecreatefrompng($mark_img);
+                    break;
+            }
+            $x = ($src_width - $mark_width - 10) / 2-65;    //水平位置
+            $y = ($src_height - $mark_height - 10) / 2-10;    //垂直位置
+
+            imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
+            if($openid){
+                $picname = $openid;
+                imagejpeg($src_im, 'uploads/shareimg/'.$picname.'.png');
+                imagedestroy($src_im);			// 释放内存
+                return 'uploads/shareimg/'.$picname.'.png';
+            }else{
+                return imagejpeg($src_im);
+            }
+            //return '/upload/ewm/'.$picname.'.png';
+        }
+    }
+
+
 }
