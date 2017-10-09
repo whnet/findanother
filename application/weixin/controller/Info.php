@@ -28,13 +28,7 @@ class Info extends SecdController
 {
 	public function index()
     {
-        echo phpinfo();
-        if (!extension_loaded('Imagick')) {
-             echo 'error';
-        }else{
-            var_dump(1);
-        }
-      exit();
+
 		if(input('flag')){
 			$yaoqingopenid = !empty(input('openid'))?input('openid'):'';//别人
 			Cookie::set('yaoqingopenid',$yaoqingopenid,300);
@@ -98,15 +92,13 @@ class Info extends SecdController
          // 提交资料之前将头像下载下来，并且变成圆形, 存放在circlehead中,在这一步可以同时将所需的字体合成，
             $fileName = 'uploads/header/'.$openid.'.jpeg';
             $this->downloadWechatImage($headimg, $fileName);
-//            $circleHead = $this->yuan_img($fileName,$openid);
-            $circleHead = $this->toCircle($fileName,$openid);
-            var_dump($circleHead);
-            exit();
+            $circleHead = $this->yuan_img($fileName,$openid);
 
         //和背景图结合起来
         $src = 'uploads/background/background.jpg';//背景图片
-        $markimgurl = $this->myImageResize($circleHead, '180', '180');   //缩放图片
+        $markimgurl = $this->myImageResize($circleHead, '80', '80');   //缩放图片
         $imgpath = $this->water_mark($src,$markimgurl,$openid);
+
 
 		//判断是否是扫别人分享的二维码进来的，在scan中写入cookies
 		if(request()->ispost()){
@@ -205,9 +197,6 @@ class Info extends SecdController
 				
 				$fdb ->save($ylab_fdata);
 
-                //$guanxi = $this->get_guanxi($id,$yopenid);
-                //$messageGuanxi = "您和".$name."的关系是：".$guanxi."，<a href=\"http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$id."/bopenid/".$yopenid."\">点击查看</a>";
-                //$this->sendtxtmessage($messageGuanxi,$id);
 			}
 			$this->redirect('Ppbirthday/index',['id'=>$uid]);
         }else{
@@ -470,26 +459,12 @@ class Info extends SecdController
         fclose($downloaded_file);
         return true;
     }
-
-    /*
-     * Imagick
-     */
-    function toCircle($url, $openid){
-        header('Content-type: image/jpeg');
-        $image = new \Imagick('http://static.oschina.net/uploads/user/29/58387_100.jpg');
-        $image->setImageFormat('png');
-        $image->roundCorners(360,360);
-        echo $image;
-        $image->destroy();
-        return $openid.$image;
-    }
-
     /*
      * 将用户头像处理成圆形
      */
     function yuan_img($imgpath, $name) {
         $ext     = pathinfo($imgpath);
-        $src_img = null;
+        $src_img = '';
         switch ($ext['extension']) {
             case 'jpeg':
                 $src_img = imagecreatefromjpeg($imgpath);
@@ -498,6 +473,7 @@ class Info extends SecdController
                 $src_img = imagecreatefrompng($imgpath);
                 break;
         }
+
         $wh  = getimagesize($imgpath);
         $w   = $wh[0];
         $h   = $wh[1];
@@ -505,13 +481,10 @@ class Info extends SecdController
         $h   = $w;
         $img = imagecreatetruecolor($w, $h);
         //这一句一定要有
-        $bg = imagecolorallocatealpha($img, 255, 255, 255, 127);
-        imagecolortransparent($img,$bg);
-        imagefill($img, 0, 0, $bg);
-        imagesavealpha($img, true);//这里很重要,意思是不要丢了$thumb图像的透明色;
-        imagealphablending($img,false); //这里很重要,意思是不合并颜色,直接用$img图像颜色替换,包括透明色;
+        imagesavealpha($img, true);
         //拾取一个完全透明的颜色,最后一个参数127为全透明
-
+        $bg = imagecolorallocatealpha($img, 255, 255, 255, 127);
+        imagefill($img, 0, 0, $bg);
         $r   = $w / 2; //圆半径
         $y_x = $r; //圆心X坐标
         $y_y = $r; //圆心Y坐标
@@ -523,11 +496,13 @@ class Info extends SecdController
                 }
             }
         }
-        header("content-type:image/png");
         imagepng($img, 'uploads/circlehead/'.$name.'.png');
         imagedestroy($img);			// 释放内存
         return 'uploads/circlehead/'.$name.'.png';
     }
+
+
+
 
     /*
      * 缩小图片
@@ -571,10 +546,17 @@ class Info extends SecdController
         }
 
         $target_image = imagecreatetruecolor($target_width, $target_height);
+        //这一句一定要有
+        imagesavealpha($target_image, true);
+        //拾取一个完全透明的颜色,最后一个参数127为全透明
+        $bg = imagecolorallocatealpha($target_image, 255, 255, 255, 127);
+        imagecolortransparent($target_image,$bg);
+        imagefill($target_image, 0, 0, $bg);
+        imageColorTransparent($target_image, $bg);
         imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
         $imgArr = explode('.', $source_path);
         $target_path = $imgArr[0] . '.' . $imgArr[1];
-        imagejpeg($target_image, $target_path, 100);
+        imagepng($target_image, $target_path, 9);
         imagedestroy($target_image);
         return $target_path;
     }
@@ -623,17 +605,22 @@ class Info extends SecdController
                     $mark_im = imagecreatefrompng($mark_img);
                     break;
             }
-            $x = ($src_width - $mark_width - 10) / 2-65;    //水平位置
-            $y = ($src_height - $mark_height - 10) / 2-10;    //垂直位置
-
+            $x = ($src_width - $mark_width - 10) / 2;    //水平位置
+            $y = ($src_height - $mark_height - 10) / 2;    //垂直位置
+            //这一句一定要有
+            imagesavealpha($mark_im, true);
+            $bg = imagecolorallocate($mark_im, 255, 255, 255);
+            imagecolortransparent($mark_im,$bg);
+            imagefill($mark_im, 0, 0, $bg);
+            imageColorTransparent($mark_im, $bg);
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
             if($openid){
                 $picname = $openid;
-                imagejpeg($src_im, 'uploads/shareimg/'.$picname.'.png');
+                imagepng($src_im, 'uploads/shareimg/'.$picname.'.png');
                 imagedestroy($src_im);			// 释放内存
                 return 'uploads/shareimg/'.$picname.'.png';
             }else{
-                return imagejpeg($src_im);
+                return imagepng($src_im);
             }
             //return '/upload/ewm/'.$picname.'.png';
         }
