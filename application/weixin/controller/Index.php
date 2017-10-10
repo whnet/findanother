@@ -99,7 +99,7 @@ class Index extends Controller
                             $options = Config::get('wechat');
                             $app = new Application($options);
                             $temporary = $app->material_temporary;
-                            $path = $this->erweima($bopenid);
+                            $path = $this->qrCode($bopenid);
                             $data = $temporary->uploadImage($path);
                             @unlink($path);  //删除生成的二维码
                             $imgmessage = new Image(['media_id' => $data['media_id']]);
@@ -187,7 +187,7 @@ class Index extends Controller
 							$options = Config::get('wechat');
 							$app = new Application($options);
 							$temporary = $app->material_temporary;
-							$path = $this->erweima($bopenid);
+							$path = $this->qrCode($bopenid);
 							$data = $temporary->uploadImage($path);
 							@unlink($path);  //删除生成的二维码
 							$imgmessage = new Image(['media_id' => $data['media_id']]);
@@ -214,9 +214,9 @@ class Index extends Controller
 							$options = Config::get('wechat');
 							$app = new Application($options);
 							$temporary = $app->material_temporary;
-							$path = $this->erweima($openid);
+							$path = $this->qrCode($openid);
 							$data = $temporary->uploadImage($path);
-							@unlink($path);  //删除生成的二维码
+                            //@unlink($path);  //删除生成的二维码
 							$imgmessage = new Image(['media_id' => $data['media_id']]);
 							$this->sendtxtmessage($imgmessage,$openid);
 						}
@@ -326,7 +326,7 @@ class Index extends Controller
 		}
 	}
 
-	function erweima($bopenid='oEpqywIbMGf52sBBKIZ_qSt-kuuk'){
+	function qrCode($bopenid=''){
 		
 		$weixinval = weixin::where('openid',$bopenid)->find();
 		$nickname = $weixinval['nickname'];
@@ -339,39 +339,25 @@ class Index extends Controller
 		$ticket = $result->ticket;
        // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
 		$markimgurl = $qrcode->url($ticket);
-		$mubiaoimg = 'uploads/ewm/'.$bopenid.'.jpeg';
+		$mubiaoimg = 'uploads/qrcode/'.$bopenid.'.jpeg';
 		$content = file_get_contents($markimgurl);
 		file_put_contents($mubiaoimg, $content);
 
-		$phone = 1;
-		$src = 'uploads/background/background.jpg';//背景图片
-		$markimgurl = $this->myImageResize($mubiaoimg, '180', '180');   //缩放图片
+		$phone = $bopenid;
+		$src = 'uploads/headerAndbackground/'.$bopenid.'.png';//获取已经合成了的背景图片
+		$markimgurl = $this->myImageResize($mubiaoimg, '280', '280');   //将二维码进行缩放
 
 		if($phone){
-			$imgpath = $this->water_mark($src,$markimgurl,$phone);
+			$imgpath = $this->waterMarkFinal($src,$markimgurl,$phone);
 			return $imgpath;
 		}else{
-			header("Content-type: image/jpeg"); 
-			$this->water_mark($src,$markimgurl,$phone);
+			header("Content-type: image/jpeg");
+			$this->waterMarkFinal($src,$markimgurl,$phone);
 		}
 	}
-	/*
-	 * 将微信的头像下载下来
-	 */
-    function downloadWechatImage($remoteImg, $fileName){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_POST, 0);
-        curl_setopt($ch,CURLOPT_URL,$remoteImg);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $file_content = curl_exec($ch);
-        curl_close($ch);
-        $downloaded_file = fopen($fileName, 'w');
-        fwrite($downloaded_file, $file_content);
-        fclose($downloaded_file);
-        return true;
-    }
 
-	public function water_mark($src,$mark_img,$phone,$pct = 100)
+
+	public function waterMarkFinal($src,$mark_img,$phone,$pct = 100)
     {
         if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
 
@@ -416,91 +402,51 @@ class Index extends Controller
                 $mark_im = imagecreatefrompng($mark_img);
                 break;
             }
-            $x = ($src_width - $mark_width - 10) / 2-65;    //水平位置
-            $y = ($src_height - $mark_height - 10) / 2-10;    //垂直位置
-			
+            $x = 420;    //水平位置
+            $y = 800;    //垂直位置
+
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
 		   if($phone){
-				$picname = MD5(time()).rand(1000,2000);
-				imagejpeg($src_im, 'uploads/ewm/'.$picname.'.png');
-				imagedestroy($src_im);			// 释放内存 
-				return 'uploads/ewm/'.$picname.'.png';
+				$picname = $phone;
+				imagejpeg($src_im, 'uploads/qrcode/'.$picname.'.png');
+				imagedestroy($src_im);			// 释放内存
+				return 'uploads/qrcode/'.$picname.'.png';
 		   }else{
 				return imagejpeg($src_im);
 		   }
-            //return '/upload/ewm/'.$picname.'.png';
+
         }
     }
 
-    /*
-     * 将用户头像处理成圆形
-     */
-	function yuan_img($imgpath, $name) {
-		$ext     = pathinfo($imgpath);
-		$src_img = null;
-		switch ($ext['extension']) {
-		case 'jpeg':
-			$src_img = imagecreatefromjpeg($imgpath);
-			break;
-		case 'png':
-			$src_img = imagecreatefrompng($imgpath);
-			break;
-		}
-		$wh  = getimagesize($imgpath);
-		$w   = $wh[0];
-		$h   = $wh[1];
-		$w   = min($w, $h);
-		$h   = $w;
-		$img = imagecreatetruecolor($w, $h);
-		//这一句一定要有
-		imagesavealpha($img, true);
-		//拾取一个完全透明的颜色,最后一个参数127为全透明
-		$bg = imagecolorallocatealpha($img, 231, 75, 138, 127);
-		imagefill($img, 0, 0, $bg);
-		$r   = $w / 2; //圆半径
-		$y_x = $r; //圆心X坐标
-		$y_y = $r; //圆心Y坐标
-		for ($x = 0; $x < $w; $x++) {
-			for ($y = 0; $y < $h; $y++) {
-				$rgbColor = imagecolorat($src_img, $x, $y);
-				if (((($x - $r) * ($x - $r) + ($y - $r) * ($y - $r)) < ($r * $r))) {
-					imagesetpixel($img, $x, $y, $rgbColor);
-				}
-			}
-		}
-		imagepng($img, 'uploads/circlehead/'.$name.'.png');
-		imagedestroy($img);			// 释放内存 
-		return 'uploads/circlehead/'.$name.'.png';
-	}
 
 	/*
 	 * 添加字体
 	 */
 	function myImgString($bigImgPath,$content,$top){
-		
-		
+
+
 		$data = getimagesize($bigImgPath);
 
         $src_width = $data[0];
 
         $dsc_width = mb_strlen($content);
-		
+
 		$img = imagecreatefromstring(file_get_contents($bigImgPath));
-	 
+
 		$font = 'static/weixin/fonts/msyh.ttf';//字体
 		$black = imagecolorallocate($img, 255, 255, 255);//字体颜色 RGB
-	 
+
 		$fontSize = 15;   //字体大小
 		$circleSize = 0; //旋转角度
 		$left = $src_width / 2-$dsc_width*10;    //水平位置
 		$top = $top;
-	 
+
 		imagefttext($img, $fontSize, $circleSize, $left, $top, $black, $font, $content);
-	 
+
 		$picname = MD5(time()).rand(1000,2000);
-		imagejpeg($img, 'uploads/ewm/'.$picname.'.png');
+		imagejpeg($img, 'uploads/qrcode/'.$picname.'.png');
 		imagedestroy($img);			// 释放内存
-		return 'uploads/ewm/'.$picname.'.png';
+		return 'uploads/qrcode/'.$picname.'.png';
 	}
 	/*
 	 * 缩小图片

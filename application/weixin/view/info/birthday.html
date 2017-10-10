@@ -6,7 +6,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/style.css">
-<script src="/static/weixin/js/hm.js"></script>
 
 <script type="text/javascript" src="/static/weixin/js/jquery.min.js"></script> 
 <script type="text/javascript" src="/static/weixin/js/mui.min.js"></script>
@@ -51,6 +50,7 @@
 </div></div>
 
 <button class="mui-btn mui-btn-warning mui-btn-block do-submit">提交</button>
+    <!--<div id="test">测试</div>-->
 </form>
 </div> 
 </div>
@@ -64,6 +64,53 @@
 <script src="/static/weixin/js/mui.picker.min.js"></script>
 <script src="/static/weixin/js/mui.poppicker.js"></script>
 <script src="/static/weixin/js/city.data.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        $('#test').click(function(){
+            stepOne();
+        });
+        function stepOne(){
+            $.ajax({
+                type: "post",
+                url: 'changeimg',
+                dataType: "json",
+                async: true,
+                data: {},
+                success: function(data) {
+                    if (data.result == "success") {
+                        stepTwo();
+                    }
+                }
+            });
+        }
+        function stepTwo(){
+            $.ajax({
+                type: "post",
+                url: 'combineAll',
+                dataType: "json",
+                async: true,
+                data: {},
+                success: function(data) {
+                    if (data.result == "success") {
+                    }
+                }
+            });
+        }
+        function findFile(){
+            $.ajax({
+                type: "post",
+                url: 'findFile',
+                dataType: "json",
+                async: true,
+                data: {},
+                success: function(data) {
+                    if (data.result == "success") {
+                        stepTwo();
+                    }
+                }
+            });
+        }
+    </script>
+
 <script>(function($,doc) {
 $.init();
 $.ready(function() {
@@ -72,7 +119,12 @@ var options =JSON.parse(optionsJson);
 var BirthdayPicker =new $.DtPicker(options);
 BirthdayPicker.setSelectedValue("1988-01-01");
 var BirthdayPickerButton =doc.getElementById('BirthdayPicker');
-BirthdayPickerButton.addEventListener('tap',function(event) {BirthdayPicker.show(function(items) {BirthdayPickerButton.getElementsByTagName('font')[0].innerText =items.text;BirthdayPickerButton.getElementsByTagName('input')[0].value =items.text;});},false);
+BirthdayPickerButton.addEventListener('tap',function(event) {
+    BirthdayPicker.show(function(items) {
+        BirthdayPickerButton.getElementsByTagName('font')[0].innerText =items.text;
+        BirthdayPickerButton.getElementsByTagName('input')[0].value =items.text;
+        stepOne();
+    });},false);
 
 
 
@@ -81,16 +133,25 @@ SexPicker.setData([{value:'1',text:'男'
 },{value:'2',text:'女'
 }]);
 var SexPickerButton =doc.getElementById('SexPicker');
-SexPickerButton.addEventListener('tap',function(event) {SexPicker.show(function(items) {SexPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
-    SexPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+SexPickerButton.addEventListener('tap',function(event) {
+    SexPicker.show(function(items) {
+        SexPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+        SexPickerButton.getElementsByTagName('input')[0].value =items[0].value;
+    });},false);
 
 
 var FindPickerButton =doc.getElementById('FindPicker');
-FindPickerButton.addEventListener('tap',function(event) {FindPicker.show(function(items) {FindPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
-FindPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
+FindPickerButton.addEventListener('tap',function(event) {
+    FindPicker.show(function(items) {
+        FindPickerButton.getElementsByTagName('font')[0].innerText =items[0].text;
+        FindPickerButton.getElementsByTagName('input')[0].value =items[0].value;
+
+    });},false);
 });
 })(mui,document);
 </script>
+
+
 <script type="text/javascript" src="/static/weixin/js/common.js"></script>
 <script language="javascript">
 				$(function() {

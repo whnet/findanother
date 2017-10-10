@@ -82,22 +82,70 @@ class Info extends SecdController
 		}
         
     }
-	
-	public function birthday(){
-
+    /*
+     * 考虑用ajax 首先将头像变圆
+     */
+    public function changeImg(){
         $user = Cookie::get('wechat_user');
         $nickname = $user['nickname'];
         $headimg = $user['avatar'];
         $openid = $user["id"];
-         // 提交资料之前将头像下载下来，并且变成圆形, 存放在circlehead中,在这一步可以同时将所需的字体合成，
-            $fileName = 'uploads/header/'.$openid.'.jpeg';
-            $this->downloadWechatImage($headimg, $fileName);
-            $circleHead = $this->yuan_img($fileName,$openid);
+        $fileName = 'uploads/header/'.$openid.'.jpeg';
+        $this->downloadWechatImage($headimg, $fileName);
+        $circleHead = $this->yuan_img($fileName,$openid);
+        if($circleHead){
+            die(json_encode(['result'=>'success']));
+        }
 
-        //和背景图结合起来
-        $src = 'uploads/background/background.jpg';//背景图片
-        $markimgurl = $this->myImageResize($circleHead, '80', '80');   //缩放图片
-        $imgpath = $this->water_mark($src,$markimgurl,$openid);
+    }
+    /*
+     * 查看是否存在文件
+     */
+	public function findFile(){
+        $user = Cookie::get('wechat_user');
+        $nickname = $user['nickname'];
+        $headimg = $user['avatar'];
+        $openid = $user["id"];
+        $fileName = 'uploads/headerAndbackground/'.$openid.'.png';
+        if(is_file($fileName)){
+            die(json_encode(['result'=>'success']));
+        }
+    }
+    /*
+     * 然后将圆形头像 和  背景图进行合并
+     */
+    public function combineAll(){
+        $user = Cookie::get('wechat_user');
+        $nickname = $user['nickname'];
+        $headimg = $user['avatar'];
+        $openid = $user["id"];
+        $src = 'uploads/background/background.png';//背景图片
+        $circleHead = 'uploads/circlehead/'.$openid.'.png';
+        $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
+        $imgpath = $this->infoErWeima($src,$markimgurl,$openid);
+        if($imgpath){
+            die(json_encode(['result'=>'success','test'=>$imgpath]));
+        }
+    }
+
+	public function birthday(){
+
+	    //进入来丰富资料就下载头像，变成圆形和背景图结合，放到headerAndbackground中
+//        $user = Cookie::get('wechat_user');
+//        $nickname = $user['nickname'];
+//        $headimg = $user['avatar'];
+//        $openid = $user["id"];
+//            $fileName = 'uploads/header/'.$openid.'.jpeg';
+//            $this->downloadWechatImage($headimg, $fileName);
+//            $circleHead = $this->yuan_img($fileName,$openid);
+//        //查看文件是否存在
+//        if(is_file($fileName)){
+//            //和背景图结合起来
+//            $src = 'uploads/background/background.png';//背景图片
+//            $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
+//            $headerAndBancground = $this->infoErWeima($src,$markimgurl,$openid);
+//        }
+
 
 
 		//判断是否是扫别人分享的二维码进来的，在scan中写入cookies
@@ -116,7 +164,6 @@ class Info extends SecdController
            $uid = $db ->insertGetId($lab_data);
            //提交资料成功之后，给公众号发送一个二维码和一段话
             if($uid){
-                //获取opened
                 $user = Cookie::get('wechat_user');
                 $open_id = $user['original']['openid'];
                 //查询数据库中用户的账号的openid中是否有值，有值说明用户的微信与账号绑定
@@ -129,11 +176,14 @@ class Info extends SecdController
                     $options = Config::get('wechat');
                     $app = new Application($options);
                     $temporary = $app->material_temporary;
-                    $path = $this->erweima($openid);
-                    $data = $temporary->uploadImage($path);
-                    // @unlink($path);
-                    $imgmessage = new Image(['media_id' => $data['media_id']]);
-                    $this->sendtxtmessage($imgmessage,$openid);
+                    $path = $this->infoQrCode($openid);
+                    if($path){
+                        $data = $temporary->uploadImage($path);
+                        $imgmessage = new Image(['media_id' => $data['media_id']]);
+                        $this->sendtxtmessage($imgmessage,$openid);
+                    }
+
+
                 }
                 //同时，通知与扫码者的关系
 
@@ -556,11 +606,11 @@ class Info extends SecdController
         imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
         $imgArr = explode('.', $source_path);
         $target_path = $imgArr[0] . '.' . $imgArr[1];
-        imagepng($target_image, $target_path, 9);
+        imagepng($target_image, $target_path);
         imagedestroy($target_image);
         return $target_path;
     }
-    public function water_mark($src,$mark_img,$openid,$pct = 100)
+    public function infoErWeima($src,$mark_img,$openid,$pct = 100)
     {
         if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
 
@@ -605,24 +655,116 @@ class Info extends SecdController
                     $mark_im = imagecreatefrompng($mark_img);
                     break;
             }
-            $x = ($src_width - $mark_width - 10) / 2;    //水平位置
-            $y = ($src_height - $mark_height - 10) / 2;    //垂直位置
+            $x = 320;    //水平位置
+            $y = 150;    //垂直位置
             //这一句一定要有
             imagesavealpha($mark_im, true);
-            $bg = imagecolorallocate($mark_im, 255, 255, 255);
+            $bg = imagecolorallocatealpha($mark_im, 255, 255, 255, 127);
             imagecolortransparent($mark_im,$bg);
             imagefill($mark_im, 0, 0, $bg);
             imageColorTransparent($mark_im, $bg);
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
             if($openid){
-                $picname = $openid;
-                imagepng($src_im, 'uploads/shareimg/'.$picname.'.png');
-                imagedestroy($src_im);			// 释放内存
-                return 'uploads/shareimg/'.$picname.'.png';
+                imagepng($src_im, 'uploads/headerAndbackground/'.$openid.'.png');
+                imagedestroy($src_im);
+                return 'uploads/headerAndbackground/'.$openid.'.png';
             }else{
-                return imagepng($src_im);
+                return imagejpeg($src_im);
             }
-            //return '/upload/ewm/'.$picname.'.png';
+        }
+    }
+
+    public function infoFinalErWeima($src,$mark_img,$openid,$pct = 100)
+    {
+        if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
+
+            $data = getimagesize($src);
+            if ($data[2] > 3)
+            {
+                return false;
+            }
+            $src_width = $data[0];
+            $src_height = $data[1];
+            $src_type = $data[2];
+            $data = getimagesize($mark_img);
+            $mark_width = $data[0];
+            $mark_height = $data[1];
+            $mark_type = $data[2];
+
+            if ($src_width < ($mark_width + 20) || $src_width < ($mark_height + 20))
+            {
+                return false;
+            }
+            switch ($src_type)
+            {
+                case 1:
+                    $src_im = imagecreatefromgif($src);
+                    break;
+                case 2:
+                    $src_im = imagecreatefromjpeg($src);
+                    break;
+                case 3:
+                    $src_im = imagecreatefrompng($src);
+                    break;
+            }
+            switch ($mark_type)
+            {
+                case 1:
+                    $mark_im = imagecreatefromgif($mark_img);
+                    break;
+                case 2:
+                    $mark_im = imagecreatefromjpeg($mark_img);
+                    break;
+                case 3:
+                    $mark_im = imagecreatefrompng($mark_img);
+                    break;
+            }
+            //二维码的位置
+            $x = 300;    //的水平位置
+            $y = 800;    //垂直位置
+            //这一句一定要有
+            imagesavealpha($mark_im, true);
+            $bg = imagecolorallocatealpha($mark_im, 255, 255, 255, 127);
+            imagecolortransparent($mark_im,$bg);
+            imagefill($mark_im, 0, 0, $bg);
+            imageColorTransparent($mark_im, $bg);
+            imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
+            if($openid){
+                imagepng($src_im, 'uploads/shareimg/'.$openid.'.png');
+                imagedestroy($src_im);			// 释放内存
+                return 'uploads/shareimg/'.$openid.'.png';
+            }else{
+                return imagejpeg($src_im);
+            }
+        }
+    }
+    function infoQrCode($bopenid=''){
+
+        $weixinval = weixin::where('openid',$bopenid)->find();
+        $nickname = $weixinval['nickname'];
+        $headimg = $weixinval['headimgurl'];
+
+        $options = Config::get('wechat');
+        $app = new Application($options);
+        $qrcode = $app->qrcode;
+        $result = $qrcode->temporary($bopenid, 6 * 24 * 3600);
+        $ticket = $result->ticket;
+        // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
+        $markimgurl = $qrcode->url($ticket);
+        $mubiaoimg = 'uploads/qrcode/'.$bopenid.'.jpeg';
+        $content = file_get_contents($markimgurl);
+        file_put_contents($mubiaoimg, $content);
+
+        $phone = $bopenid;
+        $src = 'uploads/headerAndbackground/'.$bopenid.'.png';//背景图片
+        $markimgurl = $this->myImageResize($mubiaoimg, '180', '180');//将二维码进行缩放
+
+        if($bopenid){
+            //合并二维码 和 带有头像背景图的图片
+            $imgpath = $this->infoFinalErWeima($src,$markimgurl,$phone);
+            return $imgpath;
+        }else{
+            $this->infoFinalErWeima($src,$markimgurl,$phone);
         }
     }
 
