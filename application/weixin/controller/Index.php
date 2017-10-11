@@ -402,7 +402,7 @@ class Index extends Controller
                 $mark_im = imagecreatefrompng($mark_img);
                 break;
             }
-            $x = 420;    //水平位置
+            $x = 300;    //水平位置
             $y = 800;    //垂直位置
 
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
