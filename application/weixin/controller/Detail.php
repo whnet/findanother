@@ -19,25 +19,47 @@ class Detail extends BaseController
 {
 	public function index(Request $request)
     {
-		$suid = $request->param('suid'); //推荐人的id
+		$suid = $request->param('suid'); //查看者的ID
 		$type = $request->param('type'); //添加好友的方式 0从我想认识中加，1从我的备选中加
 		$tjly = !empty($request->param('tjly'))?$request->param('tjly'):0;
 		
-		$uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //被推荐人的id 
+		$uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //系统推荐过来用户的ID
 		
 		$jh = !empty($request->param('jh'))?$request->param('jh'):0;
-		
-		$flag2 = !empty($request->param('flag2'))?$request->param('flag2'):1;
+
+		//查看好友申请状态
+
 
          if($type == 0){
              $fridDb = new Know();
-             $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
-             $frid = $knowFlag['flag'];
+             $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+             if($knowFlagOne){
+                 $frid = $knowFlagOne['flag'];
+                 //别人想加我为好友
+                 $sendStatus = 1;
+
+             }
+             $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
+
+             if($knowFlagTwo){
+                 $frid = $knowFlagTwo['flag'];
+                 //我想加别人为好友
+                 $sendStatus = 2;
+             }
+
+
          }else if($type == 1){
              $fridDb = new Alternative();
-             $knowFlag = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
-             $frid = $knowFlag['flag'];
+             $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+             if($knowFlagOne){
+                 $frid = $knowFlagOne['flag'];
+             }
+             $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
+             if($knowFlagTwo){
+                 $frid = $knowFlagTwo['flag'];
+             }
          }
+
 
 
         //echo $fridDb::getLastSql();
@@ -77,7 +99,7 @@ class Detail extends BaseController
 		$this->assign('frid', $frid);		
 		$this->assign('jh', $jh);
 		$this->assign('flag', $flag);
-		$this->assign('flag2', $flag2);
+		$this->assign('sendStatus', $sendStatus);
 		$this->assign('type', $type);
 		$this->assign('start',$this->birthext(date('Y-m-d',$list['Birthday'])));
 		return $this->fetch();

@@ -209,8 +209,10 @@ $(function(){
 	})
 	
 	$('#like').click(function() {
+		//加为好友
 		var url = '/index.php/weixin/pipei/renshi';
-		
+		// var url = '/index.php/weixin/bus/friend';
+
 		var uid = $('#infox').attr('uid');
 		var suid = $('#infox').attr('suid');
 		var tjly = $('#infox').attr('tjly');
@@ -234,7 +236,7 @@ $(function(){
 					}else{
 						mui.toast(result.msg);
 						var url = result.url;
-						
+
 						(function(){
 							var wait = 2;
 							var interval = setInterval(function(){
@@ -247,7 +249,7 @@ $(function(){
 						})();
 					}
 				}else{
-					console.log(result);
+
 					if(result.error_code ==0){
 						mui.toast(result.msg);
 					}else{
@@ -259,7 +261,7 @@ $(function(){
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {
-									// location.href = '/index.php/weixin/center/'+url;
+									location.href = '/index.php/weixin/center/'+url;
 									clearInterval(interval);
 								};
 							}, 1000);

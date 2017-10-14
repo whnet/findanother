@@ -523,18 +523,18 @@ function JsonHtml(obj, data) {
 				if(obj.flag == 0){
 					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>加为好友+</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'</div>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
                         '</div></li>';
 				}else if(obj.flag == 1){
                     var FriendStaus = '<label>等待同意</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'</div>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
                         '</div></li>';
 				}else{
                     HTML += '';
@@ -982,6 +982,7 @@ function agree(fid,uid,id,types,froms){
     if(id){
         var url = '/index.php/weixin/bus/agree';
     }else{
+    	//加为好友
         var url = '/index.php/weixin/bus/friend';
     }
     $.ajax(url, {

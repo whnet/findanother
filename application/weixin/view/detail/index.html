@@ -149,11 +149,42 @@ as[nav - 1].className ='link mui-active'
 <div id="deinfox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}"></div>
 </div>
 
-<nav class="footbar mui-clearfix" {if $flag2==1}style="display:none;"{/if}>
-<a style="width:100%;" href="javascript:;" class="footbar-item" >
-    <div class="footbar-icon beixuan-icon" status="false"></div>
-    <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>{if $frid == 1}同意{else}加为好友{/if}</span></a>
-</nav>
+{if $sendStatus == 1}
+    {if $frid == 1}
+    <nav class="footbar mui-clearfix">
+    <a style="width:100%;" href="javascript:;" class="footbar-item" >
+        <div class="footbar-icon beixuan-icon" status="false"></div>
+        <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>同意</span></a>
+    </nav>
+    {elseif $frid == 2}
+    <nav class="footbar mui-clearfix">
+    <a style="width:100%;" href="javascript:;" class="footbar-item" >
+        <div class="footbar-icon beixuan-icon" status="false"></div>
+        <span class="mui-tab-label">已同意</span></a>
+    </nav>
+    {elseif $frid == 0}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>加为好友</span></a>
+    </nav>
+    {/if}
+{elseif $sendStatus == 2}
+    {if $frid == 1}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label" >等待同意</span></a>
+    </nav>
+    {elseif $frid == 2}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label" >已同意</span></a>
+    </nav>
+    {/if}
+{/if}
+
 <link rel="stylesheet" type="text/css" href="/static/weixin/css/mui.previewimage.css">
 <script src="/static/weixin/js/mui.zoom.js"></script>
 <script src="/static/weixin/js/mui.previewimage.js"></script>

@@ -510,20 +510,60 @@ class Pipei extends BaseController
             echo json_encode(['error_code'=>1,'msg'=>'已添加到了认识列表,不能重复添加！','url'=>'index']);
             exit();
         }
-
+        //修改 将认识一下 改成 直接加为好友 fuck
         $db = new Know();
         $lab_data=[
             'uid'=>$uid,
             'suid'=>$suid,
             'tjly'=>$tjly,
+            'flag'=>1,
+            'addtime'=>time(),//标记添加时间七天后继续添加
         ];
-        $db ->save($lab_data);
+        $id = $db ->save($lab_data);
+
+
+
 
         if($flag == 1){
-            echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'添加成功！您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
+            echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
         }else{
+            //发送模板消息
+            $frid = 0;
+            $kid = 0;
+            $type = 0;
+            $data=user::alias('a')
+                ->field('b.nickname as name,b.*,a.*')
+                ->join('weixin b','b.id=a.wid')
+                ->where('a.ID',$suid)
+                ->find();
+
+            $fdata=user::alias('a')
+                ->field('b.nickname as name,b.*,a.*')
+                ->join('weixin b','b.id=a.wid')
+                ->where('a.ID',$uid)
+                ->find();
+
+
+            $options = Config::get('wechat');
+            $app = new Application($options);
+            $notice = $app->notice;
+            $userId = $fdata["openid"];
+            $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
+            //flag2 = 1 等待同意,
+            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/type/'.$type;
+            $data = array(
+                "first"  => "有人添加你为好友:",
+                "keyword1"   => $data['name'],
+                "keyword2"  => "星数奇缘",
+                "keyword3"  => date("Y-m-d",time()),
+                "remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
+            );
+            $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
+            //发送模板消息END
             echo json_encode(['error_code'=>1,'url'=>'index','msg'=>'添加成功！']);
         }
+
+
     }
 
     public function tongjixue(Request $request){

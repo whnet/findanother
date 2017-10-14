@@ -214,13 +214,13 @@ class Info extends SecdController
                     $yval = weixin::where('openid',$yaoqingpenid)->find();
                     $aname = $yval['nickname'];
                     //$guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
-                    $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yaoqingpenid."/bopenid/".$beiyaoqingopenid."'>点击查看</a>";
+                    $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/bopenid/".$yaoqingpenid."/yopenid/".$beiyaoqingopenid."'>点击查看</a>";
                     $this->sendtxtmessage($message,$beiyaoqingopenid);
 
                     $val = weixin::where('openid',$beiyaoqingopenid)->find();
                     $bname = $val['nickname'];
                     //$guanxi2 = $this->get_guanxi($beiyaoqingopenid,$yaoqingpenid);
-                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$beiyaoqingopenid."/bopenid/".$yaoqingpenid."'>点击查看</a>";
+                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/bopenid/".$beiyaoqingopenid."/yopenid/".$yaoqingpenid."'>点击查看</a>";
                     $this->sendtxtmessage($bmessage,$yaoqingpenid);
                 }
 

@@ -304,7 +304,7 @@ class Bus extends BaseController
     }
 
     function friend(){
-
+       //待废弃 转移到/index.php/weixin/pipei/renshi
         $uid = input('suid');
         $fid = input('fid');
         $kid = input('kid'); //konw 表id
@@ -350,12 +350,13 @@ class Bus extends BaseController
             $kdb ->save($lab_kdata,['id' => $kid]);
         }
 
-
+     //发送模板消息
         $data=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
             ->join('weixin b','b.id=a.wid')
             ->where('a.ID',$uid)
             ->find();
+
 
         $fdata=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
@@ -377,7 +378,7 @@ class Bus extends BaseController
             "remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
         );
         $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
-
+        //发送模板消息END
         $error_code='0';
         $msg="添加好友成功,等待对方同意,七天后可再次请求！";
         echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);

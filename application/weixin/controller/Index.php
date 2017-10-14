@@ -163,13 +163,13 @@ class Index extends Controller
                             $best = '最佳'.$Constellation['best'];
                             $worst = '最糟'.$Constellation['worst'];
                             //通过生日获得两人的关系 END
-                            $guanxi = $this->get_guanxi($yopenid,$bopenid);
-                            $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
+                            //$guanxi = $this->get_guanxi($yopenid,$bopenid);
+                            $message = "您和".$aname."的关系是：".$best."<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
                             $this->sendtxtmessage($message,$bopenid);
 
 
-                            $guanxi2 = $this->get_guanxi($bopenid,$yopenid);
-                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
+                            //$guanxi2 = $this->get_guanxi($bopenid,$yopenid);
+                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
                             $this->sendtxtmessage($bmessage,$yopenid);
                             break;
                         }
@@ -402,7 +402,7 @@ class Index extends Controller
                 $mark_im = imagecreatefrompng($mark_img);
                 break;
             }
-            $x = 300;    //水平位置
+            $x = 250;    //水平位置
             $y = 800;    //垂直位置
 
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
@@ -469,7 +469,7 @@ class Index extends Controller
 				$target_width = $target_height * $ratio_orig;
 			}else{
 				$target_height = $target_width / $ratio_orig;
-			}
+			}   
 		}
 		switch ($source_mime){
 			case 'image/gif':

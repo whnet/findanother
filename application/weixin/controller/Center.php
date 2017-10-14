@@ -40,7 +40,7 @@ class Center extends BaseController
 		$hnum = hulue::where('flag','<>',2)->where('suid',$suid)->count(); //我忽略的
 		$fnum = friends::where('flag',2)->where('uid',$suid)->count();//我的好友
 		$anum = alternative::where('flag','<>',2)->where('suid',$suid)->count();//我的备选
-		$xknum = know::where('flag',0)->where('uid',$suid)->count();//想认识我的
+		$xknum = know::where('flag','<>',2)->where('uid',$suid)->count();//想认识我的
 
         //echo know::getlastSql();
 		$this->assign('suid', $suid);
@@ -194,7 +194,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = know::where('suid',$uval['ID'])->where('flag',0)->limit($limit)->select();
+		$data = know::where('suid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -341,7 +341,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = know::where('uid',$uval['ID'])->where('flag',0)->limit($limit)->select();
+		$data = know::where('uid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
 
 		if(!empty($data)){
 			
