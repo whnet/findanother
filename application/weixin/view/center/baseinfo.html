@@ -129,7 +129,8 @@ MarryPickerButton.addEventListener('tap',function(event) {MarryPicker.show(funct
 MarryPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},false);
 
 var BooldPicker =new $.PopPicker();
-BooldPicker.setData([{value:'A',text:'A型'
+BooldPicker.setData([{value:'0',text:'不知道'
+},{value:'A',text:'A型'
 },{value:'B',text:'B型'
 },{value:'AB',text:'AB型'
 },{value:'O',text:'O型'
@@ -140,6 +141,7 @@ BooldPickerButton.getElementsByTagName('input')[0].value =items[0].value;});},fa
 
 var JobPicker =new $.PopPicker();
 JobPicker.setData([
+    {value:'0',text:'未选择'},
 {value:'在读初中生',text:'在读初中生'},
 {value:'在读高中生',text:'在读高中生'},
 {value:'在读专科生',text:'在读专科生'},

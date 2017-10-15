@@ -33,21 +33,24 @@ as[nav - 1].className ='link mui-active'
 </head>
 <body>
 <div class="mui-content backgroud-gray">
-<header class="mui-bar mui-bar-nav nav-transparent">
-<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-<h1 class="mui-title">{$list.nickname}</h1>
-</header>
+<!--<header class="mui-bar mui-bar-nav nav-transparent">-->
+<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+<!--<h1 class="mui-title">{$list.nickname}</h1>-->
+<!--</header>-->
 <div class="self-intro">
 <div class="self-intro-main">
-<div class="self-avatar" style="background-image:url({$list.headimgurl});">
+	<h4 style="color:#fff;text-align:center;widht:100%;">{$list.nickname}</h4>
+<div class="self-avatar" style="margin-top:20px;background-image:url({$list.headimgurl});">
 <div class="audit-hint">
 </div>
 </div>
 <div class="data">
+	<span>{if $list.City}{$list.City}{/if}</span>
 <span class="sex" status="{$list.Sex}"></span>
 <span>{$age}岁</span>
-<span>{$start}</span>
-
+	{if $start && $list.Blood}<span>{$start}{$list.Blood} </span>{/if}
+	{if $list.zhiye}<span>{$list.zhiye} </span>{/if}
+	{if $list.height}<span>{$list.height}cm </span>{/if}
 </div>
 <div class="mood"></div>
 </div>
@@ -65,15 +68,17 @@ as[nav - 1].className ='link mui-active'
 <section class="cm-edit-list">
 <a class="title cm-into v-link" href="baseinfo">基本资料</a>
 <div class="mui-row">
-<div class="mui-col-xs-6 mui-col-sm-6">身高 : <em>{if $list.height}{$list.height}cm{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">性别 : <em>{if $list.Sex == 1}男{else}女{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">出生日期: <em>{if $list.Birthday}{$list.Birthday|date="Y-m-d",###}{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">所在地区 :<em>{if $list.Province && $list.City}{$list.Province}-{$list.City}{else /}'未填写'{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">婚姻状况 :<em>{if $list.Gqzt}{$list.Gqzt}{else /}未填写{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">血型 : <em>{if $list.Blood}{$list.Blood}型{else /}未填写{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">职业 :<em>{if $list.zhiye}{$list.zhiye}{else /}未填写{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">性格 :<em>{if $list.character}{$list.character}{else /}未填写{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">身高 : <em>{if $list.height}{$list.height}cm{else /}未填写{/if}</em></div>
 <div class="mui-col-xs-6 mui-col-sm-6">体重 : <em>{if $list.weight}{$list.weight}{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">现居 :<em>{if $list.Province && $list.City}{$list.Province}-{$list.City}{else /}'未填写'{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">出生年月日 : <em>{if $list.Birthday}{$list.Birthday|date="Y-m-d",###}{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">婚姻状况 :<em>{if $list.Gqzt}{$list.Gqzt}{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">血型 : <em>{if $list.Blood}{$list.Blood}型{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">职业 :<em>{if $list.zhiye}{$list.zhiye}{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">微信号 :<em>{$list.wxnumber}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">性格 :<em>{if $list.character}{$list.character}{else /}未填写{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">微信号 :<em>{$list.wxnumber}</em></div>
+
 </div>
 </section>
 <section class="cm-edit-list">
@@ -115,10 +120,10 @@ as[nav - 1].className ='link mui-active'
 <a class="title cm-into v-link" href="zheouinfo">择偶要求</a>
 <div class="mui-row">
 <div class="mui-col-xs-6 mui-col-sm-6">寻找 : <em>{if $list.Wanna}{$list.Wanna}{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">期望 :<em>{if $list.Loveage}{$list.Loveage}{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">期望 : <em>{if $list.Loveage}{$list.Loveage}{else /}未填写{/if}</em></div>
 <div class="mui-col-xs-6 mui-col-sm-6">星座 : <em>{if $findval.fstart}{$findval.fstart}{else /}未填写{/if}</em></div>
 <div class="mui-col-xs-6 mui-col-sm-6">血型 : <em>{if $findval.fboold}{$findval.fboold}型{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">身高 :<em>{if $findval.fheight}{$findval.fheight}cm{else /}未填写{/if}</em></div>
+<div class="mui-col-xs-6 mui-col-sm-6">身高 : <em>{if $findval.fheight}{$findval.fheight}cm{else /}未填写{/if}</em></div>
 </div>
 </section>
 <style>

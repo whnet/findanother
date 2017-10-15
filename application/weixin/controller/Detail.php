@@ -22,14 +22,18 @@ class Detail extends BaseController
 		$suid = $request->param('suid'); //查看者的ID
 		$type = $request->param('type'); //添加好友的方式 0从我想认识中加，1从我的备选中加
 		$tjly = !empty($request->param('tjly'))?$request->param('tjly'):0;
-		
+		$id = !empty($request->param('id'))?$request->param('id'):0;
+
 		$uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //系统推荐过来用户的ID
 		
 		$jh = !empty($request->param('jh'))?$request->param('jh'):0;
+		//from
+		$from = !empty($request->param('from'))?$request->param('from'):0;
 
 		//查看好友申请状态
 
-
+        $frid = '';
+        $sendStatus = '';
          if($type == 0){
              $fridDb = new Know();
              $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
@@ -92,11 +96,13 @@ class Detail extends BaseController
 		$this->assign('age', $age);
 		$this->assign('intes', $intes);
 		$this->assign('xc', $xiangce);
+		$this->assign('id', $id);
 		$this->assign('suid', $suid);
 		$this->assign('tjly', $tjly);
 		$this->assign('uid', $uid);
 		$this->assign('kid', $kid);
 		$this->assign('frid', $frid);		
+		$this->assign('from', $from);
 		$this->assign('jh', $jh);
 		$this->assign('flag', $flag);
 		$this->assign('sendStatus', $sendStatus);

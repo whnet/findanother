@@ -29,6 +29,14 @@
 <div class="form form-search">
 <div class="padding form-list">
 
+<!--城市-->
+    <!--<div id="CityPicker" class="mui-input-row">-->
+        <!--<label><i>*</i>所在地区</label>-->
+        <!--<font class="mui-pull-right">请选择</font>-->
+        <!--<input name="city" type="hidden" value="" />-->
+    <!--</div>-->
+<!--城市-->
+
 <!--生日-->
 <div id="BirthdayPicker" class="mui-input-row">
 <label><i>*</i>出生日期(阳历)</label>
@@ -126,6 +134,9 @@ BirthdayPickerButton.addEventListener('tap',function(event) {
         stepOne();
     });},false);
 
+//    var CityPicker =new $.PopPicker({layer:2});
+//    CityPicker.setData(cityData);
+//    var CityPickerButton =doc.getElementById('CityPicker');CityPickerButton.addEventListener('tap',function(event) {CityPicker.show(function(items) {CityPickerButton.getElementsByTagName('font')[0].innerText =items[0].text + " - " + items[1].text;CityPickerButton.getElementsByTagName('input')[0].value =items[0].text + "-" + items[1].text;});},false);
 
 
 var SexPicker =new $.PopPicker();
@@ -160,7 +171,7 @@ FindPickerButton.addEventListener('tap',function(event) {
 					$('#form2 .do-submit').click(function () {
 					var _this = $(this);
 					var bd = $('#form2 input[name="birthday"]');
-					var fi = $('#form3 input[name="sex"]');
+					var fi = $('#form2 input[name="sex"]');
 					    //判断出生日期是否选择
 					    if (bd.val() == '' || bd.val() == '0') {
 					        mui.toast('请选择您的出生日期');
@@ -170,8 +181,8 @@ FindPickerButton.addEventListener('tap',function(event) {
 							flag = true;
 						}
 						//判断寻找是否选择
-					    if (fi.val() == '' || fi.val() == '0') {
-					        mui.toast('请选择您的寻找对象');
+					    if (fi.val() == undefined || fi.val() == '0' || fi.val() == '') {
+					        mui.toast('请选择您的性别');
 							flag = false;
 					        return false;
 					    }else{

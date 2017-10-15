@@ -147,41 +147,53 @@ as[nav - 1].className ='link mui-active'
 
 <div class="mui-pull-bottom-pocket mui-block mui-visibility" style="background-color:#fff;"></div>
 <div id="deinfox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}"></div>
+<div id="infox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" flag='2' from='{$from}' num='0' control='center'></div>
 </div>
-
-{if $sendStatus == 1}
-    {if $frid == 1}
-    <nav class="footbar mui-clearfix">
-    <a style="width:100%;" href="javascript:;" class="footbar-item" >
-        <div class="footbar-icon beixuan-icon" status="false"></div>
-        <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>同意</span></a>
-    </nav>
-    {elseif $frid == 2}
-    <nav class="footbar mui-clearfix">
-    <a style="width:100%;" href="javascript:;" class="footbar-item" >
-        <div class="footbar-icon beixuan-icon" status="false"></div>
-        <span class="mui-tab-label">已同意</span></a>
-    </nav>
-    {elseif $frid == 0}
-    <nav class="footbar mui-clearfix">
-        <a style="width:100%;" href="javascript:;" class="footbar-item" >
-            <div class="footbar-icon beixuan-icon" status="false"></div>
-            <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>加为好友</span></a>
-    </nav>
+{if empty($from)}
+    {if !empty($frid)}
+        {if $sendStatus == 1}
+            {if $frid == 1}
+            <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>同意</span></a>
+            </nav>
+            {elseif $frid == 2}
+            <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">已同意</span></a>
+            </nav>
+            {elseif $frid == 0}
+            <nav class="footbar mui-clearfix">
+                <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                    <div class="footbar-icon beixuan-icon" status="false"></div>
+                    <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},{$type});'>加为好友</span></a>
+            </nav>
+            {/if}
+        {elseif $sendStatus == 2}
+            {if $frid == 1}
+            <nav class="footbar mui-clearfix">
+                <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                    <div class="footbar-icon beixuan-icon" status="false"></div>
+                    <span class="mui-tab-label" >等待同意</span></a>
+            </nav>
+            {elseif $frid == 2}
+            <nav class="footbar mui-clearfix">
+                <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                    <div class="footbar-icon beixuan-icon" status="false"></div>
+                    <span class="mui-tab-label" >已同意</span></a>
+            </nav>
+            {/if}
+        {/if}
     {/if}
-{elseif $sendStatus == 2}
-    {if $frid == 1}
-    <nav class="footbar mui-clearfix">
-        <a style="width:100%;" href="javascript:;" class="footbar-item" >
-            <div class="footbar-icon beixuan-icon" status="false"></div>
-            <span class="mui-tab-label" >等待同意</span></a>
-    </nav>
-    {elseif $frid == 2}
-    <nav class="footbar mui-clearfix">
-        <a style="width:100%;" href="javascript:;" class="footbar-item" >
-            <div class="footbar-icon beixuan-icon" status="false"></div>
-            <span class="mui-tab-label" >已同意</span></a>
-    </nav>
+{else}
+    {if $from == 'likeme'}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$id},0,1);'>同意</span></a>
+        </nav>
     {/if}
 {/if}
 
@@ -192,12 +204,13 @@ as[nav - 1].className ='link mui-active'
 <script src="/static/weixin/js/detail.js"></script>
 <script>mui.previewImage();</script>
 <script>
-	function agree(fid,uid,id,types){
+	function agree(fid,uid,id,types,froms){
         if(types){
             type = 1;
         }else{
             type = 0;
         }
+         var from = $('#infox').attr('from');
 		if(id){
 			var url = '/index.php/weixin/bus/agree';
 		}else{
@@ -210,24 +223,25 @@ as[nav - 1].className ='link mui-active'
 				'fid':fid,
 				'frid':id,
 				'type':type,
+				'from':from,
 			},
 			dataType: 'json',
 			type: 'post',
 			success: function(result) {
-				if(result.error_code==0){
-				mui.toast(result.msg);
- 				href="/index.php/weixin/center/index";
-				(function(){
-				var wait = 3;
-				var interval = setInterval(function(){
-					var time = --wait;
-					if(time <= 0) {
-						location.href = href;
-						clearInterval(interval);
-					};
-				}, 1000);
-				})();
-				}
+//				if(result.error_code==0){
+//				mui.toast(result.msg);
+// 				href="/index.php/weixin/center/index";
+//				(function(){
+//				var wait = 3;
+//				var interval = setInterval(function(){
+//					var time = --wait;
+//					if(time <= 0) {
+//						location.href = href;
+//						clearInterval(interval);
+//					};
+//				}, 1000);
+//				})();
+//				}
 			}
 		});
 	}

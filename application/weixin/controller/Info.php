@@ -131,20 +131,20 @@ class Info extends SecdController
 	public function birthday(){
 
 	    //进入来丰富资料就下载头像，变成圆形和背景图结合，放到headerAndbackground中
-//        $user = Cookie::get('wechat_user');
-//        $nickname = $user['nickname'];
-//        $headimg = $user['avatar'];
-//        $openid = $user["id"];
-//            $fileName = 'uploads/header/'.$openid.'.jpeg';
-//            $this->downloadWechatImage($headimg, $fileName);
-//            $circleHead = $this->yuan_img($fileName,$openid);
-//        //查看文件是否存在
-//        if(is_file($fileName)){
-//            //和背景图结合起来
-//            $src = 'uploads/background/background.png';//背景图片
-//            $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
-//            $headerAndBancground = $this->infoErWeima($src,$markimgurl,$openid);
-//        }
+        $user = Cookie::get('wechat_user');
+        $nickname = $user['nickname'];
+        $headimg = $user['avatar'];
+        $openid = $user["id"];
+            $fileName = 'uploads/header/'.$openid.'.jpeg';
+            $this->downloadWechatImage($headimg, $fileName);
+            $circleHead = $this->yuan_img($fileName,$openid);
+        //查看文件是否存在
+        if(is_file($fileName)){
+            //和背景图结合起来
+            $src = 'uploads/background/background.png';//背景图片
+            $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
+            $headerAndBancground = $this->infoErWeima($src,$markimgurl,$openid);
+        }
 
 
 

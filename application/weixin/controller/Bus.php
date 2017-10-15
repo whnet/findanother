@@ -371,16 +371,16 @@ class Bus extends BaseController
         $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
         $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/flag2/2/type/'.$type;
         $data = array(
-            "first"  => "有人添加你为好友:",
+            "first"  => "有人想认识你一下:",
             "keyword1"   => $data['name'],
             "keyword2"  => "星数奇缘",
             "keyword3"  => date("Y-m-d",time()),
-            "remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
+            "remark" => "点击这里查看TA的详细资料，同意后可以互相看到微信号",
         );
         $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
         //发送模板消息END
         $error_code='0';
-        $msg="添加好友成功,等待对方同意,七天后可再次请求！";
+        $msg="添加好友成功，等待对方同意，七天后可再次请求！";
         echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
     }
 
@@ -391,7 +391,6 @@ class Bus extends BaseController
         $kid = input('kid');  //konw 表id
         $type = input('type');  // 添加好友的方式
         $from = input('from');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
-
         //更新对应表中的状态
         if($type == 0){
             $db = new know();
@@ -404,15 +403,15 @@ class Bus extends BaseController
         //防止重复添加 如果是从likeme中同意，那就是不为0就行，如果detail/index中同意则需要 不为 1
         //设置状态 from = 1 从likeme， 其余是从detail中来
         //通过判断
-        if($from){
+        if($from != 'likeme'){
             if($isHave['flag'] != 0){
-                $error_code='0';
+                $error_code= 0;
                 $msg="请勿重复请求！";
                 die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
             }
-        }else{
+        }elseif($from == 'likeme'){
             if($isHave['flag'] != 1){
-                $error_code='0';
+                $error_code= 0;
                 $msg="请勿重复请求！";
                 die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
             }

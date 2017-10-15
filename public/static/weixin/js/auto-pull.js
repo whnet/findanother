@@ -299,7 +299,7 @@ function JsonHtml(obj, data) {
 				}				
 				
 				
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link"><div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div><div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height + '</span></p><p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
+				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/hulue/jh/1.html" class="link"><div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div><div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height + '</span></p><p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
 			}
 			break;
 		case "sawme":
@@ -394,9 +394,9 @@ function JsonHtml(obj, data) {
 				}else{
 					var bstart = '';
 				}
-                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,1)>同意</label>';
+                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,\'likeme\')>同意</label>';
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
-					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/id/'+obj.id+'/from/likeme/jh/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
 					'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
@@ -448,7 +448,7 @@ function JsonHtml(obj, data) {
 				}
 
 				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>加为好友+</label>';
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>认识一下</label>';
 					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 						'<div class="mui-slider-right mui-disabled">' +
 						'<a class="mui-btn mui-btn-red">删除记录</a></div>' +
@@ -521,9 +521,9 @@ function JsonHtml(obj, data) {
 
 				//判断添加好友的状态 0 加为好友 1 等待同意 2 成为好友
 				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>加为好友+</label>';
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>认识一下</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/jh/1.html" class="link">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
@@ -531,7 +531,7 @@ function JsonHtml(obj, data) {
 				}else if(obj.flag == 1){
                     var FriendStaus = '<label>等待同意</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/jh/1.html" class="link">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
@@ -597,7 +597,7 @@ function JsonHtml(obj, data) {
                 if(obj.flag == 2){
                     var FriendStaus = '<label>互相认识</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/knowothers/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+wechat+'</div>' +
@@ -657,7 +657,7 @@ function JsonHtml(obj, data) {
 				
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 					'<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div>' +
-					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/myfriend/jh/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
 					'<span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
@@ -968,12 +968,8 @@ function send(suid,id,fid,types){
 /*
 同意
  */
-function agree(fid,uid,id,types,froms){
-	if(froms){
-         from = 1;//从likeme
-	}else{
-		from = 0;//默认的
-	}
+function agree(fid,uid,id,types,from){
+
     if(types){
         type = 1;
     }else{

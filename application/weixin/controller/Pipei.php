@@ -528,7 +528,7 @@ class Pipei extends BaseController
             echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
         }else{
             //发送模板消息
-            $frid = 0;
+            $frid = 1;
             $kid = 0;
             $type = 0;
             $data=user::alias('a')
@@ -552,11 +552,11 @@ class Pipei extends BaseController
             //flag2 = 1 等待同意,
             $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/type/'.$type;
             $data = array(
-                "first"  => "有人添加你为好友:",
+                "first"  => "有人想认识你一下:",
                 "keyword1"   => $data['name'],
                 "keyword2"  => "星数奇缘",
                 "keyword3"  => date("Y-m-d",time()),
-                "remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
+                "remark" => "点击这里查看TA的详细资料，同意后可以互相看到微信号",
             );
             $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
             //发送模板消息END

@@ -43,19 +43,17 @@ as[nav - 1].className ='link mui-active'
 <div class="self-intro">
 <div class="self-intro-main">
 <h4 style="color:#fff;text-align:center;widht:100%;">{$list.name}</h4>
-<div class="self-avatar" style="background-image:url({$list.header});">
+<div class="self-avatar" style="margin-top:20px;background-image:url({$list.header});">
 <div class="audit-hint">
 </div>
 </div>
 <div class="data">
+<span>{if $list.City}{$list.City}{/if}</span>
 <span class="sex" status="{$list.Sex}"></span>
-<span>{$age}岁</span>
-<span>{$start}</span>
-</div>
-<div class="data">
-{if $start && $list.Blood}<span>{$start}{$list.Blood} </span>{/if}
- {if $list.zhiye}<span>{$list.zhiye} </span>{/if}
-{if $list.height}<span>{$list.height}cm </span>{/if}
+    <span>{$age}岁</span>
+    {if $start && $list.Blood}<span>{$start}{$list.Blood} </span>{/if}
+    {if $list.zhiye}<span>{$list.zhiye} </span>{/if}
+    {if $list.height}<span>{$list.height}cm </span>{/if}
 </div>
 <div class="mood">{$list.Sign}</div>
 </div>

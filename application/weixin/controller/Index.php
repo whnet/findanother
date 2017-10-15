@@ -203,12 +203,12 @@ class Index extends Controller
                         $data = user::where('wid',$val['id'])->find();
 					    if(empty($data['Birthday'])){
                             $bopenid = $message->FromUserName;   //邀请人的openid
-                            $message1 = "您的资料不完整，<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">点击这里</a>，填写资料，获取你的专属二维码,看看谁是你的Mr/Ms Right！";
+                            $message1 = "您的资料不完整，<a href=\"http://weixin.matchingbus.com/index.php/weixin/info/index\">点击这里</a>，填写资料，获取你的专属二维码，看看谁是你的Mr/Ms Right！";
                             $this->sendtxtmessage($message1,$bopenid);
                             break;
                         }else if($message->EventKey == 'ERWEIMA' && !empty($data['Birthday'])){
 							$openid = $message->FromUserName;
-							$message3 = "Hi，将下方你的专属二维码，发送到朋友圈或发给那个Ta,看看谁是你的Mr/Ms Right！";
+							$message3 = "Hi，将下方你的专属二维码，发送到朋友圈或发给那个Ta，看看谁是你的Mr/Ms Right！";
 							$this->sendtxtmessage($message3,$openid);
 							
 							$options = Config::get('wechat');

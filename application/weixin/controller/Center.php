@@ -35,6 +35,7 @@ class Center extends BaseController
         $alterCountTwo = alternative::where('flag',2)->where('suid',$suid)->count();
         $othersnum = $knowCountOne + $knowCountTwo + $alterCountOne + $alterCountTwo;
         //互相认识的 END
+
 		$knum = know::where('flag','<>',2)->where('suid',$suid)->count(); //我想认识的
         //echo know::getlastSql();
 		$hnum = hulue::where('flag','<>',2)->where('suid',$suid)->count(); //我忽略的
@@ -573,6 +574,7 @@ class Center extends BaseController
 	public function edit(){
 		
 		$openid = Cookie::get('openid');
+
 		$list=user::alias('a')
             ->field('a.*,a.ID as uid,b.*')
             ->join('weixin b','b.id=a.wid')
@@ -590,7 +592,7 @@ class Center extends BaseController
 		}
 			
 		$findval = mfind::field('start as fstart,boold as fboold,height as fheight')->where('uid',$list['uid'])->find();
-			
+		$info = [];
 		if(!empty($list['interest'])){
 			$intest = explode(',',$list['interest']);
 			$intt = array(
