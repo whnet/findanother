@@ -153,9 +153,12 @@ class Info extends SecdController
             $id = Cookie::get('openid');
 
 			$val = Weixin::where('openid',$id)->find();
+            $addr = explode("-",input("city"));
 		   $db = new user();
            $lab_data=[
 				'wid'=>$val['id'],
+                'Province'=>$addr[0],
+                'City'=>$addr[1],
 				'Sex'=>input("sex"),
                 'Birthday'=>strtotime(input("birthday")),
 				'Regtime'=>time(),
@@ -262,11 +265,11 @@ class Info extends SecdController
 			$openid = Cookie::get('openid');
 			$val = Weixin::field('id')->where('openid',$openid)->find();
 		
-		   $addr = explode("-",input("city"));
+                //$addr = explode("-",input("city"));
 		   $db = new user();
            $lab_data=[
-				'Province'=>$addr[0],
-				'City'=>$addr[1],
+                //'Province'=>$addr[0],
+                //'City'=>$addr[1],
                 'Wanna'=>input("find"),
                 'Gqzt'=> input("marry"),
 			    'Blood'=>input("boold"),
@@ -720,14 +723,10 @@ class Info extends SecdController
                     break;
             }
             //二维码的位置
-            $x = 300;    //的水平位置
-            $y = 800;    //垂直位置
+            $x = 250;    //的水平位置
+            $y = 750;    //垂直位置
             //这一句一定要有
-            imagesavealpha($mark_im, true);
-            $bg = imagecolorallocatealpha($mark_im, 255, 255, 255, 127);
-            imagecolortransparent($mark_im,$bg);
-            imagefill($mark_im, 0, 0, $bg);
-            imageColorTransparent($mark_im, $bg);
+
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
             if($openid){
                 imagepng($src_im, 'uploads/shareimg/'.$openid.'.png');
@@ -757,7 +756,7 @@ class Info extends SecdController
 
         $phone = $bopenid;
         $src = 'uploads/headerAndbackground/'.$bopenid.'.png';//背景图片
-        $markimgurl = $this->myImageResize($mubiaoimg, '180', '180');//将二维码进行缩放
+        $markimgurl = $this->myImageResize($mubiaoimg, '280', '280');//将二维码进行缩放
 
         if($bopenid){
             //合并二维码 和 带有头像背景图的图片

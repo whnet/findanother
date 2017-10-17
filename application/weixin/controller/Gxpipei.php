@@ -25,8 +25,11 @@ class Gxpipei extends BaseController
 {
 	public function index(Request $request)
     {
+        $num = $request->param('num');
+        $num = !empty($num)?$num:0;
 		$yopenid = $request->param('yopenid');
 		$bopenid = $request->param('bopenid');
+
 		if(empty($yopenid) || empty($bopenid)){
 			$this->redirect('info/index');
 		}
@@ -37,8 +40,6 @@ class Gxpipei extends BaseController
 			->join('mfind c','c.uid=a.ID')
 			->where('b.openid',$yopenid)
 			->find();
-		
-		//echo user::getLastSql();
 		$valsuid = $selfval['suid'];
 		if(empty($valsuid)){
 			$self=user::alias('a')
@@ -54,140 +55,31 @@ class Gxpipei extends BaseController
 				->where('b.openid',$yopenid)
 				->find();
 		}
-		$suid = $self['suid'];
 		
 		$list=user::alias('a')
 			->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
 			->join('weixin b','b.id=a.wid')
 			->where('b.openid',$bopenid)
 			->find();
-		$findval=mfind::where('uid',$list['nuid'])->find();
-		//echo user::getLastSql();
-		$suid = $self['suid'];	
 
-		$lastdb=new User();
-        $lastdata=[
-            'Lasttime'=>time(),
-        ];
-        $lastdb->save($lastdata,['ID' => $suid]);
-		
-		$selfsex = (!empty($self['Sex']))?$self['Sex']:$self['wsex'];
-		$listsex = (!empty($list['Sex']))?$list['Sex']:$list['wsex'];
-		if(($selfsex=='1' && $listsex=='1') || ($selfsex=='2' && $listsex=='2')){    //判断是同性还是异性
-			$istxyx = "同性";
-		}else{
-			$istxyx = "异性";
-		}
-
-		//echo user::getLastSql();
-		//exit();
-
-		$year=date("Y",time());
-		
-		$ymd = date('Y-m-d',$list['Birthday']);
-		$bymd = explode('-',$ymd);
-		$age=$year-$bymd[0];
-		
-		$start = $this->birthext($list['Birthday']);
-		$selfstart = $this->birthext($self['Birthday']);
-		$bymd2 = date('Y-m-d',$self['Birthday']);
-		$selfymd = explode('-',$bymd2);
-		$selfage=$year-$selfymd[0];
-		
-			$isnianling = "年龄符合";
-			if($self['Loveage']=='合适就行'){    //年龄
-				$fage=true;
-			}elseif($self['Loveage']=='小我0-3岁' && $selfage>=$age && $age>=$selfage-3){
-				$fage=true;
-			}elseif($self['Loveage']=='小我3岁以上' && $age<=$selfage-3){
-				$fage=true;
-			}elseif($self['Loveage']=='大我0-3岁' && $selfage<=$age && $age<=$selfage+3){
-				$fage=true;
-			}elseif($self['Loveage']=='大我3岁以上' && $age>=$selfage+3){
-				$fage=true;
-			}else{
-				if($selfsex=='1' && $selfage > $age){    //判断是同性还是异性  男
-					$fage=true;
-				}elseif($selfsex=='2' && $selfage <= $age){
-					$fage=true;
-				}else{
-					$fage=false;
-					$isnianling = "年龄相差太大了";
-				}
-			}
-
-
-
-        $zjdata = '2008-'.$selfymd[1].'-'.$selfymd[2];
-        $YC = $this->getConstellation($zjdata);
-
-        $dfdata = '2008-'.$bymd[1].'-'.$bymd[2];
-        $NC = $this->getConstellation($dfdata);
-
-		$xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-        //最糟情况，最佳情况
-		$worst = $xingcon['worst'];
-        $best = $xingcon['best'];
-		//将下面这一块写成一个方法
-        $data = $this->match_others($xingcon['best'], $self['Wanna']);
-        $heshiweizhi = $data[0];
-        $bestfind = $data[1];
-
-        if($fage && $bestfind){
-            $tuijian = "认识一下";
-            $result = "匹配数据";
-            $content = "<table>
-                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-                                <tr>
-                                <td>48星区：</td>
-                                <td>最佳{$best}</td>
-                                <td>最糟{$worst}</td>
-                                </tr>
-                                <tr><td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td></tr>
-                                </table>";
-            $tjly = $best.$worst;
+        $selfsex = (!empty($self['Sex']))?$self['Sex']:$self['wsex'];
+        $listsex = (!empty($list['Sex']))?$list['Sex']:$list['wsex'];
+        if(($selfsex=='1' && $listsex=='1') || ($selfsex=='2' && $listsex=='2')){
+            $istxyx = "同性";
         }else{
-            $tuijian = "备选观察";
-            $result = "匹配数据";
-            $content = "<table>
-                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-                                <tr>
-                                <td>48星区：</td>
-                                <td>最佳{$best};最糟{$worst}</td>
-                                </tr>
-                                <tr>
-                                <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
-                                </tr>
-                                </table>";
-            $tjly = $best.$worst;
+            $istxyx = "异性";
         }
 
-		$this->assign('tuijian', $tuijian);
-		$this->assign('result', $result);
-		$this->assign('content', $content);
-		$this->assign('uid', $list['nuid']);
-		$this->assign('suid', $suid);
-		$this->assign('age', $age);
-		$this->assign('tjly', $tjly);
-		$this->assign('start', $start);
-		$this->assign('list', $list);
-		$this->assign('fval',$findval);
-		$xiangce = photos::where('uid',$list['nuid'])->select();
-		if(!empty($xiangce)){
-			$flag = 1;
-		}else{
-			$flag = 2;
-		}
-		$intes = explode(",",$list['interest']);
-		$this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));
-	
-		$this->assign('intes', $intes);
-		$this->assign('xc', $xiangce);
-		$this->assign('flag', $flag);
-			
-		return $this->fetch();
+        //三个文件相同的部分START
+            $suid = $self['suid'];
+            $lastdb=new User();
+            $lastdata=[
+                'Lasttime'=>time(),
+            ];
+            $lastdb->save($lastdata,['ID' => $suid]);
+            require_once(dirname(dirname(__FILE__)).'/rules/match.php');
+        return $this->fetch('combine/index');
+        //三个文件相同的部分END
     }
 	
 		

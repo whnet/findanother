@@ -403,7 +403,7 @@ class Index extends Controller
                 break;
             }
             $x = 250;    //水平位置
-            $y = 800;    //垂直位置
+            $y = 750;    //垂直位置
 
             imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
 		   if($phone){

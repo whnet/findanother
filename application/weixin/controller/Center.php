@@ -221,6 +221,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -318,6 +319,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -367,6 +369,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -415,6 +418,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -464,6 +468,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -513,6 +518,7 @@ class Center extends BaseController
 				$userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
 				$userinfo[$k]['sex'] = $uinfo['Sex'];
 				$userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
 				$userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
 				$userinfo[$k]['Sign'] = $uinfo['Sign'];
 			}
@@ -957,6 +963,7 @@ class Center extends BaseController
              $userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
              $userinfo[$k]['sex'] = $uinfo['Sex'];
              $userinfo[$k]['blood'] = $uinfo['Blood'];
+             $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
              $userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
              $userinfo[$k]['Sign'] = $uinfo['Sign'];
          }

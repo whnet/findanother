@@ -1,15 +1,95 @@
-<nav class="footbar mui-clearfix">
-    <a href="javascript:;" class="footbar-item" id="hulue">
-        <div class="footbar-icon hulue-icon" status="false"></div>
-        <span class="mui-tab-label">忽略</span>
-    </a>
-    <a href="javascript:;" class="footbar-item" id="msgrecord">
-        <div class="footbar-icon beixuan-icon" status="false"></div>
-        <span class="mui-tab-label">放入备选</span>
-    </a>
-    <a href="javascript:;" class="footbar-item" id="like">
-        <div class="footbar-icon renshi-icon" status="false"></div>
-        <span class="mui-tab-label">认识一下</span>
-    </a>
-</nav>
-<!--认识一下在 detail.js-->
+<!--获得from的类型-->
+{if $from == 'guangyiguang'}
+    <nav class="footbar mui-clearfix">
+        <a href="javascript:;" class="footbar-item" id="hulue">
+            <div class="footbar-icon hulue-icon" status="false"></div>
+            <span class="mui-tab-label">忽略</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" id="msgrecord">
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">放入备选</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" id="like">
+            <div class="footbar-icon renshi-icon" status="false"></div>
+            <span class="mui-tab-label">认识一下</span>
+        </a>
+    </nav>
+{elseif $from == "likeme"}
+    {if $frid == 1}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},3,3);'>同意</span></a>
+        </nav>
+    {elseif $frid == 2}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">已同意</span></a>
+        </nav>
+    {/if}
+{elseif $from == "haveagreed"}
+    {if $frid == 1}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">等待对方同意</span></a>
+        </nav>
+    {elseif $frid == 2}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">对方已同意</span></a>
+        </nav>
+    {/if}
+{elseif $from == 'knowothers'}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">双方已同意</span></a>
+    </nav>
+{elseif $from == 'myfriend'}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">双方已同意</span></a>
+    </nav>
+{/if}
+<script>
+    function agree(fid,uid,id,type,from){
+        var from = $('#infox').attr('from');
+        if(id){
+            var url = '/index.php/weixin/bus/agree';
+        }else{
+            var url = '/index.php/weixin/bus/friend';
+        }
+
+        $.ajax(url, {
+            data: {
+                'suid':uid,
+                'fid':fid,
+                'frid':id,
+                'type':type,
+                'from':from,
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function(result) {
+//				if(result.error_code==0){
+//				mui.toast(result.msg);
+// 				href="/index.php/weixin/center/index";
+//				(function(){
+//				var wait = 3;
+//				var interval = setInterval(function(){
+//					var time = --wait;
+//					if(time <= 0) {
+//						location.href = href;
+//						clearInterval(interval);
+//					};
+//				}, 1000);
+//				})();
+//				}
+            }
+        });
+    }
+</script>

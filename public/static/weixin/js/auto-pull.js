@@ -257,303 +257,11 @@ function JsonHtml(obj, data) {
 			var y = new Date();
 			for (var i = 0; i < data.length; i++) {
 				var obj = data[i];
-				
-				if(obj.Province){
-					var pro = obj.Province;
-				}else{
-					var pro = '';
-				}
-				
-				if(obj.City){
-					var city = obj.City;
-				}else{
-					var city = '';
-				}
-				
-				if(obj.height){
-					var height = obj.height;
-				}else{
-					var height = '';
-				}
-				
-				if(obj.Sign){
-					var sign = obj.Sign;
-				}else{
-					var sign = '';
-				}
-				
-				if(obj.sex){
-					if(obj.sex==1){
-						var sex = "男";
-					}else{
-						var sex = "女";
-					}
-				}else{
-					var sex = '';
-				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
-				}else{
-					var bstart = '';
-				}				
-				
-				
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/hulue/jh/1.html" class="link"><div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div><div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height + '</span></p><p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
-			}
-			break;
-		case "sawme":
-			var y = new Date();
-			for (var i = 0; i < data.length; i++) {
-				var obj = data[i];
-				
-				if(obj.Province){
-					var pro = obj.Province;
-				}else{
-					var pro = '';
-				}
-				
-				if(obj.City){
-					var city = obj.City;
-				}else{
-					var city = '';
-				}
-				
-				if(obj.height){
-					var height = obj.height;
-				}else{
-					var height = '';
-				}
-				
-				if(obj.Sign){
-					var sign = obj.Sign;
-				}else{
-					var sign = '';
-				}
-				
-				if(obj.sex){
-					if(obj.sex==1){
-						var sex = "男";
-					}else{
-						var sex = "女";
-					}
-				}else{
-					var sex = '';
-				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
-				}else{
-					var bstart = '';
-				}	
-				
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link"><div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div><div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p><p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
-			}
-			break;
-		case "likeme":
-			var y = new Date();
-			for (var i = 0; i < data.length; i++) {
-				var obj = data[i];
-				if(obj.Province){
-					var pro = obj.Province;
-				}else{
-					var pro = '';
-				}
-				
-				if(obj.City){
-					var city = obj.City;
-				}else{
-					var city = '';
-				}
-				
-				if(obj.height){
-					var height = obj.height;
-				}else{
-					var height = '';
-				}
-				
-				if(obj.Sign){
-					var sign = obj.Sign;
-				}else{
-					var sign = '';
-				}
-				
-				
-				if(obj.sex){
-					if(obj.sex==1){
-						var sex = "男";
-					}else{
-						var sex = "女";
-					}
-				}else{
-					var sex = '';
-				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
-				}else{
-					var bstart = '';
-				}
-                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,\'likeme\')>同意</label>';
-				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
-					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/id/'+obj.id+'/from/likeme/jh/1.html" class="link">' +
-					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
-					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-					'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
-					'</div></li>';
-			}
-			break;
-		case "mysaw":
-			var y = new Date();
-			for (var i = 0; i < data.length; i++) {
-				var obj = data[i];
-				
-				if(obj.Province){
-					var pro = obj.Province;
-				}else{
-					var pro = '';
-				}
-				
-				if(obj.City){
-					var city = obj.City;
-				}else{
-					var city = '';
-				}
-				
-				if(obj.height){
-					var height = obj.height;
-				}else{
-					var height = '';
-				}
-				
-				if(obj.Sign){
-					var sign = obj.Sign;
-				}else{
-					var sign = '';
-				}
-				if(obj.sex){
-					if(obj.sex==1){
-						var sex = "男";
-					}else{
-						var sex = "女";
-					}
-				}else{
-					var sex = '';
-				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
-				}else{
-					var bstart = '';
-				}
-
-				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>认识一下</label>';
-					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
-						'<div class="mui-slider-right mui-disabled">' +
-						'<a class="mui-btn mui-btn-red">删除记录</a></div>' +
-						'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
-						'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
-						'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-						'<span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-						'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
-						'</div></li>';
-                }else if(obj.flag == 1){
-                    var FriendStaus = '<label>等待同意</label>';
-                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
-                        '<div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div>' +
-                        '<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
-                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
-                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
-                        '</div></li>';
-				}
-
-			}
-			break;
-		case "mylike":
-			var y = new Date();
-			for (var i = 0; i < data.length; i++) {
-				var obj = data[i];
-				
-				if(obj.Province){
-					var pro = obj.Province;
-				}else{
-					var pro = '';
-				}
-				
-				if(obj.City){
-					var city = obj.City;
-				}else{
-					var city = '';
-				}
-				
-				if(obj.height){
-					var height = obj.height;
-				}else{
-					var height = '';
-				}
-                //判断是否有签名
-				if(obj.Sign){
-					var sign = obj.Sign;
-				}else{
-					var sign = '暂无相关介绍';
-				}
-
-				if(obj.sex){
-					if(obj.sex==1){
-						var sex = "男";
-					}else{
-						var sex = "女";
-					}
-				}else{
-					var sex = '';
-				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
-				}else{
-					var bstart = '';
-				}
-
-
-				//判断添加好友的状态 0 加为好友 1 等待同意 2 成为好友
-				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>认识一下</label>';
-                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1.html" class="link">' +
-                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
-                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
-                        '</div></li>';
-				}else if(obj.flag == 1){
-                    var FriendStaus = '<label>等待同意</label>';
-                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1.html" class="link">' +
-                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
-                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
-                        '</div></li>';
-				}else{
-                    HTML += '';
-				}
-				//微信号
-
-
-
-			}
-			break;
-		case "knowothers":
-            var y = new Date();
-            for (var i = 0; i < data.length; i++) {
-                var obj = data[i];
 
                 if(obj.Province){
-                    var pro = obj.Province;
+                    var Province = obj.Province;
                 }else{
-                    var pro = '';
+                    var Province = '';
                 }
 
                 if(obj.City){
@@ -583,10 +291,377 @@ function JsonHtml(obj, data) {
                     var sex = '';
                 }
 
-                if(obj.blood && obj.start){
-                    var bstart = obj.start+obj.blood;
+                if(obj.start){
+                    var start = obj.start;
                 }else{
-                    var bstart = '';
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
+                }
+				
+				
+				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
+					'<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div>' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/hulue/jh/1/type/6.html" class="link">' +
+					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
+			}
+			break;
+		case "sawme":
+			var y = new Date();
+			for (var i = 0; i < data.length; i++) {
+				var obj = data[i];
+
+                if(obj.Province){
+                    var Province = obj.Province;
+                }else{
+                    var Province = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.start){
+                    var start = obj.start;
+                }else{
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
+                }
+				
+				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
+			}
+			break;
+		case "likeme":
+			var y = new Date();
+			for (var i = 0; i < data.length; i++) {
+				var obj = data[i];
+                if(obj.Province){
+                    var Province = obj.Province;
+                }else{
+                    var Province = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.start){
+                    var start = obj.start;
+                }else{
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
+                }
+                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,\'likeme\')>同意</label>';
+				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/id/'+obj.id+'/from/likeme/jh/1/type/3.html" class="link">' +
+					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
+					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+					'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
+					'</div></li>';
+			}
+			break;
+		case "mysaw":
+			var y = new Date();
+			for (var i = 0; i < data.length; i++) {
+				var obj = data[i];
+
+                if(obj.Province){
+                    var Province = obj.Province;
+                }else{
+                    var Province = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.start){
+                    var start = obj.start;
+                }else{
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
+                }
+
+				if(obj.flag == 0){
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>认识一下</label>';
+					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
+						'<div class="mui-slider-right mui-disabled">' +
+						'<a class="mui-btn mui-btn-red">删除记录</a></div>' +
+						'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+						'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
+						'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+						'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
+						'</div></li>';
+                }else if(obj.flag == 1){
+                    var FriendStaus = '<label>等待同意</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
+                        '<div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div>' +
+                        '<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
+                        '</div></li>';
+				}
+
+			}
+			break;
+		case "mylike":
+			var y = new Date();
+			for (var i = 0; i < data.length; i++) {
+				var obj = data[i];
+
+                if(obj.Province){
+                    var Province = obj.Province;
+                }else{
+                    var Province = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.start){
+                    var start = obj.start;
+                }else{
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
+                }
+
+
+				//判断添加好友的状态 0 加为好友 1 等待同意 2 成为好友
+				if(obj.flag == 0){
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>认识一下</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/type/2.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
+                        '</div></li>';
+				}else if(obj.flag == 1){
+                    var FriendStaus = '<label>等待同意</label>';
+                    HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
+                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/type/2.html" class="link">' +
+                        '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
+                        '</div></li>';
+				}else{
+                    HTML += '';
+				}
+				//微信号
+
+
+
+			}
+			break;
+		case "knowothers":
+            var y = new Date();
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+
+                if(obj.Province){
+                    var Province = obj.Province;
+                }else{
+                    var Province = '';
+                }
+
+                if(obj.City){
+                    var city = obj.City;
+                }else{
+                    var city = '';
+                }
+
+                if(obj.height){
+                    var height = obj.height;
+                }else{
+                    var height = '';
+                }
+
+                if(obj.Sign){
+                    var sign = obj.Sign;
+                }else{
+                    var sign = '';
+                }
+                if(obj.sex){
+                    if(obj.sex==1){
+                        var sex = "男";
+                    }else{
+                        var sex = "女";
+                    }
+                }else{
+                    var sex = '';
+                }
+
+                if(obj.start){
+                    var start = obj.start;
+                }else{
+                    var start = '';
+                }
+                if(obj.blood){
+                    var blood = obj.blood;
+                }else{
+                    var blood = '';
+                }
+
+                if(obj.zhiye){
+                    var job = obj.zhiye;
+                }else{
+                    var job = '';
                 }
                 //have wechat
                 if(obj.wechat){
@@ -599,7 +674,8 @@ function JsonHtml(obj, data) {
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
                         '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/knowothers/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
-                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b><span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+                        '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
+                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+wechat+'</div>' +
                         '</div></li>';
                 }else{
@@ -617,9 +693,9 @@ function JsonHtml(obj, data) {
 				var obj = data[i];
 				
 				if(obj.Province){
-					var pro = obj.Province;
+					var Province = obj.Province;
 				}else{
-					var pro = '';
+					var Province = '';
 				}
 				
 				if(obj.City){
@@ -648,19 +724,32 @@ function JsonHtml(obj, data) {
 				}else{
 					var sex = '';
 				}
-				
-				if(obj.blood && obj.start){
-					var bstart = obj.start+obj.blood;
+
+				if(obj.start){
+					var start = obj.start;
 				}else{
-					var bstart = '';
-				}	
-				
+					var start = '';
+				}
+				if(obj.blood){
+					var blood = obj.blood;
+				}else{
+					var blood = '';
+				}
+
+				if(obj.zhiye){
+					var job = obj.zhiye;
+				}else{
+					var job = '';
+				}
+
+
+                // 上海浦东 男女符号 29岁 水瓶A 在读初中生 156cm
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 					'<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div>' +
-					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/myfriend/jh/1.html" class="link">' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/myfriend/jh/1/type/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-					'<span>' + (y.getFullYear() - obj.birthdayyear) + '岁 ' + sex +' '+ pro + ' ' + city + ' '+ bstart +' '+ height +'</span></p>' +
+					'<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
 					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a>' +
 					'</div></li>';
 			}

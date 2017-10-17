@@ -385,31 +385,24 @@ class Bus extends BaseController
     }
 
     function agree(){
-        $fid = input('fid');  //想加为好友的id
+        $fid = input('fid');  //想加为好友那个人的id
         $uid = input('suid'); //同意者的id
         $id = input('frid');  //发起请求者的朋友id
         $kid = input('kid');  //konw 表id
         $type = input('type');  // 添加好友的方式
         $from = input('from');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
         //更新对应表中的状态
-        if($type == 0){
+        //<!--type: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
+        //<!--from: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
+        if($type == 3){
             $db = new know();
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
-        }else if($type == 1){
+        }else if($type == 0){
             $db = new Alternative();
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
         }
 
-        //防止重复添加 如果是从likeme中同意，那就是不为0就行，如果detail/index中同意则需要 不为 1
-        //设置状态 from = 1 从likeme， 其余是从detail中来
-        //通过判断
-        if($from != 'likeme'){
-            if($isHave['flag'] != 0){
-                $error_code= 0;
-                $msg="请勿重复请求！";
-                die(json_encode(['error_code'=>$error_code,'msg'=>$msg]));
-            }
-        }elseif($from == 'likeme'){
+        if($from == 'likeme'){
             if($isHave['flag'] != 1){
                 $error_code= 0;
                 $msg="请勿重复请求！";
@@ -417,28 +410,25 @@ class Bus extends BaseController
             }
         }
 
-
-        if($type == 0) {
+        if($type == 3) {
             //改变know中flag状态
             $knowDb = new know();
             $lab_data = [
                 'flag' => 2,
                 'addtime' => time(),
             ];
-
+            $types = 'likeme';
             $knowDb->save($lab_data, ['id' => $isHave['id']]);
-        }elseif($type == 1){
+        }elseif($type == 4){
             //改变alertnative中flag状态
             $knowDb = new Alternative();
             $lab_data = [
                 'flag' => 2,
                 'addtime' => time(),
             ];
-
+            $types = 'mysaw';
             $knowDb->save($lab_data, ['id' => $isHave['id']]);
         }
-
-
 
 		$data=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
@@ -448,7 +438,6 @@ class Bus extends BaseController
 
 
 		$mdb = new Message();
-
         $lab_mdata=[
             'sendid'=>$uid,
             'toid'=>$fid,
@@ -456,9 +445,33 @@ class Bus extends BaseController
             'flag'=>'0',
             'fid'=>$id,
         ];
-
        $mdb ->save($lab_mdata);
+        //给对方发送模板消息
+        $fdata=user::alias('a')
+            ->field('b.nickname as name,b.*,a.*')
+            ->join('weixin b','b.id=a.wid')
+            ->where('a.ID', $fid)
+            ->find();
+        $data=user::alias('a')
+            ->field('b.nickname as name,b.*,a.*')
+            ->join('weixin b','b.id=a.wid')
+            ->where('a.ID',$uid)
+            ->find();
 
+        $options = Config::get('wechat');
+        $app = new Application($options);
+        $notice = $app->notice;
+        $userId = $fdata["openid"];
+        $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
+        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/from/haveagreed/type/'.$types;
+        $data = array(
+            "first"  => $data['name']."已经同意了您的好友请求",
+            "keyword1"   => $data['name'],
+            "keyword2"  => "星数奇缘",
+            "keyword3"  => date("Y-m-d",time()),
+            "remark" => "点击这里查看TA的微信号",
+        );
+        $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
 
 		$error_code='0';
 	   $msg="添加对方为好友成功";
