@@ -314,7 +314,7 @@ function JsonHtml(obj, data) {
 					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/hulue/jh/1/type/6.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                    '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
 					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
 			}
 			break;
@@ -377,7 +377,7 @@ function JsonHtml(obj, data) {
 					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                    '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
 					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a></div></li>';
 			}
 			break;
@@ -434,12 +434,13 @@ function JsonHtml(obj, data) {
                 }else{
                     var job = '';
                 }
-                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',0,\'likeme\')>同意</label>';
+                // agree(271,269,1,3,3);
+                var FriendStaus = '<label onclick=agree('+obj.nuid+','+obj.uid+','+obj.id+',3,3)>同意</label>';
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/id/'+obj.id+'/from/likeme/jh/1/type/3.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                    '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                    '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
 					'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
 					'</div></li>';
 			}
@@ -503,22 +504,22 @@ function JsonHtml(obj, data) {
 					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>认识一下</label>';
 					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 						'<div class="mui-slider-right mui-disabled">' +
-						'<a class="mui-btn mui-btn-red">删除记录</a></div>' +
-						'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+						'</div>' +
+						'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mysaw/id/'+ data[i].id +'/jh/1/type/4.html" class="link">' +
 						'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
 						'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
 						'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
 						'</div></li>';
                 }else if(obj.flag == 1){
                     var FriendStaus = '<label>等待同意</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
                         '<div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div>' +
-                        '<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/jh/1.html" class="link">' +
+                        '</div>' +
+                        '<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mysaw/id/'+ data[i].id +'/jh/1/type/4.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div></a>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div>' +
                         '</div></li>';
 				}
@@ -583,22 +584,22 @@ function JsonHtml(obj, data) {
 
 				//判断添加好友的状态 0 加为好友 1 等待同意 2 成为好友
 				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+')>认识一下</label>';
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',2,2)>认识一下</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/type/2.html" class="link">' +
+                        '</div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/id/'+ data[i].nuid +'/type/2.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
+                        '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'</div>' +
                         '</div></li>';
 				}else if(obj.flag == 1){
                     var FriendStaus = '<label>等待同意</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/type/2.html" class="link">' +
+                        '</div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/id/'+ data[i].nuid +'/type/2.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
-                        '<p class="mui-ellipsis">' + sign + '</p></a><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div>' +
+                        '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
+                        '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+'</div>' +
                         '</div></li>';
 				}else{
                     HTML += '';
@@ -672,10 +673,10 @@ function JsonHtml(obj, data) {
                 if(obj.flag == 2){
                     var FriendStaus = '<label>互相认识</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
-                        '<a class="mui-btn mui-btn-red">删除记录</a></div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/knowothers/jh/1.html" class="link">' +
+                        '</div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/'+ data[i].uid +'/from/knowothers/type/'+ data[i].from +'/id/'+ data[i].id +'/jh/1.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
                         '<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-                        '<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
+                        '<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
                         '<p class="mui-ellipsis">' + sign + '</p></a>'+FriendStaus+wechat+'</div>' +
                         '</div></li>';
                 }else{
@@ -691,25 +692,25 @@ function JsonHtml(obj, data) {
 			var y = new Date();
 			for (var i = 0; i < data.length; i++) {
 				var obj = data[i];
-				
+
 				if(obj.Province){
 					var Province = obj.Province;
 				}else{
 					var Province = '';
 				}
-				
+
 				if(obj.City){
 					var city = obj.City;
 				}else{
 					var city = '';
 				}
-				
+
 				if(obj.height){
 					var height = obj.height;
 				}else{
 					var height = '';
 				}
-				
+
 				if(obj.Sign){
 					var sign = obj.Sign;
 				}else{
@@ -742,18 +743,24 @@ function JsonHtml(obj, data) {
 					var job = '';
 				}
 
+				if(obj.flag == 0){
+                    var FriendStaus = '<label>认识一下</label>';
+				}else if(obj.flag == 1){
+                    var FriendStaus = '<label>等待同意</label>';
+				}else if(obj.flag == 2){
+                    var FriendStaus = '<label>对方已同意</label>';
+				}
 
-                // 上海浦东 男女符号 29岁 水瓶A 在读初中生 156cm
 				HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
-					'<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red">删除记录</a></div>' +
-					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/from/myfriend/jh/1/type/1.html" class="link">' +
+					'<div class="mui-slider-right mui-disabled"></div>' +
+					'<div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/'+ data[i].uid +'/from/myfriend/id/'+ data[i].id +'/jh/1/type/1.html" class="link">' +
 					'<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
 					'<div class="mui-media-body"><p class="title"><b>' + obj.nickname + '</b>' +
-					'<span>' + Province + '-' + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job + height +'cm</span></p>' +
-					'<p class="mui-ellipsis">' + sign + '</p><label>' + Common.getTimeformat(data[i].addtime,3) + '</label></div></a>' +
+					'<span>' + Province + city +' '+ sex +' '+ (y.getFullYear() - obj.birthdayyear) + '岁 ' + start + blood +' '+ job +' '+ height +'</span></p>' +
+					'<p class="mui-ellipsis">' + sign + '</p>'+FriendStaus+'</div></a>' +
 					'</div></li>';
 			}
-			break; 
+			break;
 		case "recommend":
 			if (data.num > 0) {
 				var address;
@@ -764,7 +771,7 @@ function JsonHtml(obj, data) {
 					} else {
 						address = obj["province"]
 					}
-					HTML += '<li class="mui-table-view-cell mui-media"><div class="mui-pull-left mui-media-object clip-bg" style="background: url(' + obj["avatar"] + ');"><a href="/user/' + obj["userid"] + '.html" class="link"></a></div><div class="mui-media-body"><a href="/user/' + obj["userid"] + '.html" class="link"><b>' + obj["username"] + '</b><span>' + Common.getBirthdayyear(obj["birthdayyear"]) + '岁，' + address + '，' + obj["height"] + 'cm</span><p class="mui-ellipsis">内心独白：' + obj["monolog"] + '</p></a></div><div><a href="javascript:;" class="do-message-hi" objid="' + obj["userid"] + '"><span class="ico ico-msg-hi"></span>打招呼</a><a href="javascript:;" objid="' + obj["userid"] + '" class="do-message-add"><span class="ico ico-msg-call"></span>发信息</a></div></li>';
+					HTML += '<li class="mui-table-view-cell mui-media"><div class="mui-pull-left mui-media-object clip-bg" style="background: url(' + obj["avatar"] + ');"><a href="/user/' + obj["userid"] + '.html" class="link"></a></div><div class="mui-media-body"><a href="/user/' + obj["userid"] + '.html" class="link"><b>' + obj["username"] + '</b><span>' + Common.getBirthdayyear(obj["birthdayyear"]) + '岁，' + address + '，' + obj["height"] + '</span><p class="mui-ellipsis">内心独白：' + obj["monolog"] + '</p></a></div><div><a href="javascript:;" class="do-message-hi" objid="' + obj["userid"] + '"><span class="ico ico-msg-hi"></span>打招呼</a><a href="javascript:;" objid="' + obj["userid"] + '" class="do-message-add"><span class="ico ico-msg-call"></span>发信息</a></div></li>';
 				}
 			} else {
 				// 数据为空
@@ -796,17 +803,17 @@ function JsonHtml(obj, data) {
 			break;
 		case "like_s":
 			var val = data.renshi;
-			
+
 			if(val['Sign']){
 				var sign = val['Sign'];
 			}else{
 				var sign = '';
 			}
-			
+
 			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:10px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="/tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'"></a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['renshival']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.renshiage+'</span><span>'+data.renshistart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
-			
-			HTML +='<section class="cm-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
-			
+
+			HTML +='<section class="-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
+
 			if(val['height']){
 				HTML+='<span class="value-item">'+val['height']+'</span>';
 			}
@@ -816,47 +823,47 @@ function JsonHtml(obj, data) {
 			if(val['Gqzt']){
 				HTML+='<span class="value-item">'+val['Gqzt']+'</span>';
 			}
-			
+
 			HTML+='<span class="value-item">'+val['xianju']+'</span>';
-			
+
 			if(val['salary']){
 				HTML+='<span class="value-item">'+val['salary']+'万</span>';
 			}
-			
+
 			if(val['education']){
 				HTML+='<span class="value-item">'+val['education']+'</span>';
 			}
-			
+
 			if(val['Blood']){
 				HTML+='<span class="value-item">'+val['Blood']+'型</span>';
 			}
-			
+
 			if(val['character']){
 				HTML+='<span class="value-item">'+val['character']+'</span>';
 			}
-			
+
 			HTML+='</div></div></div><div class="group"><div class="label">推荐理由</div><div class="values" style="padding-left: 97px;padding-bottom:30px;"><div class="values-main" style="padding-right:0px;font-size:15px;">'+data['renshival']['tjly']+'</div><div></div></section><div id="infox" likeid="'+data.likeid+'" num="'+data.snum+'" renshiuid="'+val['nuid']+'"></div>';
-			
+
 			HTML +='<nav class="footbar mui-clearfix">';
-			
+
 			HTML += '<a href="javascript:;" class="footbar-item" onclick=send('+data.uid+','+data.likeid+','+val['nuid']+')><div class="footbar-icon beixuan-icon" status="false"></div><span class="mui-tab-label">加为好友</span></a>';
 
 			// HTML +='<a href="/index.php/weixin/bus/xhhelp" class="footbar-item link"><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">小红帮忙</span></a></nav>';
 			break;
-		
+
 		case "bei_s":
 			var val = data.beixuan;
-			
+
 			if(val['Sign']){
 				var sign = val['Sign'];
 			}else{
 				var sign = '';
 			}
-			
+
 			HTML +='<header class="mui-bar mui-bar-nav nav-transparent" style="margin-top:10px;"><a href="/index.php/weixin/center/index" class="mui-bar-nav-home link" style="left: 1em;"></a><h1 class="mui-title">'+val['name']+'</h1><a class="link" style="right:0.8em;font-size:14px!important;position:absolute;line-height:40px;padding-right:0.5em!important;color:#fff;" style="color:#ccc;" href="/tousu/btuid/'+val['nuid']+'/tuid/'+data.uid+'"></a></header><div class="self-intro" onclick=detail('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'");><div class="self-intro-main"><div class="self-avatar" style="background-image:url('+val['header']+');"><div class="audit-hint"></div></div><div class="data"><span class="sex" status="'+val['Sex']+'"></span><span>'+data.beixuanage+'</span><span>'+data.beixuanstart+'</span></div><div class="mood">'+sign+'</div></div><img class="self-intro-bg" src="/static/weixin/images/self_detail_top.jpg" /></div>';
-			
-			HTML +='<section class="cm-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
-			
+
+			HTML +='<section class="-list-style"><div class="group"><div class="label">基础信息</div><div class="values" style="padding-left: 100px;"><div class="values-main" style="padding-left:0px;">';
+
 			if(val['height']){
 				HTML+='<span class="value-item">'+val['height']+'</span>';
 			}
@@ -866,27 +873,27 @@ function JsonHtml(obj, data) {
 			if(val['Gqzt']){
 				HTML+='<span class="value-item">'+val['Gqzt']+'</span>';
 			}
-			
+
 			HTML+='<span class="value-item">现居:'+val['xianju']+'</span>';
-			
+
 			if(val['salary']){
 				HTML+='<span class="value-item">'+val['salary']+'万</span>';
 			}
-			
+
 			if(val['education']){
 				HTML+='<span class="value-item">'+val['education']+'</span>';
 			}
-			
+
 			if(val['Blood']){
 				HTML+='<span class="value-item">血型:'+val['Blood']+'型</span>';
 			}
-			
+
 			if(val['character']){
 				HTML+='<span class="value-item">'+val['character']+'</span>';
 			}
-			
+
 			HTML+='</div></div></div><div class="group"><div class="label">推荐理由</div><div class="values" style="padding-left: 97px;padding-bottom:30px;"><div class="values-main" style="padding-right:0px;font-size:15px;">'+data['beixuanval']['tjly']+'</div><div></div></section><div id="infox"  num="'+data.num+'" renshiuid="'+val['nuid']+'"></div>';HTML +='<nav class="footbar mui-clearfix">';
-			
+
 			HTML +='<a onclick=hulie('+data.num+','+data.uid+','+val['nuid']+','+data['beixuanval']['id']+'); class="footbar-item"><div class="footbar-icon hulue-icon" status="false"></div><span class="mui-tab-label">忽略</span></a>';
 			HTML +='<a class="footbar-item" onclick=like('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'",'+data['beixuanval']['id']+');><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">认识一下</span></a></nav>';
 			break;
@@ -909,7 +916,7 @@ function JsonHtml(obj, data) {
 				} else {
 					HTML += '<li class="mui-table-view-cell mui-media active"><div class="mui-slider-handle"><p class="title">'+Common.getTimeformat(obj['sendtime'],3)+'</p><span></span><div class="clip-bg mui-media-object" style="background: url('+fromavatar+');"><a href="/user/'+obj['fromuserid']+'.html" class="link"></a></div><div class="mui-media-body"><p>'+emotion_exchange(obj['content'])+'</p></div></div></li>';
 				}
-			}		
+			}
 			break;
 		case "msg":
 				// HTML += '<li class="mui-table-view-cell mui-media"><div class="mui-slider-handle"><a href="/self/notice" class="link"><div class="clip-bg mui-pull-left mui-media-object system"></div><div class="mui-media-body"><font>' + data.noticeCount + '</font><p class="title"><b>系统消息</b></p><p class="mui-ellipsis">您有' + data.noticeCount + '条未读信息</p><label></label></div></a></div></li>';
@@ -975,7 +982,7 @@ function JsonHtml(obj, data) {
 		case "weibo-detail" :
 			for (var i = 0; i < data.length; i++) {
 				var obj = data[i];
-				HTML += '<li class="mui-table-view-cell mui-media"><div class="mui-slider-handle"><div class="clip-bg mui-pull-left mui-media-object" style="background: url('+obj.avatar+');"><a href="/user/'+obj.userid+'.html" class="link"></a></div><div class="mui-media-body"><p class="title"><a href="/user/'+obj['cmuserid']+'.html" class="link"><b>'+obj.username+'</b></a><span>'+obj.cmtime+'</span></p><p>'+obj.content+'</p></div></div></li>';
+				HTML += '<li class="mui-table-view-cell mui-media"><div class="mui-slider-handle"><div class="clip-bg mui-pull-left mui-media-object" style="background: url('+obj.avatar+');"><a href="/user/'+obj.userid+'.html" class="link"></a></div><div class="mui-media-body"><p class="title"><a href="/user/'+obj['userid']+'.html" class="link"><b>'+obj.username+'</b></a><span>'+obj.time+'</span></p><p>'+obj.content+'</p></div></div></li>';
 			};
 			break;
 		case "hibox-send" :
@@ -1008,7 +1015,8 @@ function JsonHtml(obj, data) {
  *添加好友
  */
 function send(suid,id,fid,types){
-    var url = '/index.php/weixin/bus/friend';
+    var url = '/index.php/weixin/pipei/renshi';
+
     if(types){
         type = 1;
     }else{
@@ -1057,19 +1065,14 @@ function send(suid,id,fid,types){
 /*
 同意
  */
-function agree(fid,uid,id,types,from){
-
-    if(types){
-        type = 1;
-    }else{
-        type = 0;
-    }
+function agree(fid,uid,id,type,from){
+    var from = $('#infox').attr('from');
     if(id){
         var url = '/index.php/weixin/bus/agree';
     }else{
-    	//加为好友
         var url = '/index.php/weixin/bus/friend';
     }
+
     $.ajax(url, {
         data: {
             'suid':uid,
@@ -1081,20 +1084,20 @@ function agree(fid,uid,id,types,from){
         dataType: 'json',
         type: 'post',
         success: function(result) {
-            if(result.error_code==0){
-                mui.toast(result.msg);
-                href="/index.php/weixin/center/index";
-                (function(){
-                    var wait = 3;
-                    var interval = setInterval(function(){
-                        var time = --wait;
-                        if(time <= 0) {
-                            location.href = href;
-                            clearInterval(interval);
-                        };
-                    }, 1000);
-                })();
-            }
+//				if(result.error_code==0){
+//				mui.toast(result.msg);
+// 				href="/index.php/weixin/center/index";
+//				(function(){
+//				var wait = 3;
+//				var interval = setInterval(function(){
+//					var time = --wait;
+//					if(time <= 0) {
+//						location.href = href;
+//						clearInterval(interval);
+//					};
+//				}, 1000);
+//				})();
+//				}
         }
     });
 }

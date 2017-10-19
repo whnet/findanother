@@ -1,4 +1,5 @@
 <!--获得from的类型-->
+
 {if $from == 'guangyiguang'}
     <nav class="footbar mui-clearfix">
         <a href="javascript:;" class="footbar-item" id="hulue">
@@ -16,10 +17,10 @@
     </nav>
 {elseif $from == "likeme"}
     {if $frid == 1}
-        <nav class="footbar mui-clearfix">
+        <nav class="footbar mui-clearfix" onclick='agree({$uid},{$suid},{$frid},3,3);'>
             <a style="width:100%;" href="javascript:;" class="footbar-item" >
                 <div class="footbar-icon beixuan-icon" status="false"></div>
-                <span class="mui-tab-label" onclick='agree({$uid},{$suid},{$frid},3,3);'>同意</span></a>
+                <span class="mui-tab-label">同意</span></a>
         </nav>
     {elseif $frid == 2}
         <nav class="footbar mui-clearfix">
@@ -46,16 +47,223 @@
     <nav class="footbar mui-clearfix">
         <a style="width:100%;" href="javascript:;" class="footbar-item" >
             <div class="footbar-icon beixuan-icon" status="false"></div>
-            <span class="mui-tab-label">双方已同意</span></a>
+            <span class="mui-tab-label">相互已认识</span></a>
     </nav>
 {elseif $from == 'myfriend'}
+{if $frid == 0}
+    <nav class="footbar mui-clearfix">
+        <a href="javascript:;" class="footbar-item" onclick='hulve({$uid},{$suid},{$frid},1,1);'>
+            <div class="footbar-icon hulue-icon" status="false"></div>
+            <span class="mui-tab-label">忽略</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" id="msgrecord">
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">放入备选</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" onclick="send({$suid},{$id},{$uid},1,1)">
+            <div class="footbar-icon renshi-icon" status="false"></div>
+            <span class="mui-tab-label">认识一下</span>
+        </a>
+    </nav>
+{elseif $frid ==1}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">等待对方同意</span></a>
+    </nav>
+{elseif $frid ==2}
+    <nav class="footbar mui-clearfix">
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">对方已同意</span></a>
+    </nav>
+{/if}
+{elseif $from == 'mylike'}
+    {if $frid == 2}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">对方已同意</span></a>
+        </nav>
+    {elseif $frid == 1}
+        <nav class="footbar mui-clearfix">
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label">等待对方同意</span></a>
+        </nav>
+    {elseif $frid == 0}
+        <nav class="footbar mui-clearfix" onclick="send({$suid},{$id},{$uid},2,2)">
+            <!--send(269,258,271,2,2)-->
+            <a style="width:100%;" href="javascript:;" class="footbar-item" >
+                <div class="footbar-icon beixuan-icon" status="false"></div>
+                <span class="mui-tab-label" >认识一下</span></a>
+        </nav>
+    {/if}
+{elseif $from == 'renshi'}
+    {if $frid == 2}
     <nav class="footbar mui-clearfix">
         <a style="width:100%;" href="javascript:;" class="footbar-item" >
             <div class="footbar-icon beixuan-icon" status="false"></div>
             <span class="mui-tab-label">双方已同意</span></a>
     </nav>
+    {elseif $frid == 1}
+    <nav class="footbar mui-clearfix" onclick='agree({$uid},{$suid},1,3,3);'>
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">同意</span></a>
+    </nav>
+    {elseif $frid == 0}
+    <nav class="footbar mui-clearfix" onclick="send({$suid},{$id},{$uid},2,2)">
+        <!--send(269,258,271,2,2)-->
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label" >认识一下</span></a>
+    </nav>
+    {/if}
+{elseif $from == 'fromWechatToAgreed'}
+    <nav class="footbar mui-clearfix" >
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">对方已同意</span></a>
+    </nav>
+{elseif $from == 'mysaw'}
+    {if $frid == 0}
+    <nav class="footbar mui-clearfix">
+
+        <a href="javascript:;" class="footbar-item" onclick='hulve({$uid},{$suid},{$frid},1,1);'>
+            <div class="footbar-icon hulue-icon" status="false"></div>
+            <span class="mui-tab-label">忽略</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" id="havemsgrecord">
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">放入备选</span>
+        </a>
+        <a href="javascript:;" class="footbar-item" onclick="AlertSend({$suid},{$id},{$uid},1)">
+            <div class="footbar-icon renshi-icon" status="false"></div>
+            <span class="mui-tab-label">认识一下</span>
+        </a>
+    </nav>
+{elseif $frid == 1}
+<nav class="footbar mui-clearfix" onclick='agree({$uid},{$suid},1,4,4);' >
+    <a style="width:100%;" href="javascript:;" class="footbar-item" >
+        <div class="footbar-icon beixuan-icon" status="false"></div>
+        <span class="mui-tab-label">同意</span></a>
+</nav>
+{elseif $frid == 2}
+    <nav class="footbar mui-clearfix" >
+        <a style="width:100%;" href="javascript:;" class="footbar-item" >
+            <div class="footbar-icon beixuan-icon" status="false"></div>
+            <span class="mui-tab-label">已同意对方请求</span></a>
+    </nav>
 {/if}
 <script>
+    $('#havemsgrecord').click(function(){
+        mui.toast('已经放入备选！');
+    });
+</script>
+{/if}
+<script>
+    /*
+     *从备选中添加好友 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers,
+     */
+    function AlertSend(suid,id,uid,types){
+        var url = '/index.php/weixin/pipei/AlertRenshi';
+        if(types){
+            type = 1;
+        }else{
+            type = 0;
+        }
+        $.ajax(url, {
+            data: {
+                'suid':suid,
+                'id':id,
+                'uid':uid,
+                'type':type,
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function(result) {
+//                if(result.error_code==0){
+//                    mui.toast(result.msg);
+//                    href="/index.php/weixin/center/index";
+//                    (function(){
+//                        var wait = 3;
+//                        var interval = setInterval(function(){
+//                            var time = --wait;
+//                            if(time <= 0) {
+//                                location.href = href;
+//                                clearInterval(interval);
+//                            };
+//                        }, 1000);
+//                    })();
+//                }else if(result.error_code== 1){
+//                    mui.toast(result.msg);
+//                    href="/index.php/weixin/center/index";
+//                    (function(){
+//                        var wait = 3;
+//                        var interval = setInterval(function(){
+//                            var time = --wait;
+//                            if(time <= 0) {
+//                                location.href = href;
+//                                clearInterval(interval);
+//                            };
+//                        }, 1000);
+//                    })();
+//                }
+            }
+        });
+    }
+    /*
+     *添加好友
+     */
+    function send(suid,id,uid,types){
+        var url = '/index.php/weixin/pipei/renshi';
+
+        if(types){
+            type = 1;
+        }else{
+            type = 0;
+        }
+        $.ajax(url, {
+            data: {
+                'suid':suid,
+                'id':id,
+                'uid':uid,
+                'type':type,
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function(result) {
+//                if(result.error_code==0){
+//                    mui.toast(result.msg);
+//                    href="/index.php/weixin/center/index";
+//                    (function(){
+//                        var wait = 3;
+//                        var interval = setInterval(function(){
+//                            var time = --wait;
+//                            if(time <= 0) {
+//                                location.href = href;
+//                                clearInterval(interval);
+//                            };
+//                        }, 1000);
+//                    })();
+//                }else if(result.error_code== 1){
+//                    mui.toast(result.msg);
+//                    href="/index.php/weixin/center/index";
+//                    (function(){
+//                        var wait = 3;
+//                        var interval = setInterval(function(){
+//                            var time = --wait;
+//                            if(time <= 0) {
+//                                location.href = href;
+//                                clearInterval(interval);
+//                            };
+//                        }, 1000);
+//                    })();
+//                }
+            }
+        });
+    }
     function agree(fid,uid,id,type,from){
         var from = $('#infox').attr('from');
         if(id){
@@ -92,4 +300,55 @@
             }
         });
     }
+    /*
+    忽略
+     */
+
+    function hulve(fid,uid,id,type,from){
+        var from = $('#infox').attr('from');
+        var url = '/index.php/weixin/pipei/fromCenterToHulve';
+
+        $.ajax(url, {
+            data: {
+                'uid':uid,
+                'suid':fid,
+            },
+            dataType: 'json',
+            type: 'post',
+            success: function(result) {
+//				if(result.error_code==0){
+//				mui.toast(result.msg);
+// 				href="/index.php/weixin/center/index";
+//				(function(){
+//				var wait = 3;
+//				var interval = setInterval(function(){
+//					var time = --wait;
+//					if(time <= 0) {
+//						location.href = href;
+//						clearInterval(interval);
+//					};
+//				}, 1000);
+//				})();
+//				}
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </script>

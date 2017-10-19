@@ -86,6 +86,19 @@
         </div>
 
         <section class="cm-list-style">
+            {if !empty($frid)}
+                {if $frid == 2}
+                    <div class="group">
+                        <div class="label">微信号</div>
+                        <div class="values">
+                            <div class="values-main">
+                                {if $list.wxnumber}<span id="wechat" class="value-item">{$list.wxnumber}</span>{/if}
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+            {/if}
+
             <div class="group">
                 <div class="label">基本资料</div>
                 <div class="values">

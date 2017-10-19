@@ -143,7 +143,7 @@ class Index extends Controller
                                 $ylab_fdata=[
                                     'uid'=>$uid,
                                     'fid'=>$fid,
-                                    'flag'=>2,
+                                    'flag'=>0,
                                     'create_at'=>time(),
                                 ];
 
@@ -168,9 +168,11 @@ class Index extends Controller
                             $this->sendtxtmessage($message,$bopenid);
 
 
-                            //$guanxi2 = $this->get_guanxi($bopenid,$yopenid);
-                            $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$yopenid."/bopenid/".$bopenid."'>点击查看</a>";
-                            $this->sendtxtmessage($bmessage,$yopenid);
+                            //避免多次扫码给对方产生影响
+                            if(!$data) {
+                                $bmessage = $bname . "刚扫码成为你的好友，你和" . $bname . "的关系是：" . $best . "<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/" . $yopenid . "/bopenid/" . $bopenid . "'>点击查看</a>";
+                                $this->sendtxtmessage($bmessage, $yopenid);
+                            }
                             break;
                         }
                         //后判断是否填写资料，因为有一个break 注意判断顺序

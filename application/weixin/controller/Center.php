@@ -30,8 +30,18 @@ class Center extends BaseController
 
         //互相认识的
         $knowCountOne = know::where('flag',2)->where('suid',$suid)->count();
-        $knowCountTwo = know::where('flag',2)->where('uid',$suid)->count();
+        if(!$knowCountOne){
+            $knowCountTwo = know::where('flag',2)->where('uid',$suid)->count();
+        }else{
+            $knowCountTwo = 0;
+        }
+
         $alterCountOne = alternative::where('flag',2)->where('uid',$suid)->count();
+        if(!$alterCountOne){
+            $alterCountOne = alternative::where('flag',2)->where('uid',$suid)->count();
+        }else{
+            $alterCountOne = 0;
+        }
         $alterCountTwo = alternative::where('flag',2)->where('suid',$suid)->count();
         $othersnum = $knowCountOne + $knowCountTwo + $alterCountOne + $alterCountTwo;
         //互相认识的 END
@@ -39,7 +49,7 @@ class Center extends BaseController
 		$knum = know::where('flag','<>',2)->where('suid',$suid)->count(); //我想认识的
         //echo know::getlastSql();
 		$hnum = hulue::where('flag','<>',2)->where('suid',$suid)->count(); //我忽略的
-		$fnum = friends::where('flag',2)->where('uid',$suid)->count();//我的好友
+		$fnum = friends::where('flag','<>',3)->where('uid',$suid)->count();//我的朋友圈
 		$anum = alternative::where('flag','<>',2)->where('suid',$suid)->count();//我的备选
 		$xknum = know::where('flag','<>',2)->where('uid',$suid)->count();//想认识我的
 
@@ -211,7 +221,6 @@ class Center extends BaseController
 				$userinfo[$k]['flag'] = $v['flag'];
 				$userinfo[$k]['uid'] = $uval['ID'];
 				$userinfo[$k]['nuid'] = $uinfo['suid'];
-				$userinfo[$k]['wechat'] = $uinfo['wxnumber'];
 				$userinfo[$k]['Province'] = $uinfo['Province'];
 				$userinfo[$k]['City'] = $uinfo['City'];
 				$userinfo[$k]['height'] = $uinfo['height'];
@@ -250,11 +259,11 @@ class Center extends BaseController
 		$data = know::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
 		$mdata = know::where('uid',$uval['ID'])->where('flag',2)->limit($limit)->select();
 		if(!empty($data)){
-            $kuserinfo = $this->userInfo($uval,$data,0);
+            $kuserinfo = $this->userInfo($uval,$data,0,1);
 			$msg = '成功';
 			$error_code = 0;
 		}else if(!empty($mdata)){
-            $kuserinfo = $this->userInfo($uval,$mdata,1);
+            $kuserinfo = $this->userInfo($uval,$mdata,1,1);
             $msg = '成功';
             $error_code = 0;
         }else{
@@ -267,11 +276,11 @@ class Center extends BaseController
         $alterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
         $malterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
         if(!empty($alterData)){
-            $auserinfo = $this->userInfo($uval,$malterData,0);
+            $auserinfo = $this->userInfo($uval,$malterData,0,2);
             $msg = '成功';
             $error_code = 0;
         }else if(!empty($malterData)){
-            $auserinfo = $this->userInfo($uval,$malterData,1);
+            $auserinfo = $this->userInfo($uval,$malterData,1,2);
             $msg = '成功';
             $error_code = 0;
         }else{
@@ -282,7 +291,7 @@ class Center extends BaseController
 		//合并数组，得出一个联合三个表的总数组
         $userinfo = array_merge($kuserinfo, $auserinfo);
 
-		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo,'msg'=>$msg]);
+		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo]);
 	}
 	
 	public function ajaxhulue(){
@@ -394,7 +403,7 @@ class Center extends BaseController
 			->where('a.openid',$openid)
 			->find();
 			
-		$data = Alternative::where('suid',$uval['ID'])->where('flag',0)->limit($limit)->select();
+		$data = Alternative::where('suid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -935,13 +944,20 @@ class Center extends BaseController
 		$this->assign('message',$message);
 		return $this->fetch('zhezhao');
 	}
-     public function userInfo($uval,$data,$type){
+     public function userInfo($uval,$data,$type,$from){
 
          foreach($data as $k => $v){
              if($type == 1){
                  $id = $v['suid'];
               }else{
                  $id = $v['uid'];
+             }
+             if($from == 1){
+                 //know
+                 $from = 3;
+             }elseif($from == 2){
+                 //alertnative
+                 $from = 4;
              }
              $uinfo=user::alias('a')
                  ->field('a.*,a.ID as suid,b.*')
@@ -950,6 +966,7 @@ class Center extends BaseController
                  ->find();
              $test = user::getLastSql();
              $userinfo[$k]['id'] = $v['id'];
+             $userinfo[$k]['from'] = $from;
              $userinfo[$k]['wechat'] = $uinfo['wxnumber'];
              $userinfo[$k]['flag'] = $v['flag'];
              $userinfo[$k]['uid'] = $uval['ID'];

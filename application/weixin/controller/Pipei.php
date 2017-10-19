@@ -141,7 +141,38 @@ class Pipei extends BaseController
 
         exit();
     }
+    public function fromCenterToHulve(Request $request){
+        $num = 0;
+        $uid = $request->param('uid');
+        $suid = $request->param('suid');
+        $flag = 0;
 
+
+        $val3 = Hulue::where('uid',$uid)->where('suid',$suid)->find();
+
+        if(!empty($val3)){
+            echo json_encode(['error_code'=>1,'msg'=>'已添加到了忽略列表,不能重复添加！','url'=>'index']);
+            exit();
+        }
+
+        $db = new Hulue();
+        $lab_data=[
+            'uid'=>$uid,
+            'suid'=>$suid,
+        ];
+        $db ->save($lab_data);
+        //同时删除备选表中的信息
+        $deAlertNative::where('uid',$uid)->where('suid',$suid)->delete();
+
+
+        if($flag == 1){
+            echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'忽略成功,您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
+        }else{
+            echo json_encode(['error_code'=>1,'url'=>'index','msg'=>'忽略成功！']);
+        }
+
+        exit();
+    }
     public function beixuan(Request $request){
         $num = $request->param('num');
         $uid = $request->param('uid');
@@ -192,6 +223,9 @@ class Pipei extends BaseController
         $suid = $request->param('suid');
         $tjly = $request->param('tjly');
         $flag = $request->param('flag');
+        $type = $request->param('type');
+        $id = $request->param('kid');
+        $kid = $request->param('id');
 
         $val1 = Hulue::where('uid',$uid)->where('suid',$suid)->find();
 
@@ -214,27 +248,66 @@ class Pipei extends BaseController
             echo json_encode(['error_code'=>1,'msg'=>'已添加到了认识列表,不能重复添加！','url'=>'index']);
             exit();
         }
-        //修改 将认识一下 改成 直接加为好友 fuck
+        //修改 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, 6-guangyiguang,
+        $types = 6;
+    if($type == 2 || $type == 3 || empty($type)){
         $db = new Know();
         $lab_data=[
             'uid'=>$uid,
             'suid'=>$suid,
-            'tjly'=>$tjly,
+            'tjly'=>'我想认识',
             'flag'=>1,
-            'addtime'=>time(),//标记添加时间七天后继续添加
+            'addtime'=>time(),
         ];
+        $types = 3;
         $id = $db ->save($lab_data);
+    }elseif($type == 4){
+        $db = new Alternative();
+        $lab_data=[
+            'uid'=>$uid,
+            'suid'=>$suid,
+            'tjly'=>'加入备选',
+            'flag'=>1,
+            'addtime'=>time(),
+        ];
+        $types = 4;
+        $id = $db ->save($lab_data,['id' => $id]);
+    }elseif($type == 1){
+        //从朋友全中相加,将数据放到know中
+        $db = new Know();
+        $lab_data=[
+            'uid'=>$uid,
+            'suid'=>$suid,
+            'tjly'=>'从我的朋友圈中添加我想认识',
+            'flag'=>1,
+            'status'=>$kid,//为know中的id
+            'addtime'=>time(),
+        ];
+        $types = 3;
+        $id = $db ->save($lab_data);
+        //同时更新 friends对应的flag状态
+            $db = new Friends();
+            $lab_data=[
+                'flag'=>1,
+            ];
+            $id = $db ->save($lab_data,['id' => $kid]);
 
-
-
+    }
+    if(!empty($id)){
+            if(!$id){
+                echo json_encode(['error_code'=>1,'url'=>'','msg'=>'失败']);
+                exit();
+            }
+    }
 
         if($flag == 1){
             echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
+            exit();
         }else{
             //发送模板消息
             $frid = 1;
             $kid = 0;
-            $type = 0;
+            $type = $type;
             $data=user::alias('a')
                 ->field('b.nickname as name,b.*,a.*')
                 ->join('weixin b','b.id=a.wid')
@@ -246,15 +319,86 @@ class Pipei extends BaseController
                 ->join('weixin b','b.id=a.wid')
                 ->where('a.ID',$uid)
                 ->find();
-
-
             $options = Config::get('wechat');
             $app = new Application($options);
             $notice = $app->notice;
             $userId = $fdata["openid"];
             $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
             //flag2 = 1 等待同意,
-            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/kid/'.$kid.'/jh/1/type/'.$type;
+            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/from/renshi/status/toagree/kid/'.$kid.'/jh/1/type/'.$types;
+            $data = array(
+                "first"  => "有人想认识你一下:",
+                "keyword1"   => $data['name'],
+                "keyword2"  => "星数奇缘",
+                "keyword3"  => date("Y-m-d",time()),
+                "remark" => "点击这里查看TA的详细资料，同意后可以互相看到微信号",
+            );
+            $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
+            //发送模板消息END
+            echo json_encode(['error_code'=>1,'url'=>'index','msg'=>'添加成功！']);
+        }
+
+
+    }
+
+    public function AlertRenshi(Request $request){
+        $num = $request->param('num');
+        $uid = $request->param('uid');
+        $suid = $request->param('suid');
+        $tjly = $request->param('tjly');
+        $flag = $request->param('flag');
+        $type = $request->param('type');
+        $id = $request->param('id');
+
+        //修改 将认识一下 改成 直接加为好友 fuck
+    if($type == 0){
+        $db = new Know();
+        $lab_data=[
+            'uid'=>$uid,
+            'suid'=>$suid,
+            'tjly'=>'我想认识',
+            'flag'=>1,
+            'addtime'=>time(),
+        ];
+        $id = $db ->save($lab_data);
+    }elseif($type == 1){
+        $db = new Alternative();
+        $lab_data=[
+            'uid'=>$uid,
+            'suid'=>$suid,
+            'tjly'=>'从备选中添加好友',
+            'flag'=>1,
+            'addtime'=>time(),
+        ];
+        $id = $db ->save($lab_data,['id' => $id]);
+    }
+
+        if($flag == 1){
+            echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
+            exit();
+        }else{
+            //发送模板消息
+            $frid = 1;
+            $kid = 0;
+            $type = 4;
+            $data=user::alias('a')
+                ->field('b.nickname as name,b.*,a.*')
+                ->join('weixin b','b.id=a.wid')
+                ->where('a.ID',$suid)
+                ->find();
+
+            $fdata=user::alias('a')
+                ->field('b.nickname as name,b.*,a.*')
+                ->join('weixin b','b.id=a.wid')
+                ->where('a.ID',$uid)
+                ->find();
+            $options = Config::get('wechat');
+            $app = new Application($options);
+            $notice = $app->notice;
+            $userId = $fdata["openid"];
+            $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
+            //flag2 = 1 等待同意,
+            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/from/mysaw/status/toagree/kid/'.$kid.'/jh/1/type/'.$type;
             $data = array(
                 "first"  => "有人想认识你一下:",
                 "keyword1"   => $data['name'],

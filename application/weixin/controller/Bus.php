@@ -308,7 +308,7 @@ class Bus extends BaseController
         $uid = input('suid');
         $fid = input('fid');
         $kid = input('kid'); //konw 表id
-        $type = input('type'); //konw 表id
+        $type = input('type');
         $tjly = input('tjly');
         $db = new friends();
         //先判断是否已经发送了添加好友请求
@@ -397,7 +397,7 @@ class Bus extends BaseController
         if($type == 3){
             $db = new know();
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
-        }else if($type == 0){
+        }else if($type == 4){
             $db = new Alternative();
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
         }
@@ -419,6 +419,14 @@ class Bus extends BaseController
             ];
             $types = 'likeme';
             $knowDb->save($lab_data, ['id' => $isHave['id']]);
+            //如果是从朋友圈中来的，则将朋友圈中的状态也改变，新增一个status状态,他的值为friends中的id
+
+            $knowDb = new Friends();
+            $lab_data = [
+                'flag' => 2,
+            ];
+            $types = 'likeme';
+            $knowDb->save($lab_data, ['id' => $isHave['status']]);
         }elseif($type == 4){
             //改变alertnative中flag状态
             $knowDb = new Alternative();
@@ -429,13 +437,11 @@ class Bus extends BaseController
             $types = 'mysaw';
             $knowDb->save($lab_data, ['id' => $isHave['id']]);
         }
-
 		$data=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
             ->join('weixin b','b.id=a.wid')
             ->where('a.ID',$uid)
             ->find();
-
 
 		$mdb = new Message();
         $lab_mdata=[
@@ -463,7 +469,7 @@ class Bus extends BaseController
         $notice = $app->notice;
         $userId = $fdata["openid"];
         $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
-        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/from/haveagreed/type/'.$types;
+        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/from/fromWechatToAgreed/type/'.$type;
         $data = array(
             "first"  => $data['name']."已经同意了您的好友请求",
             "keyword1"   => $data['name'],

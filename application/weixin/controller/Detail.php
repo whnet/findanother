@@ -30,15 +30,13 @@ class Detail extends BaseController
 		$from = !empty($request->param('from'))?$request->param('from'):0;
         $kid = !empty($request->param('kid'))?$request->param('kid'):0;
 		//查看好友申请状态
-
         $frid = '';
         $sendStatus = '';
-         if($type == 3){
+         if($type == 3 || $type == 2 || $type == 1){
              $fridDb = new Know();
              $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
              if($knowFlagOne){
                  $frid = $knowFlagOne['flag'];
-                 //别人想加我为好友
                  $sendStatus = 1;
 
              }
@@ -46,11 +44,24 @@ class Detail extends BaseController
 
              if($knowFlagTwo){
                  $frid = $knowFlagTwo['flag'];
-                 //我想加别人为好友
                  $sendStatus = 2;
              }
+         }elseif($type == 4){
+             $fridDb = new Alternative();
+             $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+             if($knowFlagOne){
+                 $frid = $knowFlagOne['flag'];
+                 $sendStatus = 1;
 
+             }
+             $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
+
+             if($knowFlagTwo){
+                 $frid = $knowFlagTwo['flag'];
+                 $sendStatus = 2;
+             }
          }
+
 
         $list=user::alias('a')
             ->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
@@ -84,7 +95,7 @@ class Detail extends BaseController
         $findval=mfind::where('uid',$list['nuid'])->find();
 		//补充匹配数据
         //flagStatus = ?, 如果是type == 3 ，是从know表中来的，如果type == 4 从alernative
-
+//        var_dump($frid);
         $controller = $request->controller();
         $this->assign('controller', $controller);
 		$this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));

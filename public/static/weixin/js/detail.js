@@ -230,44 +230,44 @@ $(function(){
 			dataType: 'json',
 			type: 'post',
 			success: function(result) {
-				if(flag == 2){
-					if(result.error_code ==0){
-						mui.toast(result.msg);
-					}else{
-						mui.toast(result.msg);
-						var url = result.url;
-
-						(function(){
-							var wait = 2;
-							var interval = setInterval(function(){
-								var time = --wait;
-								if(time <= 0) {
-									location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
-									clearInterval(interval);
-								};
-							}, 1000);
-						})();
-					}
-				}else{
-
-					if(result.error_code ==0){
-						mui.toast(result.msg);
-					}else{
-						mui.toast(result.msg);
-						var url = result.url;
-						
-						(function(){
-							var wait = 3;
-							var interval = setInterval(function(){
-								var time = --wait;
-								if(time <= 0) {
-									location.href = '/index.php/weixin/center/'+url;
-									clearInterval(interval);
-								};
-							}, 1000);
-						})();
-					}
-				}
+				// if(flag == 2){
+				// 	if(result.error_code ==0){
+				// 		mui.toast(result.msg);
+				// 	}else{
+				// 		mui.toast(result.msg);
+				// 		var url = result.url;
+                //
+				// 		(function(){
+				// 			var wait = 2;
+				// 			var interval = setInterval(function(){
+				// 				var time = --wait;
+				// 				if(time <= 0) {
+				// 					location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
+				// 					clearInterval(interval);
+				// 				};
+				// 			}, 1000);
+				// 		})();
+				// 	}
+				// }else{
+                //
+				// 	if(result.error_code ==0){
+				// 		mui.toast(result.msg);
+				// 	}else{
+				// 		mui.toast(result.msg);
+				// 		var url = result.url;
+				//
+				// 		(function(){
+				// 			var wait = 3;
+				// 			var interval = setInterval(function(){
+				// 				var time = --wait;
+				// 				if(time <= 0) {
+				// 					location.href = '/index.php/weixin/center/'+url;
+				// 					clearInterval(interval);
+				// 				};
+				// 			}, 1000);
+				// 		})();
+				// 	}
+				// }
 
 			}
 		});
