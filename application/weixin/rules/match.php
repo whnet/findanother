@@ -64,32 +64,32 @@ if($fage && $bestfind){
     $tuijian = "认识一下";
     $result = "匹配数据";
     $content = "<table>
-                                <tr><td>城市：</td><td>{$self['Province']}-{$self['City']}</td><td></td></tr>
-                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-                                <tr>
-                                <td>48星区：</td>
-                                <td>最佳{$best}</td>
-                                <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
-                                </tr>
-                                </table>";
+    <tr><td>城市：</td><td>{$self['Province']}-{$self['City']}</td></tr>
+    <tr><td>性别：</td><td>{$istxyx}</td></tr>
+    <tr><td>年龄：</td><td>{$isnianling}</td></tr>
+    <tr>
+    <td>48星区：</td>
+    <td>最佳{$best}</td>
+    <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
+    </tr>
+    </table>";
     $tjly = $best.$worst;
 }else{
     $tuijian = "备选观察";
     $result = "匹配数据";
     $content = "<table>
-                                <tr><td>城市：</td><td>{$self['Province']}-{$self['City']}</td><td></td></tr>
-                                <tr><td>性别：</td><td>{$istxyx}</td><td></td></tr>
-                                <tr><td>年龄：</td><td>{$isnianling}</td><td></td></tr>
-                                <tr>
-                                <td>48星区：</td>
-                                <td>最佳{$best}</td>
-                                <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
-                                </tr>
-                                <tr>
-                                
-                                </tr>
-                                </table>";
+    <tr><td>城市：</td><td>{$self['Province']}-{$self['City']}</td></tr>
+    <tr><td>性别：</td><td>{$istxyx}</td></tr>
+    <tr><td>年龄：</td><td>{$isnianling}</td></tr>
+    <tr>
+    <td>48星区：</td>
+    <td>最佳{$best}</td>
+    <td><a id='xingquc' href='xingqu/self/".$self['Birthday']."/list/".$list['Birthday']."'>点击查看</a></td>
+    </tr>
+    <tr>
+    
+    </tr>
+    </table>";
     $tjly = $best.$worst;
 }
 $from = !empty($request->param('from'))?$request->param('from'):0;

@@ -41,9 +41,10 @@
                 <span>{if $list.City}{$list.City}{/if}</span>
                 <span class="sex" status="{$list.Sex}"></span>
                 <span>{$age}岁</span>
-                {if $start && $list.Blood}<span>{$start}{$list.Blood} </span>{/if}
+                {if $start}<span>{$start}</span>{/if}
+                {if $list.Blood}<span>{$list.Blood} </span>{/if}
                 {if $list.zhiye}<span>{$list.zhiye} </span>{/if}
-                {if $list.height}<span>{$list.height}cm </span>{/if}
+                {if $list.height}<span>{$list.height}</span>{/if}
             </div>
             <div class="mood">{$list.Sign}</div>
         </div>
@@ -103,12 +104,15 @@
                 <div class="label">基本资料</div>
                 <div class="values">
                     <div class="values-main">
+                        {if $list.Sex}<span class="value-item">{if $list.Sex == 1}男{else}女{/if}</span>{/if}
+                        {if $list.Birthday}<span class="value-item">{$start}</span>{/if}
+                        {if $list.Province}<span class="value-item">{if $list.Province && $list.City}{$list.Province}-{$list.City}{else /}'未填写'{/if}</span>{/if}
+                        {if $list.Gqzt}<span class="value-item">{$list.Gqzt}</span>{/if}
+                        {if $list.Blood}<span class="value-item">{$list.Blood}型</span>{/if}
+                        {if $list.zhiye}<span class="value-item">{if $list.zhiye}{$list.zhiye}{else /}未填写{/if}</span>{/if}
+                        {if $list.character}<span class="value-item">{$list.character}</span>{/if}
                         {if $list.height}<span class="value-item">{$list.height}cm</span>{/if}
                         {if $list.weight}<span class="value-item">{$list.weight}</span>{/if}
-                        {if $list.Gqzt}<span class="value-item">{$list.Gqzt}</span>{/if}
-                        {if $list.Province && $list.City}<span class="value-item">{$list.Province}-{$list.City}</span>{/if}
-                        {if $list.character}<span class="value-item">{$list.character}</span>{/if}
-                        {if $list.Blood}<span class="value-item">{$list.Blood}型</span>{/if}
                         {if $list.education}<span class="value-item">{$list.education}</span>{/if}
 
                     </div>
@@ -182,7 +186,7 @@
             </div>
         </section>
 
-        <div id="infox" num="{$num}" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" from="{$from}" flag='2'  control='{$controller}'></div>
+        <div id="infox" num="{$num}" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" from="{$from}" flag='{$flag}'  control='{$controller}'></div>
 </div>
 
 {include file="public/nav" /}

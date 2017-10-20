@@ -68,7 +68,7 @@ as[nav - 1].className ='link mui-active'
 <section class="cm-edit-list">
 <a class="title cm-into v-link" href="baseinfo">基本资料</a>
 <div class="mui-row">
-<div class="mui-col-xs-6 mui-col-sm-6">性别 : <em>{if $list.Sex == 1}男{else}女{/if}</em></div>
+	<div class="mui-col-xs-6 mui-col-sm-6">性别 : <em>{if $list.Sex == 1}男{else}女{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">出生日期: <em>{if $list.Birthday}{$list.Birthday|date="Y-m-d",###}{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">所在地区 :<em>{if $list.Province && $list.City}{$list.Province}-{$list.City}{else /}'未填写'{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">婚姻状况 :<em>{if $list.Gqzt}{$list.Gqzt}{else /}未填写{/if}</em></div>
@@ -76,7 +76,7 @@ as[nav - 1].className ='link mui-active'
 	<div class="mui-col-xs-6 mui-col-sm-6">职业 :<em>{if $list.zhiye}{$list.zhiye}{else /}未填写{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">性格 :<em>{if $list.character}{$list.character}{else /}未填写{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">身高 : <em>{if $list.height}{$list.height}cm{else /}未填写{/if}</em></div>
-<div class="mui-col-xs-6 mui-col-sm-6">体重 : <em>{if $list.weight}{$list.weight}{else /}未填写{/if}</em></div>
+    <div class="mui-col-xs-6 mui-col-sm-6">体重 : <em>{if $list.weight}{$list.weight}{else /}未填写{/if}</em></div>
 	<div class="mui-col-xs-6 mui-col-sm-6">微信号 :<em>{$list.wxnumber}</em></div>
 
 </div>

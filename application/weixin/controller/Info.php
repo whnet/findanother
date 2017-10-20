@@ -127,6 +127,24 @@ class Info extends SecdController
             die(json_encode(['result'=>'success','test'=>$imgpath]));
         }
     }
+    /*
+     * 填写微信
+     */
+    public function weixin($id=''){
+        $id = input('id');
+        if(request()->ispost()){
+            $openid = Cookie::get('openid');
+            $val = Weixin::field('id')->where('openid',$openid)->find();
+            $db = new user();
+            $lab_data=[
+                'wxnumber'=>input("wxnamber"),
+            ];
+
+            $uid = $db ->save($lab_data,['ID' => $id]);
+            $this->redirect('Ppbirthday/index',['id'=>$uid,'from'=>'guangyiguang']);
+        }
+        return $this->fetch();
+    }
 
 	public function birthday(){
 

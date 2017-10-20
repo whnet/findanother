@@ -391,6 +391,7 @@ class Bus extends BaseController
         $kid = input('kid');  //konw 表id
         $type = input('type');  // 添加好友的方式
         $from = input('from');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
+        //判断同意者是否存在微信号
         //更新对应表中的状态
         //<!--type: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
         //<!--from: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->

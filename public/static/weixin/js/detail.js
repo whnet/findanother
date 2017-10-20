@@ -211,7 +211,6 @@ $(function(){
 	$('#like').click(function() {
 		//加为好友
 		var url = '/index.php/weixin/pipei/renshi';
-		// var url = '/index.php/weixin/bus/friend';
 
 		var uid = $('#infox').attr('uid');
 		var suid = $('#infox').attr('suid');
@@ -230,44 +229,55 @@ $(function(){
 			dataType: 'json',
 			type: 'post',
 			success: function(result) {
-				// if(flag == 2){
-				// 	if(result.error_code ==0){
-				// 		mui.toast(result.msg);
-				// 	}else{
-				// 		mui.toast(result.msg);
-				// 		var url = result.url;
-                //
-				// 		(function(){
-				// 			var wait = 2;
-				// 			var interval = setInterval(function(){
-				// 				var time = --wait;
-				// 				if(time <= 0) {
-				// 					location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
-				// 					clearInterval(interval);
-				// 				};
-				// 			}, 1000);
-				// 		})();
-				// 	}
-				// }else{
-                //
-				// 	if(result.error_code ==0){
-				// 		mui.toast(result.msg);
-				// 	}else{
-				// 		mui.toast(result.msg);
-				// 		var url = result.url;
-				//
-				// 		(function(){
-				// 			var wait = 3;
-				// 			var interval = setInterval(function(){
-				// 				var time = --wait;
-				// 				if(time <= 0) {
-				// 					location.href = '/index.php/weixin/center/'+url;
-				// 					clearInterval(interval);
-				// 				};
-				// 			}, 1000);
-				// 		})();
-				// 	}
-				// }
+				if(flag == 2){
+					if(result.error_code ==0){
+						mui.toast(result.msg);
+					}else if(result.error_code == 2){
+                        mui.toast(result.msg);
+                        (function(){
+                            var wait = 1;
+                            var interval = setInterval(function(){
+                                var time = --wait;
+                                if(time <= 0) {
+                                    location.href = '/index.php/weixin/info/weixin/id/'+result.id;
+                                    clearInterval(interval);
+                                };
+                            }, 1000);
+                        })();
+					}else{
+						mui.toast(result.msg);
+						var url = result.url;
+						(function(){
+							var wait = 2;
+							var interval = setInterval(function(){
+								var time = --wait;
+								if(time <= 0) {
+									location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
+									clearInterval(interval);
+								};
+							}, 1000);
+						})();
+					}
+				}else{
+
+					if(result.error_code ==0){
+						mui.toast(result.msg);
+					}else{
+						mui.toast(result.msg);
+						var url = result.url;
+
+						(function(){
+							var wait = 3;
+							var interval = setInterval(function(){
+								var time = --wait;
+								if(time <= 0) {
+									location.href = '/index.php/weixin/center/'+url;
+									clearInterval(interval);
+								};
+							}, 1000);
+						})();
+					}
+				}
 
 			}
 		});

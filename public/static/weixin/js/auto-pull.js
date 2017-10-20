@@ -501,7 +501,7 @@ function JsonHtml(obj, data) {
                 }
 
 				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>认识一下</label>';
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',1)>我想认识</label>';
 					HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '">' +
 						'<div class="mui-slider-right mui-disabled">' +
 						'</div>' +
@@ -584,7 +584,7 @@ function JsonHtml(obj, data) {
 
 				//判断添加好友的状态 0 加为好友 1 等待同意 2 成为好友
 				if(obj.flag == 0){
-					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',2,2)>认识一下</label>';
+					var FriendStaus = '<label onclick=send('+obj.uid+','+obj.id+','+obj.nuid+',2,2)>我想认识</label>';
                     HTML += '<li class="mui-table-view-cell mui-media" objid="' + data[i].id + '"><div class="mui-slider-right mui-disabled">' +
                         '</div><div class="mui-slider-handle"><a href="/index.php/weixin/detail/index/uid/' + data[i].nuid + '/suid/' + data[i].uid + '/from/mylike/jh/1/id/'+ data[i].nuid +'/type/2.html" class="link">' +
                         '<div class="clip-bg mui-pull-left mui-media-object" style="background: url(' + obj.headimgurl + ');"></div>' +
@@ -744,7 +744,7 @@ function JsonHtml(obj, data) {
 				}
 
 				if(obj.flag == 0){
-                    var FriendStaus = '<label>认识一下</label>';
+                    var FriendStaus = '<label>我想认识</label>';
 				}else if(obj.flag == 1){
                     var FriendStaus = '<label>等待同意</label>';
 				}else if(obj.flag == 2){
@@ -895,7 +895,7 @@ function JsonHtml(obj, data) {
 			HTML+='</div></div></div><div class="group"><div class="label">推荐理由</div><div class="values" style="padding-left: 97px;padding-bottom:30px;"><div class="values-main" style="padding-right:0px;font-size:15px;">'+data['beixuanval']['tjly']+'</div><div></div></section><div id="infox"  num="'+data.num+'" renshiuid="'+val['nuid']+'"></div>';HTML +='<nav class="footbar mui-clearfix">';
 
 			HTML +='<a onclick=hulie('+data.num+','+data.uid+','+val['nuid']+','+data['beixuanval']['id']+'); class="footbar-item"><div class="footbar-icon hulue-icon" status="false"></div><span class="mui-tab-label">忽略</span></a>';
-			HTML +='<a class="footbar-item" onclick=like('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'",'+data['beixuanval']['id']+');><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">认识一下</span></a></nav>';
+			HTML +='<a class="footbar-item" onclick=like('+val['nuid']+','+data.uid+',"'+data['beixuanval']['tjly']+'",'+data['beixuanval']['id']+');><div class="footbar-icon renshi-icon" status="false"></div><span class="mui-tab-label">我想认识</span></a></nav>';
 			break;
 		case "my-diary":
 			HTML = '<li class="mui-table-view-cell mui-media"><div class="mui-pull-left mui-media-object clip-bg" style="background: url(tmp/member-face1.png);"><a href="个人资料.html" class="link"></a></div><div class="mui-media-body"><a href="个人资料.html" class="link"><b>骑着乌龟看海<span class="mui-pull-right">55741人浏览</span></b><span>05-01 . 广东 广州</span></a></div><div><a href="日记详情.html" class="link"><p class="title"><span class="ico ico-edit"></span>大家好，我是潘盼盼</p><p>五月了。 好好工作，积极锻炼，姻缘事不要抱过多期望， 但也不要象祥林嫂似地抱怨看脸社会、女人价值由年龄 来确定等，虽然很多确实是事实。</p></a></div><div><a href="#"><span class="ico ico-msg-heart"></span><label>567</label></a><a href="#" class="do-del"><span class="ico ico-msg-recycle"></span>删除</a></div></li>';

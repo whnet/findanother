@@ -226,6 +226,14 @@ class Pipei extends BaseController
         $type = $request->param('type');
         $id = $request->param('kid');
         $kid = $request->param('id');
+        //判断是否填写了微信号
+        $currentInfo = User::where('ID',$suid)->find();
+        if(!$currentInfo['wxnumber']){
+            echo json_encode(['error_code'=>2,'id'=>$currentInfo['ID'],'msg'=>'请填写微信号','url'=>'index']);
+            exit();
+        }
+
+exit();
 
         $val1 = Hulue::where('uid',$uid)->where('suid',$suid)->find();
 
