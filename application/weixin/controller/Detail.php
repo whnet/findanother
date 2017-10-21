@@ -19,6 +19,10 @@ class Detail extends BaseController
 {
 	public function index(Request $request)
     {
+        //获取当前的url 写入session
+        $request = Request::instance();
+        $url = $request->url();
+        Session::set('preurl',$url);
         //<!--type: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers,6-hulve -->
         //<!--from: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
 		$suid = $request->param('suid'); //查看者的ID
@@ -96,6 +100,7 @@ class Detail extends BaseController
 		//补充匹配数据
         //flagStatus = ?, 如果是type == 3 ，是从know表中来的，如果type == 4 从alernative
 //        var_dump($frid);
+        var_dump($list);
         $controller = $request->controller();
         $this->assign('controller', $controller);
 		$this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));

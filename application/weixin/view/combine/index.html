@@ -23,7 +23,6 @@
             padding-top: 5px;
         }
     </style>
-    {include file="public/header" /}
     <title>星数奇缘</title>
     <meta name="description" content="星数奇缘婚恋交友网站--星数奇缘：真实的会员{$list.name}个人资料，{$list.name}交友联系电话 ，快来速配，找对象的好去处，星数奇缘实名婚恋网站，直营连锁创导者，更提供丰富多彩的交友征婚活动！">
     <meta name="keywords" content="{$list.name}会员征婚照片电话">
@@ -208,6 +207,34 @@
     }
     }
     })
+</script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config(<?php echo $js->config(array('onMenuShareTimeline', 'onMenuShareAppMessage'), true) ?>);
+    wx.ready(function(){
+        wx.onMenuShareTimeline({
+            title:'{$list.name}的星数奇缘',
+            link:'',
+            imgUrl:'{$list.headimgurl}',
+            success:function(){
+            },
+            cancel:function(){
+            }
+        });
+        wx.onMenuShareAppMessage({
+            title:'{$list.name}',
+            desc:'{$list.name}的星数奇缘',
+            link:'',
+            imgUrl:'{$list.headimgurl}',
+            type:'',
+            dataUrl:'',
+            success:function(){
+            },
+            cancel:function(){
+            }
+        });
+
+    });
 </script>
 </body>
 </html>

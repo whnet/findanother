@@ -296,6 +296,18 @@
 					};
 				}, 1000);
 				})();
+				}else if(result.error_code==2){
+                    mui.toast(result.msg);
+                    (function(){
+                    var wait = 3;
+                    var interval = setInterval(function(){
+                        var time = --wait;
+                        if(time <= 0) {
+                            location.href = '/index.php/weixin/info/weixin/id/'+result.id;
+                            clearInterval(interval);
+                        };
+                    }, 1000);
+                    })();
 				}
             }
         });

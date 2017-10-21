@@ -141,7 +141,11 @@ class Info extends SecdController
             ];
 
             $uid = $db ->save($lab_data,['ID' => $id]);
-            $this->redirect('Ppbirthday/index',['id'=>$uid,'from'=>'guangyiguang']);
+
+            //通过session控制跳转
+            $preUrl = Session::get('preurl');
+            $this->redirect($preUrl);
+
         }
         return $this->fetch();
     }

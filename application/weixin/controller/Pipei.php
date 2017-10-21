@@ -233,8 +233,6 @@ class Pipei extends BaseController
             exit();
         }
 
-exit();
-
         $val1 = Hulue::where('uid',$uid)->where('suid',$suid)->find();
 
         if(!empty($val1)){
