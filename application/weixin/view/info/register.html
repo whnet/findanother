@@ -42,7 +42,7 @@
                                 <input name="id" type="hidden" value="{$id}" />
                             </div>
                             <div id="BooldPicker" class="mui-input-row">
-                                <label><i>*</i>血型</label>
+                                <label><i></i>血型</label>
                                 <font class="mui-pull-right">请选择</font>
                                 <input name="boold" type="hidden" value="">
                             </div>
@@ -252,14 +252,6 @@
                     flag = true;
                 }
 
-                //判断血型是否选择
-                if (bld.val() == '' || bld.val() == '0') {
-                    mui.toast('请选择您的血型');
-                    flag = false;
-                    return false;
-                }else{
-                    flag = true;
-                }
 
                	//判断职业是否选择
                  if (jb.val() == '' || jb.val() == '0') {

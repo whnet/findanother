@@ -151,6 +151,14 @@ class Info extends SecdController
     }
 
 	public function birthday(){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 
 	    //进入来丰富资料就下载头像，变成圆形和背景图结合，放到headerAndbackground中
         $user = Cookie::get('wechat_user');
@@ -159,14 +167,18 @@ class Info extends SecdController
         $openid = $user["id"];
             $fileName = 'uploads/header/'.$openid.'.jpeg';
             $this->downloadWechatImage($headimg, $fileName);
-            $circleHead = $this->yuan_img($fileName,$openid);
-        //查看文件是否存在
-        if(is_file($fileName)){
-            //和背景图结合起来
-            $src = 'uploads/background/background.png';//背景图片
-            $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
-            $headerAndBancground = $this->infoErWeima($src,$markimgurl,$openid);
-        }
+            if($openid){
+                $circleHead = $this->yuan_img($fileName,$openid);
+                //查看文件是否存在
+                if(is_file($fileName)){
+                    //和背景图结合起来
+                    $src = 'uploads/background/background.png';//背景图片
+                    $markimgurl = $this->myImageResize($circleHead, '150', '150');   //缩放图片
+                    $headerAndBancground = $this->infoErWeima($src,$markimgurl,$openid);
+                }
+            }
+
+
 
 
 
@@ -239,13 +251,13 @@ class Info extends SecdController
                     $yval = weixin::where('openid',$yaoqingpenid)->find();
                     $aname = $yval['nickname'];
                     //$guanxi = $this->get_guanxi($yaoqingpenid,$beiyaoqingopenid);
-                    $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/bopenid/".$yaoqingpenid."/yopenid/".$beiyaoqingopenid."'>点击查看</a>";
+                    $message = "您和".$aname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/froms/gxpipei/bopenid/".$yaoqingpenid."/yopenid/".$beiyaoqingopenid."'>点击查看</a>";
                     $this->sendtxtmessage($message,$beiyaoqingopenid);
 
                     $val = weixin::where('openid',$beiyaoqingopenid)->find();
                     $bname = $val['nickname'];
                     //$guanxi2 = $this->get_guanxi($beiyaoqingopenid,$yaoqingpenid);
-                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/bopenid/".$beiyaoqingopenid."/yopenid/".$yaoqingpenid."'>点击查看</a>";
+                    $bmessage = $bname."刚扫码成为你的好友，你和".$bname."的关系是：".$best."，<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/froms/gxpipei/bopenid/".$beiyaoqingopenid."/yopenid/".$yaoqingpenid."'>点击查看</a>";
                     $this->sendtxtmessage($bmessage,$yaoqingpenid);
                 }
 
@@ -266,14 +278,14 @@ class Info extends SecdController
 				$ylab_fdata=[
 						'uid'=>$yuinfo['ID'],
 						'fid'=>$uid,
-						'flag'=>2,
+						'flag'=>0,
 						'create_at'=>time(),
 				];
 				
 				$fdb ->save($ylab_fdata);
 
 			}
-			$this->redirect('Ppbirthday/index',['id'=>$uid]);
+			$this->redirect('Ppbirthday/index',['id'=>$uid,'froms'=>'ppbirthday']);
         }else{
 			return $this->fetch();
 		}
@@ -281,6 +293,14 @@ class Info extends SecdController
 	}
 	
 	public function register($id=''){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$id = input('id');
 		if(request()->ispost()){
 			$id = input('id');
@@ -325,6 +345,14 @@ class Info extends SecdController
 	
 	
 	public function next($id=''){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		
 		if(request()->ispost()){
 		   $id = input('id');
@@ -350,13 +378,27 @@ class Info extends SecdController
 	}
 	
 	public function avatar($id=''){
-		
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$this->assign('id',$id);
 		return $this->fetch();
 	}
 	
 	public function savepho(){
+        $options = Config::get('wechat');
+        $app = new Application($options);
 
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		    $file = request()->file('imgfile0');
             if($file){
                 // 移动到框架应用根目录/uploads/ 目录下
@@ -399,6 +441,14 @@ class Info extends SecdController
 	}
 	
 	public function interest(Request $request){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$uid = $request->param('id');
 		$this->assign('uid',$uid);
 		return $this->fetch();
@@ -427,6 +477,14 @@ class Info extends SecdController
 	}
 	
 	public function mfind($id=''){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$id = input('id');
 		if(request()->ispost()){
 		   $db = new mfind();
@@ -459,6 +517,14 @@ class Info extends SecdController
 	
 	
 	public function panduan_find($uid){
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$uid = empty($uid)?input('uid'):$uid;
 		$data = Mfind::where('uid',$uid)->find();
 		if(!empty($data)){
@@ -475,7 +541,14 @@ class Info extends SecdController
 	
 	
 	public function save_uinfo(){
-		
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$user = Cookie::get('wechat_user');
 		$openid = $user['original']['openid'];
 		$val = weixin::where('openid',$openid)->find();

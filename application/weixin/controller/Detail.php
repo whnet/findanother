@@ -13,58 +13,82 @@ use app\weixin\model\Weixin;
 use app\weixin\model\User; 
 use app\weixin\model\Photos;
 use app\weixin\model\Know;
+use app\weixin\model\Hulue;
 use app\weixin\model\Alternative;
+use app\weixin\model\Constellation;
 
 class Detail extends BaseController
 {
 	public function index(Request $request)
     {
+
+        $type = !empty($request->param('type'))?$request->param('type'):0; //添加好友的方式 0从我想认识中加，1从我的备选中加
+        $tjly = !empty($request->param('tjly'))?$request->param('tjly'):0;
+        $id = !empty($request->param('id'))?$request->param('id'):0;
+        $uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //系统推荐过来用户的ID
+        $suid = $request->param('suid'); //查看者的ID
+        $jh = !empty($request->param('jh'))?$request->param('jh'):0;
+        $froms = !empty($request->param('froms'))?$request->param('froms'):0;
+        $kid = !empty($request->param('kid'))?$request->param('kid'):0;
+
+        $openid = Cookie::get('openid');//邀请
+        $yopenid = Cookie::get('byaoqingopenid');//被邀请
+        $list = weixin::where('openid',$openid)->find();
+
+        $uinfo = user::where('wid',$list['id'])->find();//查看者的信息
+        if( ($suid == $uinfo['ID'] && $froms == 'fromWechatToAgreed') || ($froms == 'mysaw' && $uid == $uinfo['ID'])){//避免自己匹配自己,暂时屏蔽
+            //$this->redirect('center/index');
+        }
+        $self = user::where('wid',$list['id'])->find();//查看者的信息
+
+        $suid = $uinfo['ID'];//我的id
+
+
+        if(!$suid || !$openid){
+            $this->redirect('info/birthday');
+        }
+        //我想认识中根据访问者ID  将表中uid超过addtime七天的flag=1 改变成flag=0,
+        if(!empty($suid)){
+            //查看know中的时间
+            $SevenTime = 3600*24*7;
+            $afterDays = know::where('uid',$suid)->select();
+            $findDatas = [];
+            foreach($afterDays as $k=>$v){
+                if( (time() - $v['addtime']) > $SevenTime ){
+                    $findDatas[$v['id']]['id'] = $v['id'];
+                    $findDatas[$v['id']]['flag'] = 0;
+                }
+            }
+
+            $knowDeadTime = new Know;
+            $knowDeadTime->saveAll($findDatas);
+
+
+        }
+
         //获取当前的url 写入session
+        //<!--type: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers,6-hulve -->
+        //<!--froms: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
         $request = Request::instance();
         $url = $request->url();
         Session::set('preurl',$url);
-        //<!--type: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers,6-hulve -->
-        //<!--from: 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, -->
-		$suid = $request->param('suid'); //查看者的ID
-		$type = !empty($request->param('type'))?$request->param('type'):0; //添加好友的方式 0从我想认识中加，1从我的备选中加
-		$tjly = !empty($request->param('tjly'))?$request->param('tjly'):0;
-		$id = !empty($request->param('id'))?$request->param('id'):0;
-		$uid = !empty($request->param('uid'))?$request->param('uid'):input('uid'); //系统推荐过来用户的ID
-		$jh = !empty($request->param('jh'))?$request->param('jh'):0;
-		$from = !empty($request->param('from'))?$request->param('from'):0;
-        $kid = !empty($request->param('kid'))?$request->param('kid'):0;
-		//查看好友申请状态
-        $frid = '';
-        $sendStatus = '';
-         if($type == 3 || $type == 2 || $type == 1){
-             $fridDb = new Know();
-             $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
-             if($knowFlagOne){
-                 $frid = $knowFlagOne['flag'];
-                 $sendStatus = 1;
 
-             }
-             $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
 
-             if($knowFlagTwo){
-                 $frid = $knowFlagTwo['flag'];
-                 $sendStatus = 2;
-             }
-         }elseif($type == 4){
-             $fridDb = new Alternative();
-             $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
-             if($knowFlagOne){
-                 $frid = $knowFlagOne['flag'];
-                 $sendStatus = 1;
 
-             }
-             $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
 
-             if($knowFlagTwo){
-                 $frid = $knowFlagTwo['flag'];
-                 $sendStatus = 2;
-             }
-         }
+        //如果$uid 或 $suid 的信息不存在 就跳转到会员中心
+            $uidInfo = user::where('ID',$uid)->find();
+            if(!$uidInfo){
+                $this->redirect('center/index');
+            }
+            $suidInfo = user::where('ID',$suid)->find();
+            if(!$suidInfo){
+                $this->redirect('center/index');
+            }
+
+
+
+
 
 
         $list=user::alias('a')
@@ -85,25 +109,82 @@ class Detail extends BaseController
 		}
 
 		$intes = explode(",",$list['interest']);
-		$year=date("Y",time());
-		$ymddd = date('Y-m-d',$list['Birthday']);
-		$ymd = explode('-',$ymddd);
-		$age=$year-$ymd[0];
+
+        //判断性别
+        if($uinfo['Sex'] == $list['Sex']){
+            $sex = '同性';
+            $istxyx = '同性';
+            $xingbie = false;
+        }else{
+            $sex = '异性';
+            $istxyx = '异性';
+            $xingbie = true;
+        }
+        $num = $request->param('num');
+        $num = !empty($num)?$num:0;
+        require_once(dirname(dirname(__FILE__)).'/rules/match.php');
+
+        //查看好友申请状态
+        $frid = '';
+        $sendStatus = '';
+        if($type == 3 || $type == 2 || $type == 1){
+
+            $fridDb = new Know();
+            $knowFlag = $fridDb->where(['uid'=>$suid,'suid'=>$uid])->whereOr(['uid'=>$uid,'suid'=>$suid])->find();
+            if($knowFlag){
+                $frid = $knowFlag['flag'];
+
+            }else{
+                $alertFlag = Alternative::where(['uid'=>$suid,'suid'=>$uid])->whereOr(['uid'=>$uid,'suid'=>$suid])->find();
+                if($alertFlag){
+                    $frid = $alertFlag['flag'];
+                }
+            }
 
 
-		//补充匹配数据
-        $tuijian = "";
-        $result = "";
-        $content = "";
-        $tjly = '';
+
+        }elseif($type == 4){
+            $fridDb = new Alternative();
+            $knowFlagOne = $fridDb->where('uid',$suid)->where('suid',$uid)->find();
+            if($knowFlagOne){
+                $frid = $knowFlagOne['flag'];
+                if($frid == 1){
+                    $frid = 11;
+                }
+            }
+
+            $knowFlagTwo = $fridDb->where('uid',$uid)->where('suid',$suid)->find();
+            if($knowFlagTwo){
+                $frid = $knowFlagTwo['flag'];
+                if($frid == 1){
+                    $frid = 12;
+                }
+
+            }
+        }elseif($type == 5){//从相互认识中进来
+            $knowothersData = Know::where(['uid'=>$uid,'suid'=>$suid])->whereOr(['suid'=>$uid,'uid'=>$suid])->find();
+            $frid = $knowothersData['flag'];
+           if(!$knowothersData){
+               $AlertData = Alternative::where(['uid'=>$uid,'suid'=>$suid])->whereOr(['suid'=>$uid,'uid'=>$suid])->find();
+               $frid = $AlertData['flag'];
+           }else{
+               $frid = 0;
+           }
+        }
+
+
         $findval=mfind::where('uid',$list['nuid'])->find();
 		//补充匹配数据
         //flagStatus = ?, 如果是type == 3 ，是从know表中来的，如果type == 4 从alernative
-//        var_dump($frid);
-        var_dump($list);
+
+        //判断是否已添加到忽略列表
+        $isHulve = Hulue::where('suid',$uid)->where('uid',$suid)->count();
+        //判断是否已添加到忽略列表END
         $controller = $request->controller();
         $this->assign('controller', $controller);
 		$this->assign('shuxing',$this->birthshuxing(date('Y-m-d',$list['Birthday'])));
+
+		$this->assign('isHulve', $isHulve);
 		$this->assign('mfindval', $mfindval);
 		$this->assign('list', $list);
 		$this->assign('age', $age);
@@ -114,12 +195,10 @@ class Detail extends BaseController
 		$this->assign('tjly', $tjly);
 		$this->assign('uid', $uid);
 		$this->assign('kid', $kid);
-		$this->assign('frid', $frid);
-		$this->assign('from', $from);
+		$this->assign('froms', $froms);
 		$this->assign('jh', $jh);
 		$this->assign('flag', $flag);
         $this->assign('nuid', 0);
-		$this->assign('sendStatus', $sendStatus);
 		$this->assign('type', $type);
 		$this->assign('tuijian', $tuijian);
 		$this->assign('result', $result);
@@ -127,6 +206,7 @@ class Detail extends BaseController
 		$this->assign('tjly', $tjly);
         $this->assign('fval',$findval);
         $this->assign('num',0);
+        $this->assign('frid',$frid);
 		$this->assign('start',$this->birthext(date('Y-m-d',$list['Birthday'])));
 		return $this->fetch('combine/index');
     }

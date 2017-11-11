@@ -34,10 +34,7 @@ class Pipei extends BaseController
 
             $this->redirect('zhezhao',['flag'=>$flag,'flag2'=>$flag2,'url'=>$url,'message'=>$message]);
         }else{
-
-            //三个文件相同的部分START
             require_once(dirname(dirname(__FILE__)).'/rules/match.php');
-            //三个文件相同的部分END
             return $this->fetch('combine/index');
         }
     }
@@ -161,17 +158,36 @@ class Pipei extends BaseController
             'suid'=>$suid,
         ];
         $db ->save($lab_data);
-        //同时删除备选表中的信息
-        $deAlertNative::where('uid',$uid)->where('suid',$suid)->delete();
+        //同时删除备选表中的信息,先判断是在备选还是扫我码的表
+        $beixuanbiao = Alternative::where('suid',$uid)->where('uid',$suid)->find();
+        if(!empty($beixuanbiao)){
+            Alternative::where('suid',$uid)->where('uid',$suid)->delete();
+        }
+
+
+
 
 
         if($flag == 1){
             echo json_encode(['error_code'=>1,'url'=>'info/index','msg'=>'忽略成功,您的资料还未填写完整，请填写完整再来寻找你的Ta吧！']);
         }else{
-            echo json_encode(['error_code'=>1,'url'=>'index','msg'=>'忽略成功！']);
+            echo json_encode(['error_code'=>2,'url'=>'index','msg'=>'忽略成功！']);
         }
 
         exit();
+    }
+    //移除忽略
+    public function dishulve(Request $request){
+        $uid = $request->param('uid');
+        $suid = $request->param('suid');
+        $hulve = Hulue::where('uid',$uid)->where('suid',$suid)->find();
+        if(!empty($hulve)){
+            $id = Hulue::where('uid',$uid)->where('suid',$suid)->delete();
+            if($id){
+                die(json_encode(['error_code'=>2,'url'=>'index','msg'=>'移除忽略成功！']));
+            }
+        }
+
     }
     public function beixuan(Request $request){
         $num = $request->param('num');
@@ -226,10 +242,11 @@ class Pipei extends BaseController
         $type = $request->param('type');
         $id = $request->param('kid');
         $kid = $request->param('id');
+        $froms = $request->param('froms');
         //判断是否填写了微信号
         $currentInfo = User::where('ID',$suid)->find();
         if(!$currentInfo['wxnumber']){
-            echo json_encode(['error_code'=>2,'id'=>$currentInfo['ID'],'msg'=>'请填写微信号','url'=>'index']);
+            echo json_encode(['error_code'=>2,'id'=>$currentInfo['ID'],'msg'=>'为了相互认识，请填写微信号','url'=>'index']);
             exit();
         }
 
@@ -251,13 +268,27 @@ class Pipei extends BaseController
         $val3 = Know::where('uid',$uid)->where('suid',$suid)->find();
 
         if(!empty($val3)){
-            echo json_encode(['error_code'=>1,'msg'=>'已添加到了认识列表,不能重复添加！','url'=>'index']);
-            exit();
+            if($val3['flag'] !=0){
+                echo json_encode(['error_code'=>1,'msg'=>'已添加到了认识列表,不能重复添加！','url'=>'index']);
+                exit();
+            }
         }
         //修改 1-myfriend, 2-mylike, 3-likeme, 4-mysaw, 5-knowothers, 6-guangyiguang,
         $types = 6;
     if($type == 2 || $type == 3 || empty($type)){
+
         $db = new Know();
+     if(!empty($val3)){
+         if($val3['flag'] ==0){
+             $lab_data=[
+                 'flag'=>1,
+                 'addtime'=>time(),
+             ];
+             $types = 3;
+             $id = $db ->save($lab_data,['uid' => $uid,'suid'=>$suid]);
+         }
+
+     }else{
         $lab_data=[
             'uid'=>$uid,
             'suid'=>$suid,
@@ -267,6 +298,8 @@ class Pipei extends BaseController
         ];
         $types = 3;
         $id = $db ->save($lab_data);
+     }
+
     }elseif($type == 4){
         $db = new Alternative();
         $lab_data=[
@@ -279,7 +312,7 @@ class Pipei extends BaseController
         $types = 4;
         $id = $db ->save($lab_data,['id' => $id]);
     }elseif($type == 1){
-        //从朋友全中相加,将数据放到know中
+        //从朋友圈中相加,将数据放到know中
         $db = new Know();
         $lab_data=[
             'uid'=>$uid,
@@ -299,6 +332,7 @@ class Pipei extends BaseController
             $id = $db ->save($lab_data,['id' => $kid]);
 
     }
+
     if(!empty($id)){
             if(!$id){
                 echo json_encode(['error_code'=>1,'url'=>'','msg'=>'失败']);
@@ -331,7 +365,7 @@ class Pipei extends BaseController
             $userId = $fdata["openid"];
             $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
             //flag2 = 1 等待同意,
-            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/from/renshi/status/toagree/kid/'.$kid.'/jh/1/type/'.$types;
+            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/froms/renshi/status/toagree/kid/'.$kid.'/jh/1/type/'.$types;
             $data = array(
                 "first"  => "有人想认识你一下:",
                 "keyword1"   => $data['name'],
@@ -356,7 +390,6 @@ class Pipei extends BaseController
         $type = $request->param('type');
         $id = $request->param('id');
 
-        //修改 将认识一下 改成 直接加为好友 fuck
     if($type == 0){
         $db = new Know();
         $lab_data=[
@@ -367,7 +400,7 @@ class Pipei extends BaseController
             'addtime'=>time(),
         ];
         $id = $db ->save($lab_data);
-    }elseif($type == 1){
+    }elseif($type == 1 ){
         $db = new Alternative();
         $lab_data=[
             'uid'=>$uid,
@@ -404,7 +437,7 @@ class Pipei extends BaseController
             $userId = $fdata["openid"];
             $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
             //flag2 = 1 等待同意,
-            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/from/mysaw/status/toagree/kid/'.$kid.'/jh/1/type/'.$type;
+            $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/suid/'.$uid.'/uid/'.$suid.'/frid/'.$frid.'/froms/mysaw/status/toagree/kid/'.$kid.'/jh/1/type/'.$type;
             $data = array(
                 "first"  => "有人想认识你一下:",
                 "keyword1"   => $data['name'],

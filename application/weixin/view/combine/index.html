@@ -76,9 +76,7 @@
         <div class="group">
             <div class="label">{$result}</div>
             <div class="values" style="padding-left: 97px;padding-bottom:10px;">
-                <div class="values-main" style="padding-right:0px;font-size:15px;">
-                    {$content}
-                </div>
+                <div class="values-main" style="padding-right:0px;font-size:15px;">{$content}</div>
 
             </div>
             {/if}
@@ -185,7 +183,7 @@
             </div>
         </section>
 
-        <div id="infox" num="{$num}" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" from="{$from}" flag='{$flag}'  control='{$controller}'></div>
+        <div id="infox" num="{$num}" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" froms="{$froms}" flag='{$flag}'  control='{$controller}'></div>
 </div>
 
 {include file="public/nav" /}
@@ -210,7 +208,7 @@
 </script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-    wx.config(<?php echo $js->config(array('onMenuShareTimeline', 'onMenuShareAppMessage'), true) ?>);
+    wx.config(<?php echo $js->config(array('onMenuShareTimeline', 'onMenuShareAppMessage'), false) ?>);
     wx.ready(function(){
         wx.onMenuShareTimeline({
             title:'{$list.name}的星数奇缘',

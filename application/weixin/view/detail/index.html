@@ -147,9 +147,9 @@ as[nav - 1].className ='link mui-active'
 
 <div class="mui-pull-bottom-pocket mui-block mui-visibility" style="background-color:#fff;"></div>
 <div id="deinfox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}"></div>
-<div id="infox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" flag='2' from='{$from}' num='0' control='center'></div>
+<div id="infox" uid="{$uid}" suid="{$suid}" tjly="{$tjly}" flag='2' froms='{$froms}' num='0' control='center'></div>
 </div>
-{if empty($from)}
+{if empty($froms)}
     {if !empty($frid)}
         {if $sendStatus == 1}
             {if $frid == 1}
@@ -188,7 +188,7 @@ as[nav - 1].className ='link mui-active'
         {/if}
     {/if}
 {else}
-    {if $from == 'likeme'}
+    {if $froms == 'likeme'}
         <nav class="footbar mui-clearfix">
             <a style="width:100%;" href="javascript:;" class="footbar-item" >
                 <div class="footbar-icon beixuan-icon" status="false"></div>
@@ -210,7 +210,7 @@ as[nav - 1].className ='link mui-active'
         }else{
             type = 0;
         }
-         var from = $('#infox').attr('from');
+         var froms = $('#infox').attr('froms');
 		if(id){
 			var url = '/index.php/weixin/bus/agree';
 		}else{
@@ -223,25 +223,25 @@ as[nav - 1].className ='link mui-active'
 				'fid':fid,
 				'frid':id,
 				'type':type,
-				'from':from,
+				'froms':froms,
 			},
 			dataType: 'json',
 			type: 'post',
 			success: function(result) {
-//				if(result.error_code==0){
-//				mui.toast(result.msg);
-// 				href="/index.php/weixin/center/index";
-//				(function(){
-//				var wait = 3;
-//				var interval = setInterval(function(){
-//					var time = --wait;
-//					if(time <= 0) {
-//						location.href = href;
-//						clearInterval(interval);
-//					};
-//				}, 1000);
-//				})();
-//				}
+				if(result.error_code==0){
+				mui.toast(result.msg);
+ 				href="/index.php/weixin/center/index";
+				(function(){
+				var wait = 3;
+				var interval = setInterval(function(){
+					var time = --wait;
+					if(time <= 0) {
+						location.href = href;
+						clearInterval(interval);
+					};
+				}, 1000);
+				})();
+				}
 			}
 		});
 	}

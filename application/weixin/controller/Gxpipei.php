@@ -77,7 +77,41 @@ class Gxpipei extends BaseController
                 'Lasttime'=>time(),
             ];
             $lastdb->save($lastdata,['ID' => $suid]);
-            require_once(dirname(dirname(__FILE__)).'/rules/match.php');
+            //自己的id self['suid']  对方的 list['nuid']
+        //是否在know表中
+        $knowDataFird = Know::where(['uid'=>$self['suid'],'suid'=>$list['nuid']])->whereOr(['suid'=>$self['suid'],'uid'=>$list['nuid']])->find();
+
+        if($knowDataFird){
+            $frid = $knowDataFird['flag'];
+        }else{
+            //在备选表中
+            $alertDataFird = Alternative::where(['uid'=>$self['suid'],'suid'=>$list['nuid']])->whereOr(['suid'=>$self['suid'],'uid'=>$list['nuid']])->find();
+            if($alertDataFird){
+                $frid = $alertDataFird['flag'];
+                if($frid == 0){//已备选
+                    $this->assign('isFirdStatus', 1);
+                }else{
+                    $this->assign('isFirdStatus', 0);
+                }
+            }else{//查看是否在忽略表中
+                $hulveDataFird = Hulue::where(['uid'=>$self['suid'],'suid'=>$list['nuid']])->whereOr(['suid'=>$self['suid'],'uid'=>$list['nuid']])->find();
+                if($hulveDataFird){
+                    $frid = $hulveDataFird['flag'];
+                    if($frid == 0){//已备选
+                        $this->assign('isFirdStatus', 2);
+                    }else{
+                        $this->assign('isFirdStatus', 0);
+                    }
+                }else{
+                    $frid = 0;
+                    $this->assign('isFirdStatus', 0);
+                }
+
+            }
+        }
+
+        require_once(dirname(dirname(__FILE__)).'/rules/match.php');
+
         return $this->fetch('combine/index');
         //三个文件相同的部分END
     }

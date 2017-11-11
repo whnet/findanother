@@ -38,8 +38,8 @@ class Ppbirthday extends BaseController
 
             $this->redirect('zhezhao',['flag'=>$flag,'flag2'=>$flag2,'url'=>$url,'message'=>$message]);
         }else{
-                require_once(dirname(dirname(__FILE__)).'/rules/match.php');
-//            var_dump($list);
+
+            require_once(dirname(dirname(__FILE__)).'/rules/match.php');
             return $this->fetch('combine/index');
         }
 

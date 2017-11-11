@@ -131,7 +131,6 @@ BirthdayPickerButton.addEventListener('tap',function(event) {
     BirthdayPicker.show(function(items) {
         BirthdayPickerButton.getElementsByTagName('font')[0].innerText =items.text;
         BirthdayPickerButton.getElementsByTagName('input')[0].value =items.text;
-        stepOne();
     });},false);
 
     var CityPicker =new $.PopPicker({layer:2});

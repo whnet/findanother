@@ -175,7 +175,7 @@ $(function(){
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {
-									location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
+									location.href = '/index.php/weixin/'+control+'/'+url+'/froms/guangyiguang/num/'+num;
 									clearInterval(interval);
 								};
 							}, 1000);
@@ -252,7 +252,7 @@ $(function(){
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {
-									location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
+									location.href = '/index.php/weixin/'+control+'/'+url+'/froms/guangyiguang/num/'+num;
 									clearInterval(interval);
 								};
 							}, 1000);
@@ -285,7 +285,6 @@ $(function(){
 	
 	$('#hulue').click(function() {
 		var url = '/index.php/weixin/pipei/hulue';
-		
 		var uid = $('#infox').attr('uid');
 		var suid = $('#infox').attr('suid');
 		var tjly = $('#infox').attr('tjly');
@@ -315,7 +314,7 @@ $(function(){
 							var interval = setInterval(function(){
 								var time = --wait;
 								if(time <= 0) {
-									location.href = '/index.php/weixin/'+control+'/'+url+'/num/'+num;
+									location.href = '/index.php/weixin/'+control+'/'+url+'/froms/guangyiguang/num/'+num;
 									clearInterval(interval);
 								};
 							}, 1000);

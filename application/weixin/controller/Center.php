@@ -21,12 +21,43 @@ class Center extends BaseController
 {
 	public function index()
     {
+
+        $options = Config::get('wechat');
+        $app = new Application($options);
+
+        $oauth = $app->oauth;
+        if(!Cookie::has('wechat_user')) {
+            session('target_url','info/save_uinfo');
+            $oauth->redirect()->send();
+        }
 		$openid = Cookie::get('openid');//邀请
 		$yopenid = Cookie::get('byaoqingopenid');//被邀请
 		$list = weixin::where('openid',$openid)->find();
 		
 		$uinfo = user::where('wid',$list['id'])->find();
-		$suid = $uinfo['ID'];
+		$suid = $uinfo['ID'];//我的id
+        if(!$suid){
+            $this->redirect('info/birthday');
+        }
+        //我想认识中根据访问者ID  将表中uid超过addtime七天的flag=1 改变成flag=0,
+       if(!empty($suid)){
+            //查看know中的时间
+           $SevenTime = 3600*24*7;
+           $afterDays = know::where('uid',$suid)->select();
+           $findDatas = [];
+           foreach($afterDays as $k=>$v){
+               if( (time() - $v['addtime']) > $SevenTime ){
+                   $findDatas[$v['id']]['id'] = $v['id'];
+                   $findDatas[$v['id']]['flag'] = 0;
+               }
+           }
+
+           $knowDeadTime = new Know;
+           $knowDeadTime->saveAll($findDatas);
+
+
+       }
+
 
         //互相认识的
         $knowCountOne = know::where('flag',2)->where('suid',$suid)->count();
@@ -36,13 +67,12 @@ class Center extends BaseController
             $knowCountTwo = 0;
         }
 
-        $alterCountOne = alternative::where('flag',2)->where('uid',$suid)->count();
+        $alterCountOne = alternative::where('flag',2)->where('suid',$suid)->count();
         if(!$alterCountOne){
-            $alterCountOne = alternative::where('flag',2)->where('uid',$suid)->count();
+            $alterCountTwo = alternative::where('flag',2)->where('uid',$suid)->count();
         }else{
-            $alterCountOne = 0;
+            $alterCountTwo = 0;
         }
-        $alterCountTwo = alternative::where('flag',2)->where('suid',$suid)->count();
         $othersnum = $knowCountOne + $knowCountTwo + $alterCountOne + $alterCountTwo;
         //互相认识的 END
 
@@ -204,8 +234,10 @@ class Center extends BaseController
 			->join('user b','a.id=b.wid')
 			->where('a.openid',$openid)
 			->find();
-			
+
+		//查看know 和 alertnative 两个表
 		$data = know::where('suid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
+		$alertAgreeData = Alternative::where('suid',$uval['ID'])->where('flag','<>',2)->limit($limit)->select();
 
 		if(!empty($data)){
 			
@@ -236,7 +268,36 @@ class Center extends BaseController
 			}
 			$msg = '成功';
 			$error_code = 0;
-		}else{
+		}elseif(!empty($alertAgreeData)){
+            foreach($alertAgreeData as $k => $v){
+
+                $uinfo=user::alias('a')
+                    ->field('a.*,a.ID as suid,b.*')
+                    ->join('weixin b','b.id=a.wid')
+                    ->where('a.ID',$v['uid'])
+                    ->find();
+
+                $userinfo[$k]['id'] = $v['id'];
+                $userinfo[$k]['flag'] = $v['flag'];
+                $userinfo[$k]['uid'] = $uval['ID'];
+                $userinfo[$k]['nuid'] = $uinfo['suid'];
+                $userinfo[$k]['Province'] = $uinfo['Province'];
+                $userinfo[$k]['City'] = $uinfo['City'];
+                $userinfo[$k]['height'] = $uinfo['height'];
+                $userinfo[$k]['addtime'] = $v['create_at'];
+                $userinfo[$k]['nickname'] = $uinfo['nickname'];
+                $userinfo[$k]['headimgurl'] = $uinfo['headimgurl'];
+                $userinfo[$k]['birthdayyear'] = date("Y",$uinfo['Birthday']);
+                $userinfo[$k]['sex'] = $uinfo['Sex'];
+                $userinfo[$k]['blood'] = $uinfo['Blood'];
+                $userinfo[$k]['zhiye'] = $uinfo['zhiye'];
+                $userinfo[$k]['start'] = $this->birthext($uinfo['Birthday']);
+                $userinfo[$k]['Sign'] = $uinfo['Sign'];
+            }
+            $msg = '成功';
+            $error_code = 0;
+
+        }else{
 			$msg = '暂无数据';
 			$error_code = 0;
 			$userinfo='';
@@ -274,9 +335,9 @@ class Center extends BaseController
 
         //从备选表中获取已经成为好友的数据
         $alterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
-        $malterData = Alternative::where('suid',$uval['ID'])->where('flag',2)->limit($limit)->select();
+        $malterData = Alternative::where('uid',$uval['ID'])->where('flag',2)->limit($limit)->select();
         if(!empty($alterData)){
-            $auserinfo = $this->userInfo($uval,$malterData,0,2);
+            $auserinfo = $this->userInfo($uval,$alterData,0,2);
             $msg = '成功';
             $error_code = 0;
         }else if(!empty($malterData)){
@@ -290,6 +351,7 @@ class Center extends BaseController
         }
 		//合并数组，得出一个联合三个表的总数组
         $userinfo = array_merge($kuserinfo, $auserinfo);
+
 
 		echo json_encode(['error_code'=>$error_code,'data'=>$userinfo]);
 	}
@@ -944,7 +1006,7 @@ class Center extends BaseController
 		$this->assign('message',$message);
 		return $this->fetch('zhezhao');
 	}
-     public function userInfo($uval,$data,$type,$from){
+     public function userInfo($uval,$data,$type,$froms){
 
          foreach($data as $k => $v){
              if($type == 1){
@@ -952,21 +1014,21 @@ class Center extends BaseController
               }else{
                  $id = $v['uid'];
              }
-             if($from == 1){
+             if($froms == 1){
                  //know
-                 $from = 3;
-             }elseif($from == 2){
+                 $froms = 3;
+             }elseif($froms == 2){
                  //alertnative
-                 $from = 4;
+                 $froms = 4;
              }
              $uinfo=user::alias('a')
                  ->field('a.*,a.ID as suid,b.*')
                  ->join('weixin b','b.id=a.wid')
                  ->where('a.ID',$id)
                  ->find();
-             $test = user::getLastSql();
+
              $userinfo[$k]['id'] = $v['id'];
-             $userinfo[$k]['from'] = $from;
+             $userinfo[$k]['froms'] = $froms;
              $userinfo[$k]['wechat'] = $uinfo['wxnumber'];
              $userinfo[$k]['flag'] = $v['flag'];
              $userinfo[$k]['uid'] = $uval['ID'];
@@ -986,8 +1048,6 @@ class Center extends BaseController
          }
          return $userinfo;
      }
-
-
 
 
 

@@ -16,6 +16,7 @@ use app\weixin\model\User;
 use app\weixin\model\Know;
 use app\weixin\model\Birthday;
 use app\weixin\model\Hulue;
+use app\weixin\model\Beixuan;
 use app\weixin\model\Alternative;
 use app\weixin\model\District;
 use app\weixin\model\Constellation;
@@ -23,6 +24,7 @@ use app\weixin\model\Blood;
 use app\weixin\model\Photos;
 use app\weixin\model\Friends;
 
+//填写完资料 逛逛里面 还有 每周推的里面 不显示备选的人，
 $uid = $request->param('id');
 $num = $request->param('num');
 $num = !empty($num)?$num:0;
@@ -67,6 +69,19 @@ $where3 = "a.ID not in ($huusersid)";
 }else{
 $where3 = '1=1';
 }
+//在新增的备选表中
+$beixuan = Beixuan::where('suid',$suid)->select();
+if(!empty($beixuan)) {
+    $beixuanid = "";
+    foreach ($beixuan as $alkey => $alval) {
+        $beixuanid .= $alval['uid'] . ",";
+    }
+    $beixuanid = substr($beixuanid,0,-1);
+    $where5 = "a.ID not in ($beixuanid)";
+}else{
+    $where5 = '1=1';
+}
+
 //是否在备选列表中
 $get_alval = Alternative::where('suid',$suid)->select();
 if(!empty($get_alval)){
@@ -98,8 +113,10 @@ if($self['Sex']=='1'){
     $yi = 1;
 }
 
-//如果在就
-$istxyx = "异性";
+//是否在新增的备选表中
+
+
+
 $newlist=user::alias('a')
     ->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
     ->join('weixin b','b.id=a.wid')
@@ -108,6 +125,7 @@ $newlist=user::alias('a')
     ->where($where2)
     ->where($where3)
     ->where($where4)
+    ->where($where5)
     ->where('a.ID','<>',$suid)
     ->order('a.ID asc')
     ->select();
@@ -136,9 +154,9 @@ if($newlist){
             $str .= $v['id'].',';
         }
 
-
     }
 }
+
 //去除最后一个字符串
 $listStr = substr($str,0,-1);
 $list=user::alias('a')
@@ -149,6 +167,13 @@ $list=user::alias('a')
     ->where($where2)
     ->where($where3)
     ->where($where4)
+    ->where($where5)
     ->where('a.wid','in',$listStr)
     ->order('a.ID asc')
     ->find();
+
+    if($list['Sex'] != $self['Sex']){
+        $istxyx = "异性";
+    }else{
+        $istxyx = "同性";
+    }

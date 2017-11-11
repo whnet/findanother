@@ -390,7 +390,7 @@ class Bus extends BaseController
         $id = input('frid');  //发起请求者的朋友id
         $kid = input('kid');  //konw 表id
         $type = input('type');  // 添加好友的方式
-        $from = input('from');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
+        $froms = input('froms');  // 同意好友请求的来源 from = 1 从likeme， 其余是从detail中来
         //判断是否填写了微信号
         $currentInfo = User::where('ID',$uid)->find();
         if(!$currentInfo['wxnumber']){
@@ -408,7 +408,7 @@ class Bus extends BaseController
             $isHave = $db->where('uid',$uid)->where('suid',$fid)->find();
         }
 
-        if($from == 'likeme'){
+        if($froms == 'likeme'){
             if($isHave['flag'] != 1){
                 $error_code= 0;
                 $msg="请勿重复请求！";
@@ -417,7 +417,15 @@ class Bus extends BaseController
         }
 
         if($type == 3) {
-            //改变know中flag状态
+            //同时改变friends中flag状态
+            $friendsDb = new Friends();
+            $isHaveFriend = $friendsDb->where('uid',$uid)->where('fid',$fid)->find();
+
+            $friendsData = [
+                'flag' => 2,
+            ];
+            $friendsDb->save($friendsData, ['id' => $isHaveFriend['id']]);
+
             $knowDb = new know();
             $lab_data = [
                 'flag' => 2,
@@ -434,7 +442,6 @@ class Bus extends BaseController
             $types = 'likeme';
             $knowDb->save($lab_data, ['id' => $isHave['status']]);
         }elseif($type == 4){
-            //改变alertnative中flag状态
             $knowDb = new Alternative();
             $lab_data = [
                 'flag' => 2,
@@ -458,6 +465,7 @@ class Bus extends BaseController
             'fid'=>$id,
         ];
        $mdb ->save($lab_mdata);
+
         //给对方发送模板消息
         $fdata=user::alias('a')
             ->field('b.nickname as name,b.*,a.*')
@@ -475,7 +483,7 @@ class Bus extends BaseController
         $notice = $app->notice;
         $userId = $fdata["openid"];
         $templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
-        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/from/fromWechatToAgreed/type/'.$type;
+        $url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid.'/suid/'.$fid.'/froms/fromWechatToAgreed/type/'.$type;
         $data = array(
             "first"  => $data['name']."已经同意了您的好友请求",
             "keyword1"   => $data['name'],
@@ -486,7 +494,7 @@ class Bus extends BaseController
         $result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
 
 		$error_code='0';
-	   $msg="添加对方为好友成功";
+	   $msg="相互认识成功";
 	   echo json_encode(['error_code'=>$error_code,'msg'=>$msg]);
 	}
 

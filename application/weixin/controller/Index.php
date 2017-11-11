@@ -116,8 +116,8 @@ class Index extends Controller
                             $map['yaoqingopenid'] = $yopenid;
                             $map['beiyaoqingopenid'] = $bopenid;
                             $map['status'] = 1;
-                            $data = saoma::where($map)->find();
-                            if(!$data){
+                            $saoma = saoma::where($map)->find();
+                            if(!$saoma){
                                 $db = new saoma();
                                 $lab_data=[
                                     'yaoqingopenid'=>$yopenid,
@@ -138,7 +138,7 @@ class Index extends Controller
                             $fid = $buinfo['ID'];
                             $friendDb = new Friends();
                             $friendExist = $friendDb->where('uid',$uid)->where('fid',$fid)->count();
-                            if(!$friendExist){
+                            if(!$friendExist){//扫我码的不存在记录, 就添加
                                 $fdb = new friends();
                                 $ylab_fdata=[
                                     'uid'=>$uid,
@@ -150,7 +150,6 @@ class Index extends Controller
                                 $fdb ->save($ylab_fdata);
                             }
                             //通过扫码查看与其他人的关系
-                            //通过生日获得两人的关系
                             $myYmd =date('m-d',$yuinfo['Birthday']);
                             $myData = '2008-'.$myYmd;
                             $myConstellation = $this->getConstellation($myData);
@@ -164,15 +163,15 @@ class Index extends Controller
                             $worst = '最糟'.$Constellation['worst'];
                             //通过生日获得两人的关系 END
                             //$guanxi = $this->get_guanxi($yopenid,$bopenid);
-                            $message = "您和".$aname."的关系是：".$best."<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
+                            $message = "您和".$aname."的关系是：".$best."<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/froms/gxpipei/yopenid/".$bopenid."/bopenid/".$yopenid."'>点击查看</a>";
                             $this->sendtxtmessage($message,$bopenid);
 
 
                             //避免多次扫码给对方产生影响
-                            if(!$data) {
-                                $bmessage = $bname . "刚扫码成为你的好友，你和" . $bname . "的关系是：" . $best . "<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/yopenid/" . $yopenid . "/bopenid/" . $bopenid . "'>点击查看</a>";
+//                            if(!$data) {
+                                $bmessage = $bname . "刚扫码成为你的好友，你和" . $bname . "的关系是：" . $best . "<a href='http://weixin.matchingbus.com/index.php/weixin/gxpipei/index/froms/gxpipei/yopenid/" . $yopenid . "/bopenid/" . $bopenid . "'>点击查看</a>";
                                 $this->sendtxtmessage($bmessage, $yopenid);
-                            }
+//                            }
                             break;
                         }
                         //后判断是否填写资料，因为有一个break 注意判断顺序

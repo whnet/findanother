@@ -22,402 +22,93 @@ use app\weixin\model\Constellation;
 use app\weixin\model\Blood; 
 use app\weixin\model\Friends;
 
-class Dingshi extends BaseController
+class Dingshi extends Controller
 {
 	public function index()
     {
-
+//        echo phpinfo();
+//        exit();
 		$options = Config::get('wechat');
 		$app = new Application($options);
-		
-		$alluser = user::alias('a')
-			->field('a.*,a.ID as suid,b.*')
-			->join('weixin b','b.id=a.wid')
-			->select();
-			
-		foreach($alluser as $allkey => $allval){ 
-		
-			$uid = $allval['suid'];
-			$openid = $allval['openid'];
-			
-			$myfindval = mfind::where('uid',$uid)->find();
-			if(!empty($myfindval)){
-				$self=user::alias('a')
-					->field('a.*,a.ID as suid,b.*,c.*')
-					->join('weixin b','b.id=a.wid')
-					->join('mfind c','c.uid=a.ID')
-					->where('b.openid',$openid)
-					->find();
-			}else{
-				$self=user::alias('a')
-					->field('a.*,a.ID as suid,b.*')
-					->join('weixin b','b.id=a.wid')
-					->where('b.openid',$openid)
-					->find();
-			}
-				
-		//echo user::getLastSql();
-
-			$suid = $self['suid'];
-			
-			$get_val = know::where('suid',$suid)->select();
-			if(!empty($get_val)){
-				$usersid='';
-				foreach($get_val as $key => $val){
-					$usersid.=$val['uid'].",";
-				}
-				$usersid = substr($usersid,0,-1);
-				$where1 = "a.ID not in ($usersid)";
-			}else{
-				$where1 = '1=1';
-			}
-			
-			$hget_val = hulue::where('suid',$suid)->select();
-			if(!empty($hget_val)){
-				$huusersid="";
-				foreach($hget_val as $hkey => $hval){
-					$huusersid.=$hval['uid'].",";
-				}
-				$huusersid = substr($huusersid,0,-1);
-				$where3 = "a.ID not in ($huusersid)";
-			}else{
-				$where3 = '1=1';
-			}
-			
-			$year=date("Y",time());
-			$bymd2 = date('Y-m-d',$self['Birthday']);
-			$selfymd = explode('-',$bymd2);
-			$selfage=$year-$selfymd[0];
-			
-			if(empty($self['Loveage'])){
-				if($self['Sex']==1){
-					$where4 = "'{$selfage}','>=','Year(now())-Year(FROM_UNIXTIME(a.Birthday, '%Y-%m-%d'))'";
-				}else{
-					$where4 = "'{$selfage}','<','Year(now())-Year(FROM_UNIXTIME(a.Birthday, '%Y-%m-%d'))'";
-				}
-			}else{
-				$where4 = '1=1';
-			}
-			
-			$get_alval = Alternative::where('suid',$suid)->select();
-			if(!empty($get_alval)){
-				$ausersid="";
-				foreach($get_alval as $alkey => $alval){
-					$ausersid.=$alval['uid'].",";
-				}
-				$ausersid = substr($ausersid,0,-1);
-				$where2 = "a.ID not in ($ausersid)";
-			}else{
-				$where2 = '1=1';
-			}
-			
-			
-		$get_frval = Friends::where('uid',$suid)->select();
-		if(!empty($get_frval)){
-			$userfsid="";
-			foreach($get_frval as $key => $val){
-				$userfsid.=$val['fid'].",";
-			}
-			$userfsid = substr($userfsid,0,-1);
-			$where5 = "a.ID not in ($userfsid)";
-		}else{
-			$where5 = '1=1';
-		}
-
-		$selfsex = (!empty($self['Sex']))?$self['Sex']:$self['wsex'];
-
-		
-		if($selfsex=='1'){    //判断是同性还是异性
-			$tong = 1;
-			$yi = 2;
-		}else{
-			$tong = 2;
-			$yi = 1;
-		}
-			
-			$onemonth = time()-30*24*60*60;
-			if($self['Wanna']=='同性朋友' || $self['Wanna']=='同性恋人'){
-				$list=user::alias('a')
-					->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
-					->join('weixin b','b.id=a.wid')
-					->where('a.Sex',$tong)
-					->where($where1)
-					->where($where2)
-					->where($where3)
-					->where($where5)
-					->where('a.ID','neq',$suid)
-					->order('a.Lasttime desc')
-					->select();
-				$istxyx = "非异性";
-				
-			}else{
-				$list=user::alias('a')
-					->field('a.*,a.ID as nuid,b.nickname as name ,b.headimgurl as header,b.*')
-					->join('weixin b','b.id=a.wid')
-					->where('a.Sex',$yi)
-					->where($where1)
-					->where($where2)
-					->where($where3)
-					->where($where5)
-					->where('a.ID','neq',$suid)
-					->order('a.Lasttime desc')
-					->select();
-
-				$istxyx = "异性"; 
-			}
-			//echo user::getLastSql();
-			//exit();
-			if(!empty($list)){
-				
-				$flag = 1;
-				foreach($list as $key => $val){
-				
-					if($val['Sex']==1){
-						$xingbie = '男';
-					}else{
-						$xingbie = '女';
-					}
-				
-				
-					$ymd = date('Y-m-d',$val['Birthday']);
-					$bymd = explode('-',$ymd);
-					$age=$year-$bymd[0];   //对方年龄
-					
-					if($self['Loveage']=='合适就行'){    //年龄
-						$fage=true;
-					}elseif($self['Loveage']=='小我0-3岁' && $selfage>=$age && $age>=$selfage-3){
-						$fage=true;
-					}elseif($self['Loveage']=='小我3岁以上' && $age<=$selfage-3){
-						$fage=true;
-					}elseif($self['Loveage']=='大我0-3岁' && $selfage<=$age && $age<=$selfage+3){
-						$fage=true;
-					}elseif($self['Loveage']=='大我3岁以上' && $age>=$selfage+3){
-						$fage=true;
-					}else{
-						if($selfsex=='1' && $selfage > $age){    //判断是同性还是异性  男
-							$fage=true;
-						}elseif($selfsex=='2' && $selfage <= $age){
-							$fage=true;
-						}else{
-							$fage=false;
-						}
-					}
-                    //是否同城
-					if(!empty($self['City']) && !empty($list['City'])){
-						if($self['City']==$list['City']){
-							$city=true;
-						}else{
-							$city=false;
-
-						}
-					}else{
-						$city=true;
-					}
-                    $zjdata = '2008-'.$selfymd[1].'-'.$selfymd[2];
-                    $YC = $this->getConstellation($zjdata);
-
-                    $dfdata = '2008-'.$bymd[1].'-'.$bymd[2];
-                    $NC = $this->getConstellation($dfdata);
-
-					$xingcon = Constellation::where("C_1='".$YC."' and C_2='".$NC."'")->whereOr("C_1='".$NC."' and C_2='".$YC."'")->find();
-                    $data = $this->match_others($xingcon['best'], $self['Wanna']);
-                    $heshiweizhi = $data[0];
-                    $bestfind = $data[1];
-					
-
-					$uid = $val['nuid'];
-
-					if($city && $bestfind){
-						$notice = $app->notice;
-						$userId = $openid;
-                      //response out of time limit or subscription is canceled hint: [L5xFRa0341ge20] 用户超过24小时未与公众号取得交互
-						$templateId = 'CXhc6nO5CRoOWt9LQ05a_8XeDHd_CYqmJPULXl9snPc';
-						$url = 'http://weixin.matchingbus.com/index.php/weixin/detail/index/uid/'.$uid."/suid/".$suid.'/jh/1/flag2/2';
-						$data = array(
-									"first"  => "本周为你推荐的人为:",
-									"keyword1"   => $val['nickname'],
-									"keyword2"  => "星数奇缘",
-									"keyword3"  => date("Y-m-d H:i:s",time()),
-									"remark" => "点击下面链接赶紧查看TA的详细资料，加为好友吧！",
-									);
-						$result = $notice->uses($templateId)->withUrl($url)->andData($data)->andReceiver($userId)->send();
-						$flag = 2;
-						break;
-					}
-				}
-				if($flag == 1){
-								
-					$message = "您的Mr/Ms Right还没有出现，将下方你的专属二维码，发送到朋友圈或发给那个Ta,看看谁是你的Mr/Ms Right？";
-											
-					$this->sendtxtmessage($message,$openid);
- 					$temporary = $app->material_temporary;
-					$path = $this->erweima($openid);
-					$data = $temporary->uploadImage($path);
-					@unlink($path);  //删除生成的二维码
-					$imgmessage = new Image(['media_id' => $data['media_id']]);
-					$this->sendtxtmessage($imgmessage,$openid);
-				}
-				
-			}else{
-			
-				$message = "本周没有Mr/Ms Right出现，将下方你的专属二维码，发送到朋友圈或发给那个Ta,看看谁是你的Mr/Ms Right？";
-										
-				$this->sendtxtmessage($message,$openid);
- 				$temporary = $app->material_temporary;
-				$path = $this->erweima($openid);
-				$data = $temporary->uploadImage($path);
-				@unlink($path);  //删除生成的二维码
-				$imgmessage = new Image(['media_id' => $data['media_id']]);
-				$this->sendtxtmessage($imgmessage,$openid);
-			}
-		}
-	}
-
-	function erweima($bopenid=''){
-		$options = Config::get('wechat');
-		$app = new Application($options);
-		$qrcode = $app->qrcode;
-		$result = $qrcode->temporary($bopenid, 6 * 24 * 3600);
-		$ticket = $result->ticket; 
-		$markimgurl = $qrcode->url($ticket); // 二维码图片解析后的地址，开发者可根据该地址自行生成需要的二维码图片
-		$mubiaoimg = 'uploads/ewm/code.jpeg';
-		$content = file_get_contents($markimgurl); // 得到二进制图片内容
-		file_put_contents($mubiaoimg, $content); // 写入文件
-
-		
-		$phone = true;
-		$src = 'static/weixin/images/timg.jpg';
-		$markimgurl = $this->myImageResize($mubiaoimg, '183', '183');   //缩放图片
-		
-		if($phone){
-			$imgpath = $this->water_mark($src,$markimgurl,$phone);
-			//@unlink($mubiaoimg);  //删除生成的二维码
-			return $imgpath;
-		}else{
-			header("Content-type: image/jpeg"); 
-			$this->water_mark($src,$markimgurl,$phone);
-			//@unlink($mubiaoimg);  //删除生成的二维码
-		}
-		
-
-		
-	}
-	
-
-	public function water_mark($src,$mark_img,$phone,$pct = 100)
-    {
-        if(function_exists('imagecopy') && function_exists('imagecopymerge')) {
-            $data = getimagesize($src);
-            if ($data[2] > 3)
-            {
-                return false;
+		//所有的会员信息
+        $totalString = '';
+        //在know表中的会员数据，suid的集合
+        $knowUsers = know::select();
+        if(!empty($knowUsers)) {
+            foreach ($knowUsers as $k => $v) {
+                $knowSuids[] = $v['suid'];
+                $knowUids[] = $v['uid'];
             }
-            $src_width = $data[0];
-            $src_height = $data[1];
-            $src_type = $data[2];
-            $data = getimagesize($mark_img);
-            $mark_width = $data[0];
-            $mark_height = $data[1];
-            $mark_type = $data[2];
-
-            if ($src_width < ($mark_width + 20) || $src_width < ($mark_height + 20))
-            {
-                return false;
+            $knowUsersIds = array_unique(array_merge($knowSuids, $knowUids));
+            $kids = '';
+            foreach($knowUsersIds as $k=>$v){
+                $kids .= $v.',';
             }
-            switch ($src_type)
-            {
-                case 1:
-                $src_im = imagecreatefromgif($src);
-                break;
-                case 2:
-                $src_im = imagecreatefromjpeg($src);
-                break;
-                case 3:
-                $src_im = imagecreatefrompng($src);
-                break;
-            }
-            switch ($mark_type)
-            {
-                case 1:
-                $mark_im = imagecreatefromgif($mark_img);
-                break;
-                case 2:
-                $mark_im = imagecreatefromjpeg($mark_img);
-                break;
-                case 3:
-                $mark_im = imagecreatefrompng($mark_img);
-                break;
-            }
-            $x = ($src_width - $mark_width - 10) / 2-65;    //水平位置
-            $y = ($src_height - $mark_height - 10) / 2-10;    //垂直位置
-			
-			
-            imageCopyMerge($src_im, $mark_im, $x, $y, 0, 0, $mark_width, $mark_height, $pct);
-		   if($phone){
-				$picname = MD5(time()).rand(1000,2000);
-				imagejpeg($src_im, 'uploads/ewm/'.$picname.'.png');
-				imagedestroy($src_im);			// 释放内存 
-				return 'uploads/ewm/'.$picname.'.png';
-		   }else{
-				return imagejpeg($src_im);
-		   }
-            //return '/upload/ewm/'.$picname.'.png';
+        }else{
+            $kids = '';
         }
-    }
-	
-	
-	function myImageResize($source_path, $target_width = 200, $target_height = 200, $fixed_orig = ''){
-		$source_info = getimagesize($source_path);
-		$source_width = $source_info[0];
-		$source_height = $source_info[1];
-		$source_mime = $source_info['mime'];
-		$ratio_orig = $source_width / $source_height;
-		if ($fixed_orig == 'width'){
-			//宽度固定
-			$target_height = $target_width / $ratio_orig;
-		}elseif ($fixed_orig == 'height'){
-			//高度固定
-			$target_width = $target_height * $ratio_orig;
-		}else{
-			//最大宽或最大高
-			if ($target_width / $target_height > $ratio_orig){
-				$target_width = $target_height * $ratio_orig;
-			}else{
-				$target_height = $target_width / $ratio_orig;
-			}
-		}
-		switch ($source_mime){
-			case 'image/gif':
-				$source_image = imagecreatefromgif($source_path);
-				break;
-			
-			case 'image/jpeg':
-				$source_image = imagecreatefromjpeg($source_path);
-				break;
-			
-			case 'image/png':
-				$source_image = imagecreatefrompng($source_path);
-				break;
-			
-			default:
-				return false;
-				break;
-		}
-		
-		$target_image = imagecreatetruecolor($target_width, $target_height);
-		imagecopyresampled($target_image, $source_image, 0, 0, 0, 0, $target_width, $target_height, $source_width, $source_height);
-		//header('Content-type: image/jpeg');
-		$imgArr = explode('.', $source_path);
-		$target_path = $imgArr[0] . '_new.' . $imgArr[1];
-		imagejpeg($target_image, $target_path, 100);
-		imagedestroy($target_image);	
-		return $target_path;
+
+
+
+        //在alternative表中的会员数据
+        $alterUsers = Alternative::select();
+        if(!empty($alterUsers)){
+            foreach($alterUsers as $k=>$v){
+                $alterSuids[] = $v['suid'];
+                $alterUids[] = $v['uid'];
+            }
+            $alterUsersIds = array_unique(array_merge($alterSuids, $alterUids));
+            $aids = '';
+            foreach($alterUsersIds as $k=>$v){
+                $aids .= $v.',';
+            }
+
+        }else{
+            $aids = '';
+        }
+        //在hulve表中的会员数据
+        $hulveUsers = Hulue::select();
+        if(!empty($hulveUsers)){
+            foreach($hulveUsers as $k=>$v){
+                $hulveSuids[] = $v['suid'];
+                $hulveUids[] = $v['uid'];
+            }
+            $hulveUsersIds = array_unique(array_merge($hulveSuids, $hulveUids));
+            $hids = '';
+            foreach($hulveUsersIds as $k=>$v){
+                $hids .= $v.',';
+            }
+        }else{
+            $hids = '';
+        }
+        //将三个表中的会员id 去重后组成一个字符串
+        $totalUsers = substr($kids.$aids.$hids,0,-1);
+        $newlists = explode(',', $totalUsers);
+        //去除重复的值
+        $lists = array_unique($newlists);
+        $strings = join(',',$lists);
+        //排除 $strings 中的会员
+        $alluser = user::alias('a')
+            ->field('a.*,a.ID as suid,b.*')
+            ->join('weixin b','b.id=a.wid')
+            ->where('a.ID','not in',$strings)
+            ->select();
+        //从alluser 中根据规则进行筛选： 同城 AND 异性 AND 男》=女的年龄 AND 最佳夫妻 AND 最糟不是夫妻 并且只推送一个。
+
+        var_dump($alluser);
+
+
+
+
 	}
-	
-	function sendtxtmessage($message,$openId){
-			$options = Config::get('wechat');
-			$app = new Application($options);
-			$result = $app->staff->message($message)->to($openId)->send();
-	}
+
+
+
+
+
+
+
+
+
 		
 }
